@@ -1,9 +1,11 @@
 #include "App.h"
-#include "MainMenuPage.h"
+#include "pages/MainMenuPage.h"
+#include "pages/SettingsPage.h"
 
 int main(int argc, char* argv[]) {
 	App app;
 	MainMenuPage main_menu(&app);
+	SettingsPage settings(&app);
 	main_menu.init();
 
 	while (app.isRunning)
@@ -24,16 +26,37 @@ int main(int argc, char* argv[]) {
 		case App::MAIN_MENU:
 			main_menu.exec();
 			break;
+		case App::SETTINGS:
+			settings.exec();
+			break;
+		}
+
+		if (app.currentLocation != app.previousLocation) {
+			switch (app.previousLocation)
+			{
+			case App::MAIN_MENU:
+				main_menu.clean();
+				break;
+			case App::SETTINGS:
+				settings.clean();
+				break;
+			}
+
+			switch (app.currentLocation)
+			{
+			case App::MAIN_MENU:
+				main_menu.init();
+				break;
+			case App::SETTINGS:
+				settings.init();
+				break;
+			}
+
+			app.previousLocation = app.currentLocation;
 		}
 	}
 
-	switch (app.currentLocation)
-	{
-	case App::MAIN_MENU:
-		main_menu.clean();
-		break;
-	}
-
-	app.destroy();
+	main_menu.clean();
+	settings.clean();
 	return 0;
 }

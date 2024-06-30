@@ -4,16 +4,17 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+#ifndef APP_H
+#define APP_H
+
 class App
 {
 private:
-	SDL_Window* window = NULL;
-	SDL_Renderer* renderer = NULL;
+	SDL_Window* window = nullptr;
+	SDL_Renderer* renderer = nullptr;
 public:
 	enum Location {
 		MAIN_MENU,
-		GAME_PROCESS,
-		GAME_OVER,
 		SETTINGS
 	};
 
@@ -23,8 +24,10 @@ public:
 	int fps = 60;
 	int lastFrameTime = 0;
 	Location currentLocation = MAIN_MENU;
+	Location previousLocation = MAIN_MENU;
 	App();
+	~App();
 	SDL_Renderer* getRenderer();
-	void destroy();
 };
 
+#endif // APP_H

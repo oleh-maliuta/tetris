@@ -2,17 +2,15 @@
 
 #include "Page.h"
 
-class MainMenuPage : public Page
+class SettingsPage
+	: public Page
 {
-private:
-	SDL_Texture* logoTexture = NULL;
-	SDL_Rect logoRect;
 public:
-	MainMenuPage(App*);
+	SettingsPage(App*);
+	~SettingsPage();
 	virtual void init() override;
 	virtual void clean() override;
 	virtual void input() override;
 	virtual void update() override;
 	virtual void render() override;
 };
-

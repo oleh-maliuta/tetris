@@ -1,48 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Исходные файлы">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="pages">
+      <UniqueIdentifier>{8c4b0f14-7aa2-4479-9b87-6830f6bb5c01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Файлы заголовков">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Файлы ресурсов">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="renderables">
+      <UniqueIdentifier>{d711916f-db72-44ba-b487-224a1890a7e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Исходные файлы</Filter>
+    <ClCompile Include="pages\MainMenuPage.cpp">
+      <Filter>pages</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp">
-      <Filter>Исходные файлы</Filter>
+    <ClCompile Include="pages\Page.cpp">
+      <Filter>pages</Filter>
     </ClCompile>
-    <ClCompile Include="Page.cpp">
-      <Filter>Исходные файлы</Filter>
+    <ClCompile Include="pages\SettingsPage.cpp">
+      <Filter>pages</Filter>
     </ClCompile>
-    <ClCompile Include="MainMenuPage.cpp">
-      <Filter>Исходные файлы</Filter>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="renderables\Renderable.cpp">
+      <Filter>renderables</Filter>
     </ClCompile>
-    <ClCompile Include="Loader.cpp">
-      <Filter>Исходные файлы</Filter>
+    <ClCompile Include="renderables\Texture.cpp">
+      <Filter>renderables</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="pages\MainMenuPage.h">
+      <Filter>pages</Filter>
     </ClInclude>
-    <ClInclude Include="Page.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="pages\Page.h">
+      <Filter>pages</Filter>
     </ClInclude>
-    <ClInclude Include="MainMenuPage.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="pages\SettingsPage.h">
+      <Filter>pages</Filter>
     </ClInclude>
-    <ClInclude Include="Loader.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="App.h" />
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="renderables\Renderable.h">
+      <Filter>renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="renderables\Texture.h">
+      <Filter>renderables</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
