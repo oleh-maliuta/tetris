@@ -6,7 +6,10 @@ Texture::Texture(
 	SDL_Rect* srcrect,
 	SDL_Rect* dstrect
 ) : Renderable(app) {
-	this->filePath = path;
+	char* strToSet = new char[std::strlen(path) + 1];
+	std::strcpy(strToSet, path);
+
+	this->filePath = strToSet;
 	this->srcrect = srcrect;
 	this->dstrect = dstrect;
 }
@@ -17,10 +20,7 @@ Texture::~Texture() {
 		this->sdlTexture = nullptr;
 	}
 
-	char* strToDel = new char[std::strlen(this->filePath) + 1];
-	std::strcpy(strToDel, this->filePath);
-
-	delete[] strToDel;
+	delete[] this->filePath;
 	delete this->srcrect;
 	delete this->dstrect;
 }
@@ -39,6 +39,12 @@ void Texture::render() {
 		this->sdlTexture,
 		this->srcrect,
 		this->dstrect);
+
+	SDL_SetTextureColorMod(
+		this->sdlTexture,
+		this->moduleRed,
+		this->moduleGreen,
+		this->moduleBlue);
 }
 
 void Texture::destroy() {

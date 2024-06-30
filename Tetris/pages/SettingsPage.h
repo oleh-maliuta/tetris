@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef PAGES_SETTINGSPAGE_H
+#define PAGES_SETTINGSPAGE_H
+
 #include "Page.h"
 
 class SettingsPage
@@ -14,3 +17,5 @@ public:
 	virtual void update() override;
 	virtual void render() override;
 };
+
+#endif

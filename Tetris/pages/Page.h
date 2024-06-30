@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef PAGES_PAGE_H
+#define PAGES_PAGE_H
+
 #include "../App.h"
 
 class Page
@@ -16,3 +19,5 @@ public:
 	virtual void update();
 	virtual void render();
 };
+
+#endif

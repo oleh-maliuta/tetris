@@ -1,11 +1,11 @@
 #pragma once
 
+#ifndef APP_H
+#define APP_H
+
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_image.h>
-
-#ifndef APP_H
-#define APP_H
 
 class App
 {
@@ -30,4 +30,4 @@ public:
 	SDL_Renderer* getRenderer();
 };
 
-#endif // APP_H
+#endif

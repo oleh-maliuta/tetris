@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef PAGES_MAINMENUPAGE_H
+#define PAGES_MAINMENUPAGE_H
+
 #include "Page.h"
 #include "../Loader.h"
 #include "../renderables/Texture.h"
@@ -19,3 +22,4 @@ public:
 	virtual void render() override;
 };
 
+#endif
