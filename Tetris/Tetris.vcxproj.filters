@@ -27,6 +27,9 @@
     <ClCompile Include="renderables\Texture.cpp">
       <Filter>renderables</Filter>
     </ClCompile>
+    <ClCompile Include="renderables\Text.cpp">
+      <Filter>renderables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pages\MainMenuPage.h">
@@ -44,6 +47,9 @@
       <Filter>renderables</Filter>
     </ClInclude>
     <ClInclude Include="renderables\Texture.h">
+      <Filter>renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="renderables\Text.h">
       <Filter>renderables</Filter>
     </ClInclude>
   </ItemGroup>

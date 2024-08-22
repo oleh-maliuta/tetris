@@ -3,7 +3,7 @@
 #include "pages/SettingsPage.h"
 
 int main(int argc, char* argv[]) {
-	App app;
+	App app("v0.0.1", 440, 640);
 	MainMenuPage main_menu(&app);
 	SettingsPage settings(&app);
 	main_menu.init();
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 			SDL_Delay(delay_time);
 		}
 
-		float delta_time = (
+		app.deltaTime = (
 			static_cast<float>(SDL_GetTicks()) / app.lastFrameTime)
 			/ 1000.0f;
 		app.lastFrameTime = SDL_GetTicks();

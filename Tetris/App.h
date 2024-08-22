@@ -4,8 +4,10 @@
 #define APP_H
 
 #include <stdio.h>
+#include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 class App
 {
@@ -18,14 +20,19 @@ public:
 		SETTINGS
 	};
 
-	static const int APP_WINDOW_WIDTH = 440;
-	static const int APP_WINDOW_HEIGHT = 640;
+	const char* version;
+	int windowWidth;
+	int windowHeight;
 	bool isRunning = false;
 	int fps = 60;
 	int lastFrameTime = 0;
+	float deltaTime = 1;
 	Location currentLocation = MAIN_MENU;
 	Location previousLocation = MAIN_MENU;
-	App();
+	App(
+		const char* version,
+		int windowWidth,
+		int windowHeight);
 	~App();
 	SDL_Renderer* getRenderer();
 };

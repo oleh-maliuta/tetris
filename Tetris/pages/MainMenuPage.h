@@ -6,12 +6,14 @@
 #include "Page.h"
 #include "../Loader.h"
 #include "../renderables/Texture.h"
+#include "../renderables/Text.h"
 
 class MainMenuPage
 	: public Page
 {
 private:
 	Texture* logo = nullptr;
+	Text* versionInfo = nullptr;
 public:
 	MainMenuPage(App*);
 	~MainMenuPage();

@@ -2,43 +2,35 @@
 
 Texture::Texture(
 	App* app,
-	const char* path,
-	SDL_Rect* srcrect,
-	SDL_Rect* dstrect
+	std::string path
 ) : Renderable(app) {
-	char* strToSet = new char[std::strlen(path) + 1];
-	std::strcpy(strToSet, path);
-
-	this->filePath = strToSet;
-	this->srcrect = srcrect;
-	this->dstrect = dstrect;
+	this->filePath = path;
 }
 
 Texture::~Texture() {
-	if (this->sdlTexture != nullptr) {
-		SDL_DestroyTexture(this->sdlTexture);
-		this->sdlTexture = nullptr;
-	}
-
-	delete[] this->filePath;
+	this->destroy();
 	delete this->srcrect;
 	delete this->dstrect;
+	delete this->rotationPoint;
 }
 
 void Texture::init() {
 	SDL_Renderer* renderer = this->app->getRenderer();
 
-	this->sdlTexture = Loader::loadTexture(
+	this->sdlTexture = Loader::loadTextureFromImage(
 		renderer,
-		this->filePath);
+		this->filePath.c_str());
 }
 
 void Texture::render() {
-	SDL_RenderCopy(
+	SDL_RenderCopyEx(
 		this->app->getRenderer(),
 		this->sdlTexture,
 		this->srcrect,
-		this->dstrect);
+		this->dstrect,
+		this->angle,
+		this->rotationPoint,
+		this->flip);
 
 	SDL_SetTextureColorMod(
 		this->sdlTexture,
@@ -48,6 +40,8 @@ void Texture::render() {
 }
 
 void Texture::destroy() {
-	SDL_DestroyTexture(this->sdlTexture);
-	this->sdlTexture = nullptr;
+	if (this->sdlTexture != nullptr) {
+		SDL_DestroyTexture(this->sdlTexture);
+		this->sdlTexture = nullptr;
+	}
 }
