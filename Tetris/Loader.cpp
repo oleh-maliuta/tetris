@@ -8,7 +8,7 @@ SDL_Texture* Loader::loadTextureFromImage(
 
 	if (texture == nullptr) {
 		printf(
-			"Unable to create texture from %s! SDL Error: %s\n",
+			"Unable to create a texture from %s! SDL Error: %s\n",
 			path,
 			IMG_GetError());
 	}
@@ -19,18 +19,19 @@ SDL_Texture* Loader::loadTextureFromImage(
 SDL_Texture* Loader::loadTextureFromSolidUtf8Text(
 	SDL_Renderer* renderer,
 	TTF_Font* font,
-	SDL_Color color,
+	const SDL_Color& color,
 	const char* text,
-	Uint32 wrapLength,
-	int& widthRef,
-	int& heightRef
+	const Uint32* wrapLength,
+	int* widthRef,
+	int* heightRef
 ) {
-	SDL_Surface* textSurface = TTF_RenderUTF8_Solid_Wrapped(
-		font, text, color, wrapLength);
+	SDL_Surface* textSurface = wrapLength != nullptr ?
+		TTF_RenderUTF8_Solid_Wrapped(font, text, color, *wrapLength) :
+		TTF_RenderUTF8_Solid(font, text, color);
 
 	if (textSurface == nullptr)
 	{
-		printf("Unable to render text surface! SDL_ttf Error: %s\n",
+		printf("Unable to render a text surface! SDL_ttf Error: %s\n",
 			TTF_GetError());
 	}
 
@@ -38,13 +39,17 @@ SDL_Texture* Loader::loadTextureFromSolidUtf8Text(
 
 	if (texture == nullptr)
 	{
-		printf("Unable to create texture from rendered text! SDL Error: %s\n",
+		printf("Unable to create a texture from rendered text! SDL Error: %s\n",
 			SDL_GetError());
 	}
 
 	if (textSurface != nullptr) {
-		widthRef = textSurface->w;
-		heightRef = textSurface->h;
+		if (widthRef != nullptr) {
+			*widthRef = textSurface->w;
+		}
+		if (heightRef != nullptr) {
+			*heightRef = textSurface->h;
+		}
 	}
 
 	SDL_FreeSurface(textSurface);

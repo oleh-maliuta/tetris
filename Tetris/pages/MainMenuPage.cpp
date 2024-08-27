@@ -1,42 +1,35 @@
 #include "MainMenuPage.h"
 
-MainMenuPage::MainMenuPage(App* app) : Page(app) {
-	this->logo = new Texture(
+MainMenuPage::MainMenuPage(App* app)
+	: Page(app) {
+	this->renderables["logo"] = new Texture(
 		this->app,
-		"assets/images/png/game_logo.png");
-	this->logo->srcrect = nullptr;
-	this->logo->dstrect = new SDL_Rect{ this->app->windowWidth / 2 - 78,100,156,34 };
+		"assets/images/png/game_logo.png",
+		nullptr,
+		new SDL_Rect{ this->app->getWindowWidth() / 2 - 78,100,156,34 });
 
-	this->versionInfo = new Text(this->app, "assets/fonts/swansea.ttf", this->app->version, { 0, 0, 0 }, 18, this->app->windowWidth);
-}
+	Uint32 uint32WindowWidth = static_cast<Uint32>(this->app->getWindowWidth());
 
-MainMenuPage::~MainMenuPage() {
-	delete this->logo;
-	delete this->versionInfo;
-	this->logo = nullptr;
-	this->versionInfo = nullptr;
+	this->renderables["version_info"] = new Text(
+		this->app,
+		"assets/fonts/open_sans/normal.ttf",
+		this->app->getVersion(),
+		15,
+		&uint32WindowWidth);
 }
 
 void MainMenuPage::init() {
-	if (this->initialized) {
+	if (this->isInitialized) {
 		return;
 	}
-
-	SDL_Renderer* renderer = this->app->getRenderer();
-
-	this->logo->init();
-	this->versionInfo->init();
 
 	Page::init();
 }
 
 void MainMenuPage::clean() {
-	if (!this->initialized) {
+	if (!this->isInitialized) {
 		return;
 	}
-
-	this->logo->destroy();
-	this->versionInfo->destroy();
 
 	Page::clean();
 }
@@ -48,7 +41,7 @@ void MainMenuPage::input() {
 	{
 		switch (event.type) {
 		case SDL_QUIT:
-			this->app->isRunning = false;
+			this->app->setRunning(false);
 			break;
 		}
 	}
@@ -59,8 +52,9 @@ void MainMenuPage::update() {
 }
 
 void MainMenuPage::render() {
-	SDL_Renderer* renderer = this->app->getRenderer();
+	if (!this->isInitialized) {
+		return;
+	}
 
-	this->logo->render();
-	this->versionInfo->render();
+	Page::render();
 }

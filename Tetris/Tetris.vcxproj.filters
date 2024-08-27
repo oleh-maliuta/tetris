@@ -53,4 +53,7 @@
       <Filter>renderables</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app_settings.txt" />
+  </ItemGroup>
 </Project>

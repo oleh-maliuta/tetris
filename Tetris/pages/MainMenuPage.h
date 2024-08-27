@@ -11,12 +11,9 @@
 class MainMenuPage
 	: public Page
 {
-private:
-	Texture* logo = nullptr;
-	Text* versionInfo = nullptr;
 public:
-	MainMenuPage(App*);
-	~MainMenuPage();
+	MainMenuPage(App* app);
+
 	virtual void init() override;
 	virtual void clean() override;
 	virtual void input() override;

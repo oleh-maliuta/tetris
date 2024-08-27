@@ -7,13 +7,23 @@
 
 class Renderable
 {
-protected:
-	App* app = nullptr;
 public:
-	Renderable(App*);
+
+	Renderable(App* app);
+	virtual ~Renderable();
+
 	virtual void init();
 	virtual void render();
 	virtual void destroy();
+
+	bool getVisibility() const;
+
+	void setVisibility(const bool& value);
+
+protected:
+
+	App* app = nullptr;
+	bool visibility = true;
 };
 
 #endif

@@ -11,17 +11,18 @@
 class Loader
 {
 public:
+
 	static SDL_Texture* loadTextureFromImage(
 		SDL_Renderer* renderer,
 		const char* path);
 	static SDL_Texture* loadTextureFromSolidUtf8Text(
 		SDL_Renderer* renderer,
 		TTF_Font* font,
-		SDL_Color color,
+		const SDL_Color& color,
 		const char* text,
-		Uint32 wrapLength,
-		int& widthRef,
-		int& heightRef);
+		const Uint32* wrapLength,
+		int* widthRef,
+		int* heightRef);
 };
 
 #endif

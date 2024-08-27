@@ -4,11 +4,18 @@ Page::Page(App* app) {
 	this->app = app;
 }
 
+Page::~Page() {
+	for (auto& el : this->renderables) {
+		delete el.second;
+	}
+}
+
 void Page::exec() {
 	this->input();
 	this->update();
 
 	SDL_Renderer* renderer = this->app->getRenderer();
+
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
 	this->render();
@@ -16,15 +23,27 @@ void Page::exec() {
 }
 
 void Page::init() {
-	this->initialized = true;
+	for (auto& el : this->renderables) {
+		el.second->init();
+	}
+
+	this->isInitialized = true;
 }
 
 void Page::clean() {
-	this->initialized = false;
+	for (auto& el : this->renderables) {
+		el.second->destroy();
+	}
+
+	this->isInitialized = false;
 }
 
 void Page::input() {}
 
 void Page::update() {}
 
-void Page::render() {}
+void Page::render() {
+	for (auto& el : this->renderables) {
+		el.second->render();
+	}
+}

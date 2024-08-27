@@ -11,30 +11,51 @@
 
 class App
 {
-private:
-	SDL_Window* window = nullptr;
-	SDL_Renderer* renderer = nullptr;
 public:
+
 	enum Location {
 		MAIN_MENU,
 		SETTINGS
 	};
 
-	const char* version;
-	int windowWidth;
-	int windowHeight;
-	bool isRunning = false;
-	int fps = 60;
-	int lastFrameTime = 0;
-	float deltaTime = 1;
-	Location currentLocation = MAIN_MENU;
-	Location previousLocation = MAIN_MENU;
 	App(
-		const char* version,
+		std::string version,
+		int fps,
 		int windowWidth,
 		int windowHeight);
 	~App();
-	SDL_Renderer* getRenderer();
+
+	SDL_Renderer* getRenderer() const;
+	App::Location getCurrentLocation() const;
+	App::Location getPreviousLocation() const;
+	std::string getVersion() const;
+	bool getRunning() const;
+	int getLastFrameTime() const;
+	int getFps() const;
+	int getWindowWidth() const;
+	int getWindowHeight() const;
+	float getDeltaTime() const;
+
+	void setCurrentLocation(App::Location value);
+	void setPreviousLocation(App::Location value);
+	void setRunning(bool value);
+	void setLastFrameTime(int value);
+	void setFps(int value);
+	void setDeltaTime(float value);
+
+private:
+
+	SDL_Window* window = nullptr;
+	SDL_Renderer* renderer = nullptr;
+	App::Location currentLocation = MAIN_MENU;
+	App::Location previousLocation = MAIN_MENU;
+	std::string version;
+	bool isRunning = false;
+	int lastFrameTime = 0;
+	int fps;
+	int windowWidth;
+	int windowHeight;
+	float deltaTime = 1;
 };
 
 #endif

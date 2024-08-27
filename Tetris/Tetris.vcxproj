@@ -39,6 +39,9 @@
     <ClInclude Include="renderables\Text.h" />
     <ClInclude Include="renderables\Texture.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app_settings.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
