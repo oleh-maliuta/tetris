@@ -30,6 +30,9 @@
     <ClCompile Include="renderables\Text.cpp">
       <Filter>renderables</Filter>
     </ClCompile>
+    <ClCompile Include="renderables\TextButton.cpp">
+      <Filter>renderables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pages\MainMenuPage.h">
@@ -50,6 +53,9 @@
       <Filter>renderables</Filter>
     </ClInclude>
     <ClInclude Include="renderables\Text.h">
+      <Filter>renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="renderables\TextButton.h">
       <Filter>renderables</Filter>
     </ClInclude>
   </ItemGroup>

@@ -89,8 +89,8 @@ std::string App::getVersion() const {
 	return this->version;
 }
 
-bool App::getRunning() const {
-	return this->isRunning;
+float App::getDeltaTime() const {
+	return this->deltaTime;
 }
 
 int App::getLastFrameTime() const {
@@ -109,8 +109,8 @@ int App::getWindowHeight() const {
 	return this->windowHeight;
 }
 
-float App::getDeltaTime() const {
-	return this->deltaTime;
+bool App::getRunning() const {
+	return this->isRunning;
 }
 
 void App::setCurrentLocation(App::Location value) {
@@ -121,8 +121,8 @@ void App::setPreviousLocation(App::Location value) {
 	this->previousLocation = value;
 }
 
-void App::setRunning(bool value) {
-	this->isRunning = value;
+void App::setDeltaTime(float value) {
+	this->deltaTime = value;
 }
 
 void App::setLastFrameTime(int value) {
@@ -133,6 +133,6 @@ void App::setFps(int value) {
 	this->fps = value;
 }
 
-void App::setDeltaTime(float value) {
-	this->deltaTime = value;
+void App::setRunning(bool value) {
+	this->isRunning = value;
 }

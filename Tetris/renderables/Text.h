@@ -20,7 +20,7 @@ public:
         const Uint32* wrapLength = nullptr,
         const int& x = 0,
         const int& y = 0,
-        const SDL_Color& fontColor = { 0, 0, 0 },
+        const SDL_Color& fontColor = { 0, 0, 0, 255 },
         const SDL_RendererFlip& flip = SDL_FLIP_NONE,
         const SDL_Point* rotationPoint = nullptr,
         const double& angle = 0);

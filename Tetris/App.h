@@ -29,19 +29,19 @@ public:
 	App::Location getCurrentLocation() const;
 	App::Location getPreviousLocation() const;
 	std::string getVersion() const;
-	bool getRunning() const;
+	float getDeltaTime() const;
 	int getLastFrameTime() const;
 	int getFps() const;
 	int getWindowWidth() const;
 	int getWindowHeight() const;
-	float getDeltaTime() const;
+	bool getRunning() const;
 
 	void setCurrentLocation(App::Location value);
 	void setPreviousLocation(App::Location value);
-	void setRunning(bool value);
+	void setDeltaTime(float value);
 	void setLastFrameTime(int value);
 	void setFps(int value);
-	void setDeltaTime(float value);
+	void setRunning(bool value);
 
 private:
 
@@ -50,12 +50,12 @@ private:
 	App::Location currentLocation = MAIN_MENU;
 	App::Location previousLocation = MAIN_MENU;
 	std::string version;
-	bool isRunning = false;
+	float deltaTime = 1;
 	int lastFrameTime = 0;
 	int fps;
 	int windowWidth;
 	int windowHeight;
-	float deltaTime = 1;
+	bool isRunning = false;
 };
 
 #endif

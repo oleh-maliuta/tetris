@@ -7,6 +7,7 @@
 #include "../Loader.h"
 #include "../renderables/Texture.h"
 #include "../renderables/Text.h"
+#include "../renderables/TextButton.h"
 
 class MainMenuPage
 	: public Page

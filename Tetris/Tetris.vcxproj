@@ -27,6 +27,7 @@
     <ClCompile Include="pages\SettingsPage.cpp" />
     <ClCompile Include="renderables\Renderable.cpp" />
     <ClCompile Include="renderables\Text.cpp" />
+    <ClCompile Include="renderables\TextButton.cpp" />
     <ClCompile Include="renderables\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +38,7 @@
     <ClInclude Include="pages\SettingsPage.h" />
     <ClInclude Include="renderables\Renderable.h" />
     <ClInclude Include="renderables\Text.h" />
+    <ClInclude Include="renderables\TextButton.h" />
     <ClInclude Include="renderables\Texture.h" />
   </ItemGroup>
   <ItemGroup>
