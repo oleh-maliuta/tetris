@@ -31,6 +31,32 @@ public:
     virtual void render() override;
     virtual void destroy() override;
 
+    SDL_Color getBodyColor() const;
+    SDL_Color getFontColor() const;
+    std::string getContent() const;
+    std::string getFontPath() const;
+    int getFontSize() const;
+    int getPositionX() const;
+    int getPositionY() const;
+    int getBodyWidth() const;
+    int getBodyHeight() const;
+    int getTextWidth() const;
+    int getTextHeight() const;
+    int getPaddingLeft() const;
+    int getPaddingRight() const;
+
+    void setBodyColor(const SDL_Color& value);
+    void setFontColor(const SDL_Color& value);
+    void setContent(const std::string& value);
+    void setFontPath(const std::string& value);
+    void setFontSize(const int& value);
+    void setPositionX(const int& value);
+    void setPositionY(const int& value);
+    void setBodyWidth(const int& value);
+    void setBodyHeight(const int& value);
+    void setPaddingLeft(const int& value);
+    void setPaddingRight(const int& value);
+
 private:
 
     SDL_Texture* textTexture = nullptr;

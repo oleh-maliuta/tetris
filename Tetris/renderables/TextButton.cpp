@@ -96,3 +96,171 @@ void TextButton::destroy() {
 		this->textTexture = nullptr;
 	}
 }
+
+SDL_Color TextButton::getBodyColor() const {
+	return this->bodyColor;
+}
+
+SDL_Color TextButton::getFontColor() const {
+	return this->fontColor;
+}
+
+std::string TextButton::getContent() const {
+	return this->content;
+}
+
+std::string TextButton::getFontPath() const {
+	return this->fontPath;
+}
+
+int TextButton::getFontSize() const {
+	return this->fontSize;
+}
+
+int TextButton::getPositionX() const {
+	return this->positionX;
+}
+
+int TextButton::getPositionY() const {
+	return this->positionY;
+}
+
+int TextButton::getBodyWidth() const {
+	return this->bodyWidth;
+}
+
+int TextButton::getBodyHeight() const {
+	return this->bodyHeight;
+}
+
+int TextButton::getTextWidth() const {
+	return this->textWidth;
+}
+
+int TextButton::getTextHeight() const {
+	return this->textHeight;
+}
+
+int TextButton::getPaddingLeft() const {
+	return this->paddingLeft;
+}
+
+int TextButton::getPaddingRight() const {
+	return this->paddingRight;
+}
+
+void TextButton::setBodyColor(const SDL_Color& value) {
+	this->bodyColor = value;
+}
+
+void TextButton::setFontColor(const SDL_Color& value) {
+	if (this->textTexture != nullptr) {
+		SDL_DestroyTexture(this->textTexture);
+		this->textTexture = nullptr;
+	}
+
+	this->fontColor = value;
+
+	SDL_Renderer* renderer = this->app->getRenderer();
+	Uint32 textWrap = static_cast<Uint32>(
+		this->bodyWidth - this->paddingLeft - this->paddingRight);
+
+	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
+		renderer,
+		this->font,
+		this->fontColor,
+		this->content.c_str(),
+		&textWrap,
+		&this->textWidth,
+		&this->textHeight);
+}
+
+void TextButton::setContent(const std::string& value) {
+	if (this->textTexture != nullptr) {
+		SDL_DestroyTexture(this->textTexture);
+		this->textTexture = nullptr;
+	}
+
+	this->content = value;
+
+	SDL_Renderer* renderer = this->app->getRenderer();
+	Uint32 textWrap = static_cast<Uint32>(
+		this->bodyWidth - this->paddingLeft - this->paddingRight);
+
+	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
+		renderer,
+		this->font,
+		this->fontColor,
+		this->content.c_str(),
+		&textWrap,
+		&this->textWidth,
+		&this->textHeight);
+}
+
+void TextButton::setFontPath(const std::string& value) {
+	if (this->textTexture != nullptr) {
+		SDL_DestroyTexture(this->textTexture);
+		this->textTexture = nullptr;
+	}
+
+	this->fontPath = value;
+
+	SDL_Renderer* renderer = this->app->getRenderer();
+	Uint32 textWrap = static_cast<Uint32>(
+		this->bodyWidth - this->paddingLeft - this->paddingRight);
+
+	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
+		renderer,
+		this->font,
+		this->fontColor,
+		this->content.c_str(),
+		&textWrap,
+		&this->textWidth,
+		&this->textHeight);
+}
+
+void TextButton::setFontSize(const int& value) {
+	if (this->textTexture != nullptr) {
+		SDL_DestroyTexture(this->textTexture);
+		this->textTexture = nullptr;
+	}
+
+	this->fontSize = value;
+
+	SDL_Renderer* renderer = this->app->getRenderer();
+	Uint32 textWrap = static_cast<Uint32>(
+		this->bodyWidth - this->paddingLeft - this->paddingRight);
+
+	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
+		renderer,
+		this->font,
+		this->fontColor,
+		this->content.c_str(),
+		&textWrap,
+		&this->textWidth,
+		&this->textHeight);
+}
+
+void TextButton::setPositionX(const int& value) {
+	this->positionX = value;
+}
+
+void TextButton::setPositionY(const int& value) {
+	this->positionY = value;
+}
+
+void TextButton::setBodyWidth(const int& value) {
+	this->bodyWidth = value;
+}
+
+void TextButton::setBodyHeight(const int& value) {
+	this->bodyHeight = value;
+}
+
+void TextButton::setPaddingLeft(const int& value) {
+	this->paddingLeft = value;
+}
+
+void TextButton::setPaddingRight(const int& value) {
+	this->paddingRight = value;
+}
