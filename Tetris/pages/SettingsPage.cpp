@@ -22,20 +22,11 @@ void SettingsPage::clean() {
 }
 
 void SettingsPage::input() {
-	SDL_Event event;
-
-	while (SDL_PollEvent(&event))
-	{
-		switch (event.type) {
-		case SDL_QUIT:
-			this->app->setRunning(false);
-			break;
-		}
-	}
+	Page::input();
 }
 
 void SettingsPage::update() {
-
+	Page::update();
 }
 
 void SettingsPage::render() {

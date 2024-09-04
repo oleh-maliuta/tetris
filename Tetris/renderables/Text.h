@@ -26,6 +26,7 @@ public:
         const double& angle = 0);
     ~Text();
 
+    virtual bool isCursorIn(int x, int y) override;
     virtual void init() override;
     virtual void render() override;
     virtual void destroy() override;

@@ -9,10 +9,14 @@ class SettingsPage
 	: public Page
 {
 public:
-	SettingsPage(App* app);
 
+	SettingsPage(App* app);
+	
 	virtual void init() override;
 	virtual void clean() override;
+
+protected:
+	
 	virtual void input() override;
 	virtual void update() override;
 	virtual void render() override;

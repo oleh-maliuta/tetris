@@ -38,7 +38,30 @@ void Page::clean() {
 	this->isInitialized = false;
 }
 
-void Page::input() {}
+void Page::input() {
+	SDL_Event event;
+	int mousePosX, mousePosY;
+
+	SDL_GetMouseState(&mousePosX, &mousePosY);
+
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type) {
+		case SDL_QUIT:
+			this->app->setRunning(false);
+			break;
+		case SDL_MOUSEBUTTONUP:
+			if (event.button.button == SDL_BUTTON_LEFT) {
+				for (auto& el : this->renderables) {
+					if (el.second->isCursorIn(mousePosX, mousePosY)) {
+						el.second->getOnRelease()();
+					}
+				}
+			}
+			break;
+		}
+	}
+}
 
 void Page::update() {}
 

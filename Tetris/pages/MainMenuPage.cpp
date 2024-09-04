@@ -2,22 +2,23 @@
 
 MainMenuPage::MainMenuPage(App* app)
 	: Page(app) {
-	this->renderables["logo__texture"] = new Texture(
+	App* appRef = this->app;
+	Uint32 uint32WindowWidth = static_cast<Uint32>(this->app->getWindowWidth());
+
+	Texture* logo__texture = new Texture(
 		this->app,
 		"assets/images/png/game_logo.png",
 		nullptr,
 		new SDL_Rect{ this->app->getWindowWidth() / 2 - 78,100,156,34 });
 
-	Uint32 uint32WindowWidth = static_cast<Uint32>(this->app->getWindowWidth());
-
-	this->renderables["version_info__text"] = new Text(
+	Text* version_info__text = new Text(
 		this->app,
 		"assets/fonts/open_sans/normal.ttf",
 		this->app->getVersion(),
 		15,
 		&uint32WindowWidth);
 
-	this->renderables["quit__text_button"] = new TextButton(
+	TextButton* quit__text_button = new TextButton(
 		this->app,
 		"assets/fonts/swansea/normal.ttf",
 		"Quit",
@@ -30,6 +31,12 @@ MainMenuPage::MainMenuPage(App* app)
 		{ 255, 255, 255, 255 },
 		5,
 		5);
+
+	this->renderables["logo__texture"] = logo__texture;
+	this->renderables["version_info__text"] = version_info__text;
+	this->renderables["quit__text_button"] = quit__text_button;
+
+	quit__text_button->setOnRelease([appRef] { appRef->setRunning(false); });
 }
 
 void MainMenuPage::init() {
@@ -49,20 +56,11 @@ void MainMenuPage::clean() {
 }
 
 void MainMenuPage::input() {
-	SDL_Event event;
-
-	while (SDL_PollEvent(&event))
-	{
-		switch (event.type) {
-		case SDL_QUIT:
-			this->app->setRunning(false);
-			break;
-		}
-	}
+	Page::input();
 }
 
 void MainMenuPage::update() {
-	
+	Page::update();
 }
 
 void MainMenuPage::render() {

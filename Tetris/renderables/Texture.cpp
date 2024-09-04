@@ -28,6 +28,15 @@ Texture::~Texture() {
 	delete this->rotationPoint;
 }
 
+bool Texture::isCursorIn(int x, int y) {
+	int posX = this->getPositionX();
+	int posY = this->getPositionY();
+
+	return
+		x >= posX && x < posX + this->getWidth() &&
+		y >= posY && y < posY + this->getHeight();
+}
+
 void Texture::init() {
 	SDL_Renderer* renderer = this->app->getRenderer();
 

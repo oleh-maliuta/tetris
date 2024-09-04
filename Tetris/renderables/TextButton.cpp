@@ -31,6 +31,12 @@ TextButton::~TextButton() {
 	this->destroy();
 }
 
+bool TextButton::isCursorIn(int x, int y) {
+	return
+		x >= this->positionX && x < this->positionX + this->bodyWidth &&
+		y >= this->positionY && y < this->positionY + this->bodyHeight;
+}
+
 void TextButton::init() {
 	SDL_Renderer* renderer = this->app->getRenderer();
 

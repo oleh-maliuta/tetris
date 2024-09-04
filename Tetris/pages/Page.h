@@ -10,20 +10,24 @@
 class Page
 {
 public:
+
 	Page(App* app);
 	virtual ~Page();
 
-	void exec();
 	virtual void init();
 	virtual void clean();
-	virtual void input();
-	virtual void update();
-	virtual void render();
+
+	void exec();
 
 protected:
+
 	App* app = nullptr;
 	std::map<std::string, Renderable*> renderables;
 	bool isInitialized = false;
+
+	virtual void input();
+	virtual void update();
+	virtual void render();
 };
 
 #endif

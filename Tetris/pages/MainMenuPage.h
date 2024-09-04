@@ -13,10 +13,14 @@ class MainMenuPage
 	: public Page
 {
 public:
+
 	MainMenuPage(App* app);
 
 	virtual void init() override;
 	virtual void clean() override;
+
+protected:
+
 	virtual void input() override;
 	virtual void update() override;
 	virtual void render() override;

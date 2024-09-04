@@ -31,6 +31,12 @@ Text::~Text() {
 	delete this->rotationPoint;
 }
 
+bool Text::isCursorIn(int x, int y) {
+	return
+		x >= this->positionX && x < this->positionX + this->width &&
+		y >= this->positionY && y < this->positionY + this->height;
+}
+
 void Text::init() {
 	SDL_Renderer* renderer = this->app->getRenderer();
 

@@ -27,6 +27,7 @@ public:
         const int& paddingRight = 0);
     ~TextButton();
 
+    virtual bool isCursorIn(int x, int y) override;
     virtual void init() override;
     virtual void render() override;
     virtual void destroy() override;
