@@ -50,7 +50,7 @@ void Page::input() {
 		case SDL_QUIT:
 			this->app->setRunning(false);
 			break;
-		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEBUTTONUP: {
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				for (auto& el : this->renderables) {
 					if (el.second->isCursorIn(mousePosX, mousePosY)) {
@@ -59,6 +59,25 @@ void Page::input() {
 				}
 			}
 			break;
+		}
+		case SDL_KEYDOWN: {
+			SDL_Keycode key = event.key.keysym.sym;
+			auto it = this->keyDownEvents.find(key);
+
+			if (it != this->keyDownEvents.end()) {
+				it->second();
+			}
+			break;
+		}
+		case SDL_KEYUP: {
+			SDL_Keycode key = event.key.keysym.sym;
+			auto it = this->keyUpEvents.find(key);
+
+			if (it != this->keyUpEvents.end()) {
+				it->second();
+			}
+			break;
+		}
 		}
 	}
 }

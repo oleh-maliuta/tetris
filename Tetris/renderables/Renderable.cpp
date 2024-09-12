@@ -10,11 +10,15 @@ bool Renderable::isCursorIn(int x, int y) {
 	return false;
 }
 
-void Renderable::init() {}
+void Renderable::init() {
+	this->isInitialized = true;
+}
 
 void Renderable::render() {}
 
-void Renderable::destroy() {}
+void Renderable::destroy() {
+	this->isInitialized = false;
+}
 
 bool Renderable::getVisibility() const {
 	return this->visibility;

@@ -28,6 +28,7 @@ protected:
 
 	App* app = nullptr;
 	bool visibility = true;
+	bool isInitialized = false;
 
 	std::function<void()> onRelease = [] {};
 };

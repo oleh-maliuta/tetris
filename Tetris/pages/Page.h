@@ -23,6 +23,8 @@ protected:
 
 	App* app = nullptr;
 	std::map<std::string, Renderable*> renderables;
+	std::map<SDL_Keycode, std::function<void()>> keyDownEvents;
+	std::map<SDL_Keycode, std::function<void()>> keyUpEvents;
 	bool isInitialized = false;
 
 	virtual void input();

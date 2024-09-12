@@ -54,7 +54,7 @@ void TextButton::init() {
 	Uint32 textWrap = static_cast<Uint32>(
 		this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
+	this->textTexture = Loader::getTextureFromSolidUtf8Text(
 		renderer,
 		this->font,
 		this->fontColor,
@@ -62,10 +62,12 @@ void TextButton::init() {
 		&textWrap,
 		&this->textWidth,
 		&this->textHeight);
+
+	Renderable::init();
 }
 
 void TextButton::render() {
-	if (!this->visibility) {
+	if (!this->visibility || !this->isInitialized) {
 		return;
 	}
 
@@ -81,14 +83,10 @@ void TextButton::render() {
 	SDL_SetRenderDrawColor(renderer, this->bodyColor.r, this->bodyColor.g, this->bodyColor.b, this->bodyColor.a);
 	SDL_RenderSetViewport(renderer, &body);
 	SDL_RenderFillRect(renderer, nullptr);
-
-	SDL_RenderCopy(
-		renderer,
-		this->textTexture,
-		nullptr,
-		&textRectangle);
-
+	SDL_RenderCopy(renderer, this->textTexture, nullptr, &textRectangle);
 	SDL_RenderSetViewport(renderer, nullptr);
+
+	Renderable::render();
 }
 
 void TextButton::destroy() {
@@ -101,6 +99,8 @@ void TextButton::destroy() {
 		SDL_DestroyTexture(this->textTexture);
 		this->textTexture = nullptr;
 	}
+
+	Renderable::destroy();
 }
 
 SDL_Color TextButton::getBodyColor() const {
@@ -167,18 +167,20 @@ void TextButton::setFontColor(const SDL_Color& value) {
 
 	this->fontColor = value;
 
-	SDL_Renderer* renderer = this->app->getRenderer();
-	Uint32 textWrap = static_cast<Uint32>(
-		this->bodyWidth - this->paddingLeft - this->paddingRight);
+	if (this->isInitialized) {
+		SDL_Renderer* renderer = this->app->getRenderer();
+		Uint32 textWrap = static_cast<Uint32>(
+			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
-		renderer,
-		this->font,
-		this->fontColor,
-		this->content.c_str(),
-		&textWrap,
-		&this->textWidth,
-		&this->textHeight);
+		this->textTexture = Loader::getTextureFromSolidUtf8Text(
+			renderer,
+			this->font,
+			this->fontColor,
+			this->content.c_str(),
+			&textWrap,
+			&this->textWidth,
+			&this->textHeight);
+	}
 }
 
 void TextButton::setContent(const std::string& value) {
@@ -189,18 +191,20 @@ void TextButton::setContent(const std::string& value) {
 
 	this->content = value;
 
-	SDL_Renderer* renderer = this->app->getRenderer();
-	Uint32 textWrap = static_cast<Uint32>(
-		this->bodyWidth - this->paddingLeft - this->paddingRight);
+	if (this->isInitialized) {
+		SDL_Renderer* renderer = this->app->getRenderer();
+		Uint32 textWrap = static_cast<Uint32>(
+			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
-		renderer,
-		this->font,
-		this->fontColor,
-		this->content.c_str(),
-		&textWrap,
-		&this->textWidth,
-		&this->textHeight);
+		this->textTexture = Loader::getTextureFromSolidUtf8Text(
+			renderer,
+			this->font,
+			this->fontColor,
+			this->content.c_str(),
+			&textWrap,
+			&this->textWidth,
+			&this->textHeight);
+	}
 }
 
 void TextButton::setFontPath(const std::string& value) {
@@ -211,18 +215,20 @@ void TextButton::setFontPath(const std::string& value) {
 
 	this->fontPath = value;
 
-	SDL_Renderer* renderer = this->app->getRenderer();
-	Uint32 textWrap = static_cast<Uint32>(
-		this->bodyWidth - this->paddingLeft - this->paddingRight);
+	if (this->isInitialized) {
+		SDL_Renderer* renderer = this->app->getRenderer();
+		Uint32 textWrap = static_cast<Uint32>(
+			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
-		renderer,
-		this->font,
-		this->fontColor,
-		this->content.c_str(),
-		&textWrap,
-		&this->textWidth,
-		&this->textHeight);
+		this->textTexture = Loader::getTextureFromSolidUtf8Text(
+			renderer,
+			this->font,
+			this->fontColor,
+			this->content.c_str(),
+			&textWrap,
+			&this->textWidth,
+			&this->textHeight);
+	}
 }
 
 void TextButton::setFontSize(const int& value) {
@@ -233,18 +239,20 @@ void TextButton::setFontSize(const int& value) {
 
 	this->fontSize = value;
 
-	SDL_Renderer* renderer = this->app->getRenderer();
-	Uint32 textWrap = static_cast<Uint32>(
-		this->bodyWidth - this->paddingLeft - this->paddingRight);
+	if (this->isInitialized) {
+		SDL_Renderer* renderer = this->app->getRenderer();
+		Uint32 textWrap = static_cast<Uint32>(
+			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-	this->textTexture = Loader::loadTextureFromSolidUtf8Text(
-		renderer,
-		this->font,
-		this->fontColor,
-		this->content.c_str(),
-		&textWrap,
-		&this->textWidth,
-		&this->textHeight);
+		this->textTexture = Loader::getTextureFromSolidUtf8Text(
+			renderer,
+			this->font,
+			this->fontColor,
+			this->content.c_str(),
+			&textWrap,
+			&this->textWidth,
+			&this->textHeight);
+	}
 }
 
 void TextButton::setPositionX(const int& value) {

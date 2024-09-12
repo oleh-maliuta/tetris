@@ -1,6 +1,35 @@
 #include "Loader.h"
 
-SDL_Texture* Loader::loadTextureFromImage(
+void Loader::getImageSize(
+	const char* path,
+	int* widthRef,
+	int* heightRef) {
+	SDL_Surface* surface = IMG_Load(path);
+
+	if (surface == nullptr) {
+		printf("Unable to load image %s! SDL_image Error: %s\n",
+			path,
+			IMG_GetError());
+
+		if (widthRef != nullptr) {
+			*widthRef = 0;
+		}
+		if (heightRef != nullptr) {
+			*heightRef = 0;
+		}
+
+		return;
+	}
+
+	if (widthRef != nullptr) {
+		*widthRef = surface->w;
+	}
+	if (heightRef != nullptr) {
+		*heightRef = surface->h;
+	}
+}
+
+SDL_Texture* Loader::getTextureFromImage(
 	SDL_Renderer* renderer,
 	const char* path
 ) {
@@ -16,7 +45,7 @@ SDL_Texture* Loader::loadTextureFromImage(
 	return texture;
 }
 
-SDL_Texture* Loader::loadTextureFromSolidUtf8Text(
+SDL_Texture* Loader::getTextureFromSolidUtf8Text(
 	SDL_Renderer* renderer,
 	TTF_Font* font,
 	const SDL_Color& color,

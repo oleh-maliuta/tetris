@@ -3,13 +3,18 @@
 App::App(
 	std::string version,
 	int fps,
+	bool vSync,
 	int windowWidth,
-	int windowHeight
+	int windowHeight,
+	App::Location startLocation
 ) {
 	this->version = version;
 	this->fps = fps;
+	this->vSync = vSync;
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
+	this->currentLocation = startLocation;
+	this->previousLocation = startLocation;
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		printf(
@@ -53,7 +58,7 @@ App::App(
 	this->renderer = SDL_CreateRenderer(
 		this->window,
 		-1,
-		0);
+		SDL_RENDERER_ACCELERATED);
 
 	if (this->renderer == nullptr) {
 		printf(
@@ -61,6 +66,8 @@ App::App(
 			SDL_GetError());
 		return;
 	}
+
+	SDL_RenderSetVSync(this->renderer, this->vSync);
 
 	this->isRunning = true;
 }
@@ -109,30 +116,44 @@ int App::getWindowHeight() const {
 	return this->windowHeight;
 }
 
+bool App::getVSync() const {
+	return this->vSync;
+}
+
 bool App::getRunning() const {
 	return this->isRunning;
 }
 
-void App::setCurrentLocation(App::Location value) {
+void App::setCurrentLocation(const App::Location& value) {
 	this->currentLocation = value;
 }
 
-void App::setPreviousLocation(App::Location value) {
+void App::setPreviousLocation(const App::Location& value) {
 	this->previousLocation = value;
 }
 
-void App::setDeltaTime(float value) {
+void App::setDeltaTime(const float& value) {
 	this->deltaTime = value;
 }
 
-void App::setLastFrameTime(int value) {
+void App::setLastFrameTime(const int& value) {
 	this->lastFrameTime = value;
 }
 
-void App::setFps(int value) {
+void App::setFps(const int& value) {
 	this->fps = value;
 }
 
-void App::setRunning(bool value) {
+void App::setVSync(const bool& value) {
+	if (this->vSync == value) {
+		return;
+	}
+
+	this->vSync = value;
+
+	SDL_RenderSetVSync(this->renderer, this->vSync);
+}
+
+void App::setRunning(const bool& value) {
 	this->isRunning = value;
 }

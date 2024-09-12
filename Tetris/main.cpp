@@ -14,13 +14,16 @@ int main(int argc, char* argv[]) {
 	App app(
 		app_settings["app_version"],
 		std::stoi(app_settings["fps"]),
+		app_settings["vertical_sync"] == "1",
 		440,
-		640);
+		640,
+		App::Location::MAIN_MENU);
 
-	MainMenuPage main_menu(&app);
-	SettingsPage settings(&app);
+	std::map<App::Location, Page*> pages;
+	pages[App::Location::MAIN_MENU] = new MainMenuPage(&app);
+	pages[App::Location::SETTINGS] = new SettingsPage(&app);
 
-	main_menu.init();
+	pages[app.getCurrentLocation()]->init();
 
 	while (app.getRunning())
 	{
@@ -34,49 +37,19 @@ int main(int argc, char* argv[]) {
 		app.setDeltaTime((static_cast<float>(SDL_GetTicks()) / app.getLastFrameTime()) / 1000.0f);
 		app.setLastFrameTime(SDL_GetTicks());
 
-		switch (app.getCurrentLocation())
-		{
-		case App::MAIN_MENU:
-			main_menu.exec();
-			break;
-		case App::SETTINGS:
-			settings.exec();
-			break;
-		}
+		pages[app.getPreviousLocation()]->exec();
 
 		if (app.getCurrentLocation() != app.getPreviousLocation()) {
-			switch (app.getPreviousLocation())
-			{
-			case App::MAIN_MENU:
-				main_menu.clean();
-				break;
-			case App::SETTINGS:
-				settings.clean();
-				break;
-			}
-
-			switch (app.getCurrentLocation())
-			{
-			case App::MAIN_MENU:
-				main_menu.init();
-				break;
-			case App::SETTINGS:
-				settings.init();
-				break;
-			}
-
+			pages[app.getPreviousLocation()]->clean();
+			pages[app.getCurrentLocation()]->init();
 			app.setPreviousLocation(app.getCurrentLocation());
 		}
 	}
 
-	switch (app.getCurrentLocation())
-	{
-	case App::MAIN_MENU:
-		main_menu.clean();
-		break;
-	case App::SETTINGS:
-		settings.clean();
-		break;
+	pages[app.getPreviousLocation()]->clean();
+
+	for (auto& el : pages) {
+		delete el.second;
 	}
 
 	return 0;

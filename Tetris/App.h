@@ -21,8 +21,10 @@ public:
 	App(
 		std::string version,
 		int fps,
+		bool vSync,
 		int windowWidth,
-		int windowHeight);
+		int windowHeight,
+		App::Location startLocation);
 	~App();
 
 	SDL_Renderer* getRenderer() const;
@@ -34,27 +36,30 @@ public:
 	int getFps() const;
 	int getWindowWidth() const;
 	int getWindowHeight() const;
+	bool getVSync() const;
 	bool getRunning() const;
 
-	void setCurrentLocation(App::Location value);
-	void setPreviousLocation(App::Location value);
-	void setDeltaTime(float value);
-	void setLastFrameTime(int value);
-	void setFps(int value);
-	void setRunning(bool value);
+	void setCurrentLocation(const App::Location& value);
+	void setPreviousLocation(const App::Location& value);
+	void setDeltaTime(const float& value);
+	void setLastFrameTime(const int& value);
+	void setFps(const int& value);
+	void setVSync(const bool& value);
+	void setRunning(const bool& value);
 
 private:
 
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr;
-	App::Location currentLocation = MAIN_MENU;
-	App::Location previousLocation = MAIN_MENU;
+	App::Location currentLocation;
+	App::Location previousLocation;
 	std::string version;
 	float deltaTime = 1;
 	int lastFrameTime = 0;
 	int fps;
 	int windowWidth;
 	int windowHeight;
+	bool vSync;
 	bool isRunning = false;
 };
 

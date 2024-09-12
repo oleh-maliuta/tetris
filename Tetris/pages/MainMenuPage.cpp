@@ -3,25 +3,27 @@
 MainMenuPage::MainMenuPage(App* app)
 	: Page(app) {
 	App* appRef = this->app;
-	Uint32 uint32WindowWidth = static_cast<Uint32>(this->app->getWindowWidth());
+	Uint32 versionInfoTextWrap = static_cast<Uint32>(this->app->getWindowWidth()) - 6;
 
 	Texture* logo__texture = new Texture(
 		this->app,
 		"assets/images/png/game_logo.png",
-		nullptr,
-		new SDL_Rect{ this->app->getWindowWidth() / 2 - 78,100,156,34 });
+		this->app->getWindowWidth() / 2 - 78,
+		100);
 
 	Text* version_info__text = new Text(
 		this->app,
 		"assets/fonts/open_sans/normal.ttf",
 		this->app->getVersion(),
 		15,
-		&uint32WindowWidth);
+		&versionInfoTextWrap,
+		3,
+		this->app->getWindowHeight() - 20);
 
-	TextButton* quit__text_button = new TextButton(
+	TextButton* settings__text_button = new TextButton(
 		this->app,
 		"assets/fonts/swansea/normal.ttf",
-		"Quit",
+		"Settings",
 		30,
 		250,
 		86,
@@ -32,10 +34,26 @@ MainMenuPage::MainMenuPage(App* app)
 		5,
 		5);
 
+	TextButton* quit__text_button = new TextButton(
+		this->app,
+		"assets/fonts/swansea/normal.ttf",
+		"Quit",
+		30,
+		250,
+		86,
+		this->app->getWindowWidth() / 2 - 125,
+		320,
+		{ 0, 55, 164, 255 },
+		{ 255, 255, 255, 255 },
+		5,
+		5);
+
 	this->renderables["logo__texture"] = logo__texture;
 	this->renderables["version_info__text"] = version_info__text;
+	this->renderables["settings__text_button"] = settings__text_button;
 	this->renderables["quit__text_button"] = quit__text_button;
 
+	settings__text_button->setOnRelease([appRef] { appRef->setCurrentLocation(App::Location::SETTINGS); });
 	quit__text_button->setOnRelease([appRef] { appRef->setRunning(false); });
 }
 

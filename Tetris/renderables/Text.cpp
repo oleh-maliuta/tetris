@@ -51,7 +51,7 @@ void Text::init() {
 		this->app->setRunning(false);
 	}
 
-	this->texture = Loader::loadTextureFromSolidUtf8Text(
+	this->texture = Loader::getTextureFromSolidUtf8Text(
 		renderer,
 		this->font,
 		this->fontColor,
@@ -59,10 +59,12 @@ void Text::init() {
 		this->wrapLength,
 		&this->width,
 		&this->height);
+
+	Renderable::init();
 }
 
 void Text::render() {
-	if (!this->visibility) {
+	if (!this->visibility || !this->isInitialized) {
 		return;
 	}
 
@@ -77,6 +79,8 @@ void Text::render() {
 		this->angle,
 		this->rotationPoint,
 		this->flip);
+
+	Renderable::render();
 }
 
 void Text::destroy() {
@@ -89,6 +93,8 @@ void Text::destroy() {
 		SDL_DestroyTexture(this->texture);
 		this->texture = nullptr;
 	}
+
+	Renderable::destroy();
 }
 
 SDL_Point* Text::getRotationPoint() const {
@@ -169,14 +175,16 @@ void Text::setWrapLength(const Uint32* value) {
 		this->wrapLength = nullptr;
 	}
 
-	this->texture = Loader::loadTextureFromSolidUtf8Text(
-		this->app->getRenderer(),
-		this->font,
-		this->fontColor,
-		this->content.c_str(),
-		this->wrapLength,
-		&this->width,
-		&this->height);
+	if (this->isInitialized) {
+		this->texture = Loader::getTextureFromSolidUtf8Text(
+			this->app->getRenderer(),
+			this->font,
+			this->fontColor,
+			this->content.c_str(),
+			this->wrapLength,
+			&this->width,
+			&this->height);
+	}
 }
 
 void Text::setFontColor(const SDL_Color& value) {
@@ -187,14 +195,16 @@ void Text::setFontColor(const SDL_Color& value) {
 
 	this->fontColor = value;
 	
-	this->texture = Loader::loadTextureFromSolidUtf8Text(
-		this->app->getRenderer(),
-		this->font,
-		this->fontColor,
-		this->content.c_str(),
-		this->wrapLength,
-		&this->width,
-		&this->height);
+	if (this->isInitialized) {
+		this->texture = Loader::getTextureFromSolidUtf8Text(
+			this->app->getRenderer(),
+			this->font,
+			this->fontColor,
+			this->content.c_str(),
+			this->wrapLength,
+			&this->width,
+			&this->height);
+	}
 }
 
 void Text::setFlip(const SDL_RendererFlip& value) {
@@ -209,14 +219,16 @@ void Text::setContent(const std::string& value) {
 
 	this->content = value;
 	
-	this->texture = Loader::loadTextureFromSolidUtf8Text(
-		this->app->getRenderer(),
-		this->font,
-		this->fontColor,
-		this->content.c_str(),
-		this->wrapLength,
-		&this->width,
-		&this->height);
+	if (this->isInitialized) {
+		this->texture = Loader::getTextureFromSolidUtf8Text(
+			this->app->getRenderer(),
+			this->font,
+			this->fontColor,
+			this->content.c_str(),
+			this->wrapLength,
+			&this->width,
+			&this->height);
+	}
 }
 
 void Text::setFontPath(const std::string& value) {
@@ -237,14 +249,16 @@ void Text::setFontSize(const int& value) {
 
 	this->fontSize = value;
 
-	this->texture = Loader::loadTextureFromSolidUtf8Text(
-		this->app->getRenderer(),
-		this->font,
-		this->fontColor,
-		this->content.c_str(),
-		this->wrapLength,
-		&this->width,
-		&this->height);
+	if (this->isInitialized) {
+		this->texture = Loader::getTextureFromSolidUtf8Text(
+			this->app->getRenderer(),
+			this->font,
+			this->fontColor,
+			this->content.c_str(),
+			this->wrapLength,
+			&this->width,
+			&this->height);
+	}
 }
 
 void Text::setPositionX(const int& value) {

@@ -15,8 +15,10 @@ public:
     Texture(
         App* app,
         const std::string& path,
-        const SDL_Rect* srcRectangle = nullptr,
-        const SDL_Rect* dstRectangle = nullptr,
+        const int& x = 0,
+        const int& y = 0,
+        const int* width = nullptr,
+        const int* height = nullptr,
         const SDL_Point* rotationPoint = nullptr,
         const SDL_RendererFlip& flip = SDL_FLIP_NONE,
         const SDL_Color& moduleColor = { 255, 255, 255 },
@@ -28,8 +30,6 @@ public:
     virtual void render() override;
     virtual void destroy() override;
 
-    SDL_Rect* getSrcRectangle() const;
-    SDL_Rect* getDstRectangle() const;
     SDL_Point* getRotationPoint() const;
     SDL_RendererFlip getFlip() const;
     SDL_Color getModuleColor() const;
@@ -43,26 +43,33 @@ public:
     int getWidth() const;
     int getHeight() const;
 
-    void setSrcRectangle(const SDL_Rect* value);
-    void setDstRectangle(const SDL_Rect* value);
     void setRotationPoint(const SDL_Point* value);
+    void setFilePath(const std::string& value);
     void setModuleRed(const Uint8& value);
     void setModuleGreen(const Uint8& value);
     void setModuleBlue(const Uint8& value);
     void setModuleColor(const SDL_Color& color);
+    void setPositionX(const int& value);
+    void setPositionY(const int& value);
+    void setWidth(const int* value);
+    void setHeight(const int* value);
     void setAngle(const double& value);
 
 private:
 
     SDL_Texture* sdlTexture = nullptr;
-    SDL_Rect* srcRectangle;
-    SDL_Rect* dstRectangle;
     SDL_Point* rotationPoint;
     SDL_RendererFlip flip;
     std::string filePath;
     Uint8 moduleRed;
     Uint8 moduleGreen;
     Uint8 moduleBlue;
+    int* width;
+    int* height;
+    int defaultWidth;
+    int defaultHeight;
+    int positionX;
+    int positionY;
     double angle;
 };
 

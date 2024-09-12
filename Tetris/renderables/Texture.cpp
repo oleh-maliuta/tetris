@@ -3,28 +3,34 @@
 Texture::Texture(
 	App* app,
 	const std::string& path,
-	const SDL_Rect* srcRectangle,
-	const SDL_Rect* dstRectangle,
+	const int& x,
+	const int& y,
+	const int* width,
+	const int* height,
 	const SDL_Point* rotationPoint,
 	const SDL_RendererFlip& flip,
 	const SDL_Color& moduleColor,
 	const double& angle
 ) : Renderable(app) {
 	this->filePath = path;
-	this->srcRectangle = srcRectangle != nullptr ? new SDL_Rect(*srcRectangle) : nullptr;
-	this->dstRectangle = dstRectangle != nullptr ? new SDL_Rect(*dstRectangle) : nullptr;
+	this->positionX = x;
+	this->positionY = y;
+	this->width = width != nullptr ? new int(*width) : nullptr;
+	this->height = height != nullptr ? new int(*height) : nullptr;
 	this->rotationPoint = rotationPoint != nullptr ? new SDL_Point(*rotationPoint) : nullptr;
 	this->flip = flip;
 	this->moduleRed = moduleColor.r;
 	this->moduleGreen = moduleColor.g;
 	this->moduleBlue = moduleColor.b;
 	this->angle = angle;
+
+	Loader::getImageSize(path.c_str(), &this->defaultWidth, &this->defaultHeight);
 }
 
 Texture::~Texture() {
 	this->destroy();
-	delete this->srcRectangle;
-	delete this->dstRectangle;
+	delete this->width;
+	delete this->height;
 	delete this->rotationPoint;
 }
 
@@ -40,23 +46,31 @@ bool Texture::isCursorIn(int x, int y) {
 void Texture::init() {
 	SDL_Renderer* renderer = this->app->getRenderer();
 
-	this->sdlTexture = Loader::loadTextureFromImage(
+	this->sdlTexture = Loader::getTextureFromImage(
 		renderer,
 		this->filePath.c_str());
+
+	Renderable::init();
 }
 
 void Texture::render() {
-	if (!this->visibility) {
+	if (!this->visibility || !this->isInitialized) {
 		return;
 	}
 
 	SDL_Renderer* renderer = this->app->getRenderer();
+	SDL_Rect textureRectangle = {
+		this->positionX,
+		this->positionY,
+		this->width != nullptr ? *this->width : this->defaultWidth,
+		this->height != nullptr ? *this->height : this->defaultHeight
+	};
 
 	SDL_RenderCopyEx(
 		renderer,
 		this->sdlTexture,
-		this->srcRectangle,
-		this->dstRectangle,
+		nullptr,
+		&textureRectangle,
 		this->angle,
 		this->rotationPoint,
 		this->flip);
@@ -66,6 +80,8 @@ void Texture::render() {
 		this->moduleRed,
 		this->moduleGreen,
 		this->moduleBlue);
+
+	Renderable::render();
 }
 
 void Texture::destroy() {
@@ -73,14 +89,8 @@ void Texture::destroy() {
 		SDL_DestroyTexture(this->sdlTexture);
 		this->sdlTexture = nullptr;
 	}
-}
 
-SDL_Rect* Texture::getSrcRectangle() const {
-	return this->srcRectangle != nullptr ? new SDL_Rect(*this->srcRectangle) : nullptr;
-}
-
-SDL_Rect* Texture::getDstRectangle() const {
-	return this->dstRectangle != nullptr ? new SDL_Rect(*this->dstRectangle) : nullptr;
+	Renderable::destroy();
 }
 
 SDL_Point* Texture::getRotationPoint() const {
@@ -120,77 +130,27 @@ double Texture::getAngle() const {
 }
 
 int Texture::getPositionX() const {
-	if (this->dstRectangle != nullptr) {
-		return dstRectangle->x;
-	}
-
-	if (this->srcRectangle != nullptr) {
-		return srcRectangle->x;
-	}
-
-	return 0;
+	return this->positionX;
 }
 
 int Texture::getPositionY() const {
-	if (this->dstRectangle != nullptr) {
-		return dstRectangle->y;
-	}
-
-	if (this->srcRectangle != nullptr) {
-		return srcRectangle->y;
-	}
-
-	return 0;
+	return this->positionY;
 }
 
 int Texture::getWidth() const {
-	if (this->dstRectangle != nullptr) {
-		return dstRectangle->w;
+	if (this->width != nullptr) {
+		return *this->width;
 	}
 
-	if (this->srcRectangle != nullptr) {
-		return srcRectangle->w;
-	}
-
-	return this->app->getWindowWidth();
+	return this->defaultWidth;
 }
 
 int Texture::getHeight() const {
-	if (this->dstRectangle != nullptr) {
-		return dstRectangle->h;
+	if (this->height != nullptr) {
+		return *this->height;
 	}
 
-	if (this->srcRectangle != nullptr) {
-		return srcRectangle->h;
-	}
-
-	return this->app->getWindowHeight();
-}
-
-void Texture::setSrcRectangle(const SDL_Rect* value) {
-	if (this->srcRectangle != nullptr) {
-		delete this->srcRectangle;
-	}
-
-	if (value != nullptr) {
-		this->srcRectangle = new SDL_Rect(*value);
-	}
-	else {
-		this->srcRectangle = nullptr;
-	}
-}
-
-void Texture::setDstRectangle(const SDL_Rect* value) {
-	if (this->dstRectangle != nullptr) {
-		delete this->dstRectangle;
-	}
-
-	if (value != nullptr) {
-		this->dstRectangle = new SDL_Rect(*value);
-	}
-	else {
-		this->dstRectangle = nullptr;
-	}
+	return this->defaultHeight;
 }
 
 void Texture::setRotationPoint(const SDL_Point* value) {
@@ -203,6 +163,23 @@ void Texture::setRotationPoint(const SDL_Point* value) {
 	}
 	else {
 		this->rotationPoint = nullptr;
+	}
+}
+
+void Texture::setFilePath(const std::string& value) {
+	if (this->sdlTexture != nullptr) {
+		SDL_DestroyTexture(this->sdlTexture);
+		this->sdlTexture = nullptr;
+	}
+
+	this->filePath = value;
+
+	if (this->isInitialized) {
+		SDL_Renderer* renderer = this->app->getRenderer();
+
+		this->sdlTexture = Loader::getTextureFromImage(
+			renderer,
+			this->filePath.c_str());
 	}
 }
 
@@ -222,6 +199,32 @@ void Texture::setModuleColor(const SDL_Color& color) {
 	this->moduleRed = color.r;
 	this->moduleGreen = color.g;
 	this->moduleBlue = color.b;
+}
+
+void Texture::setPositionX(const int& value) {
+	this->positionX = value;
+}
+
+void Texture::setPositionY(const int& value) {
+	this->positionY = value;
+}
+
+void Texture::setWidth(const int* value) {
+	delete this->width;
+	this->width = nullptr;
+
+	if (value != nullptr) {
+		this->width = new int(*value);
+	}
+}
+
+void Texture::setHeight(const int* value) {
+	delete this->height;
+	this->height = nullptr;
+
+	if (value != nullptr) {
+		this->height = new int(*value);
+	}
 }
 
 void Texture::setAngle(const double& value) {
