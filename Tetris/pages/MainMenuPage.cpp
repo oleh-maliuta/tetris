@@ -53,7 +53,7 @@ MainMenuPage::MainMenuPage(App* app)
 	this->renderables["settings__text_button"] = settings__text_button;
 	this->renderables["quit__text_button"] = quit__text_button;
 
-	settings__text_button->setOnRelease([appRef] { appRef->setCurrentLocation(App::Location::SETTINGS); });
+	settings__text_button->setOnRelease([appRef] { appRef->changePage("settings"); });
 	quit__text_button->setOnRelease([appRef] { appRef->setRunning(false); });
 }
 

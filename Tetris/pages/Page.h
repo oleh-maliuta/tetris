@@ -3,6 +3,8 @@
 #ifndef PAGES_PAGE_H
 #define PAGES_PAGE_H
 
+class App;
+
 #include <map>
 #include "../renderables/Renderable.h"
 #include "../App.h"

@@ -66,7 +66,7 @@ SettingsPage::SettingsPage(App* app)
 		pageRef->setVSync(!pageRef->getVSync());
 		v_sync__texture->setFilePath(pageRef->getVSync() ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png");
 	});
-	return__image_button->setOnRelease([appRef] { appRef->setCurrentLocation(App::Location::MAIN_MENU); });
+	return__image_button->setOnRelease([appRef] { appRef->changePage("main_menu"); });
 	apply__text_button->setOnRelease([appRef, pageRef] {
 		if (appRef->getVSync() != pageRef->getVSync()) {
 			appRef->setVSync(pageRef->getVSync());
