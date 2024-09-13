@@ -4,13 +4,13 @@
 #define RENDERABLES_RENDERABLE_H
 
 #include <functional>
-#include "../App.h"
+#include <SDL.h>
 
 class Renderable
 {
 public:
 
-	Renderable(App* app);
+	Renderable(SDL_Renderer* renderer);
 	virtual ~Renderable();
 
 	virtual bool isCursorIn(int x, int y);
@@ -26,7 +26,7 @@ public:
 
 protected:
 
-	App* app = nullptr;
+	SDL_Renderer* renderer = nullptr;
 	bool visibility = true;
 	bool isInitialized = false;
 

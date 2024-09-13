@@ -8,13 +8,13 @@ SettingsPage::SettingsPage(App* app)
 	Uint32 vSyncTextWrap = 100;
 
 	Texture* v_sync__texture = new Texture(
-		this->app,
+		this->app->getRenderer(),
 		this->vSync ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png",
 		280,
 		100);
 
 	Text* version_info__text = new Text(
-		this->app,
+		this->app->getRenderer(),
 		"assets/fonts/open_sans/normal.ttf",
 		this->app->getVersion(),
 		15,
@@ -23,7 +23,7 @@ SettingsPage::SettingsPage(App* app)
 		this->app->getWindowHeight() - 20);
 
 	Text* v_sync__text = new Text(
-		this->app,
+		this->app->getRenderer(),
 		"assets/fonts/open_sans/bold.ttf",
 		"V. Sync.",
 		20,
@@ -32,7 +32,7 @@ SettingsPage::SettingsPage(App* app)
 		100);
 
 	TextButton* apply__text_button = new TextButton(
-		this->app,
+		this->app->getRenderer(),
 		"assets/fonts/swansea/normal.ttf",
 		"Apply",
 		20,
@@ -46,7 +46,7 @@ SettingsPage::SettingsPage(App* app)
 		5);
 
 	ImageButton* return__image_button = new ImageButton(
-		this->app,
+		this->app->getRenderer(),
 		"assets/images/png/return.png",
 		10,
 		10,

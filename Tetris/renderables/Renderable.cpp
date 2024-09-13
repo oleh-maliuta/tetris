@@ -1,7 +1,7 @@
 #include "Renderable.h"
 
-Renderable::Renderable(App* app) {
-	this->app = app;
+Renderable::Renderable(SDL_Renderer* renderer) {
+	this->renderer = renderer;
 }
 
 Renderable::~Renderable() {}

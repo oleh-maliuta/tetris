@@ -5,7 +5,7 @@ Page::Page(App* app) {
 }
 
 Page::~Page() {
-	for (auto& el : this->renderables) {
+	for (const auto& el : this->renderables) {
 		delete el.second;
 	}
 }
@@ -23,7 +23,7 @@ void Page::exec() {
 }
 
 void Page::init() {
-	for (auto& el : this->renderables) {
+	for (const auto& el : this->renderables) {
 		el.second->init();
 	}
 
@@ -31,7 +31,7 @@ void Page::init() {
 }
 
 void Page::clean() {
-	for (auto& el : this->renderables) {
+	for (const auto& el : this->renderables) {
 		el.second->destroy();
 	}
 
@@ -52,7 +52,7 @@ void Page::input() {
 			break;
 		case SDL_MOUSEBUTTONUP: {
 			if (event.button.button == SDL_BUTTON_LEFT) {
-				for (auto& el : this->renderables) {
+				for (const auto& el : this->renderables) {
 					if (el.second->isCursorIn(mousePosX, mousePosY)) {
 						el.second->getOnRelease()();
 					}
@@ -61,8 +61,8 @@ void Page::input() {
 			break;
 		}
 		case SDL_KEYDOWN: {
-			SDL_Keycode key = event.key.keysym.sym;
-			auto it = this->keyDownEvents.find(key);
+			const SDL_Keycode key = event.key.keysym.sym;
+			const auto it = this->keyDownEvents.find(key);
 
 			if (it != this->keyDownEvents.end()) {
 				it->second();
@@ -70,8 +70,8 @@ void Page::input() {
 			break;
 		}
 		case SDL_KEYUP: {
-			SDL_Keycode key = event.key.keysym.sym;
-			auto it = this->keyUpEvents.find(key);
+			const SDL_Keycode key = event.key.keysym.sym;
+			const auto it = this->keyUpEvents.find(key);
 
 			if (it != this->keyUpEvents.end()) {
 				it->second();
@@ -85,7 +85,7 @@ void Page::input() {
 void Page::update() {}
 
 void Page::render() {
-	for (auto& el : this->renderables) {
+	for (const auto& el : this->renderables) {
 		el.second->render();
 	}
 }

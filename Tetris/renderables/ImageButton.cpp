@@ -1,7 +1,7 @@
 #include "ImageButton.h"
 
 ImageButton::ImageButton(
-	App* app,
+	SDL_Renderer* renderer,
 	const std::string& imagePath,
 	const int& x,
 	const int& y,
@@ -13,7 +13,7 @@ ImageButton::ImageButton(
 	const int* width,
 	const int* height,
 	const SDL_Color& imageModuleColor)
-	: Renderable(app) {
+	: Renderable(renderer) {
 	this->imagePath = imagePath;
 	this->positionX = x;
 	this->positionY = y;
@@ -47,10 +47,9 @@ bool ImageButton::isCursorIn(int x, int y) {
 }
 
 void ImageButton::init() {
-	SDL_Renderer* renderer = this->app->getRenderer();
 
 	this->texture = Loader::getTextureFromImage(
-		renderer,
+		this->renderer,
 		this->imagePath.c_str());
 
 	Renderable::init();
@@ -65,7 +64,6 @@ void ImageButton::render() {
 	int bodyHeight = this->getHeight();
 	int imageWidth = this->getImageWidth();
 	int imageHeight = this->getImageHeight();
-	SDL_Renderer* renderer = this->app->getRenderer();
 	SDL_Rect body = { this->positionX, this->positionY, bodyWidth, bodyHeight };
 	SDL_Rect imageRectangle = {
 		bodyWidth / 2 - imageWidth / 2,
@@ -74,12 +72,12 @@ void ImageButton::render() {
 		imageHeight
 	};
 
-	SDL_SetRenderDrawColor(renderer, this->bodyColor.r, this->bodyColor.g, this->bodyColor.b, this->bodyColor.a);
-	SDL_RenderSetViewport(renderer, &body);
-	SDL_RenderFillRect(renderer, nullptr);
-	SDL_RenderCopy(renderer, this->texture, nullptr, &imageRectangle);
+	SDL_SetRenderDrawColor(this->renderer, this->bodyColor.r, this->bodyColor.g, this->bodyColor.b, this->bodyColor.a);
+	SDL_RenderSetViewport(this->renderer, &body);
+	SDL_RenderFillRect(this->renderer, nullptr);
+	SDL_RenderCopy(this->renderer, this->texture, nullptr, &imageRectangle);
 	SDL_SetTextureColorMod(this->texture, this->moduleRed, this->moduleGreen, this->moduleBlue);
-	SDL_RenderSetViewport(renderer, nullptr);
+	SDL_RenderSetViewport(this->renderer, nullptr);
 
 	Renderable::render();
 }

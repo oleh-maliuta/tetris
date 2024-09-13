@@ -1,7 +1,7 @@
 #include "Texture.h"
 
 Texture::Texture(
-	App* app,
+	SDL_Renderer* renderer,
 	const std::string& path,
 	const int& x,
 	const int& y,
@@ -11,7 +11,7 @@ Texture::Texture(
 	const SDL_RendererFlip& flip,
 	const SDL_Color& moduleColor,
 	const double& angle
-) : Renderable(app) {
+) : Renderable(renderer) {
 	this->filePath = path;
 	this->positionX = x;
 	this->positionY = y;
@@ -44,10 +44,8 @@ bool Texture::isCursorIn(int x, int y) {
 }
 
 void Texture::init() {
-	SDL_Renderer* renderer = this->app->getRenderer();
-
 	this->sdlTexture = Loader::getTextureFromImage(
-		renderer,
+		this->renderer,
 		this->filePath.c_str());
 
 	Renderable::init();
@@ -58,7 +56,6 @@ void Texture::render() {
 		return;
 	}
 
-	SDL_Renderer* renderer = this->app->getRenderer();
 	SDL_Rect textureRectangle = {
 		this->positionX,
 		this->positionY,
@@ -67,7 +64,7 @@ void Texture::render() {
 	};
 
 	SDL_RenderCopyEx(
-		renderer,
+		this->renderer,
 		this->sdlTexture,
 		nullptr,
 		&textureRectangle,
@@ -175,10 +172,8 @@ void Texture::setFilePath(const std::string& value) {
 	this->filePath = value;
 
 	if (this->isInitialized) {
-		SDL_Renderer* renderer = this->app->getRenderer();
-
 		this->sdlTexture = Loader::getTextureFromImage(
-			renderer,
+			this->renderer,
 			this->filePath.c_str());
 	}
 }

@@ -1,7 +1,7 @@
 #include "Text.h"
 
 Text::Text(
-	App* app,
+	SDL_Renderer* renderer,
 	const std::string& fontPath,
 	const std::string& content,
 	const int& fontSize,
@@ -12,7 +12,7 @@ Text::Text(
 	const SDL_RendererFlip& flip,
 	const SDL_Point* rotationPoint,
 	const double& angle)
-	: Renderable(app) {
+	: Renderable(renderer) {
 	this->fontPath = fontPath;
 	this->content = content;
 	this->wrapLength = wrapLength != nullptr ? new Uint32(*wrapLength) : nullptr;
@@ -38,8 +38,6 @@ bool Text::isCursorIn(int x, int y) {
 }
 
 void Text::init() {
-	SDL_Renderer* renderer = this->app->getRenderer();
-
 	this->font = TTF_OpenFont(
 		this->fontPath.c_str(),
 		this->fontSize);
@@ -48,11 +46,10 @@ void Text::init() {
 	{
 		printf("Failed to load lazy font! SDL_ttf Error: %s\n",
 			TTF_GetError());
-		this->app->setRunning(false);
 	}
 
 	this->texture = Loader::getTextureFromSolidUtf8Text(
-		renderer,
+		this->renderer,
 		this->font,
 		this->fontColor,
 		this->content.c_str(),
@@ -68,11 +65,10 @@ void Text::render() {
 		return;
 	}
 
-	SDL_Renderer* renderer = this->app->getRenderer();
 	SDL_Rect dstRectangle = { this->positionX, this->positionY, this->width, this->height };
 
 	SDL_RenderCopyEx(
-		renderer,
+		this->renderer,
 		this->texture,
 		nullptr,
 		&dstRectangle,
@@ -177,7 +173,7 @@ void Text::setWrapLength(const Uint32* value) {
 
 	if (this->isInitialized) {
 		this->texture = Loader::getTextureFromSolidUtf8Text(
-			this->app->getRenderer(),
+			this->renderer,
 			this->font,
 			this->fontColor,
 			this->content.c_str(),
@@ -197,7 +193,7 @@ void Text::setFontColor(const SDL_Color& value) {
 	
 	if (this->isInitialized) {
 		this->texture = Loader::getTextureFromSolidUtf8Text(
-			this->app->getRenderer(),
+			this->renderer,
 			this->font,
 			this->fontColor,
 			this->content.c_str(),
@@ -221,7 +217,7 @@ void Text::setContent(const std::string& value) {
 	
 	if (this->isInitialized) {
 		this->texture = Loader::getTextureFromSolidUtf8Text(
-			this->app->getRenderer(),
+			this->renderer,
 			this->font,
 			this->fontColor,
 			this->content.c_str(),
@@ -251,7 +247,7 @@ void Text::setFontSize(const int& value) {
 
 	if (this->isInitialized) {
 		this->texture = Loader::getTextureFromSolidUtf8Text(
-			this->app->getRenderer(),
+			this->renderer,
 			this->font,
 			this->fontColor,
 			this->content.c_str(),

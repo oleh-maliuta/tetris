@@ -23,7 +23,7 @@ App::App(
 		return;
 	}
 
-	int imgFlags = IMG_INIT_PNG;
+	const int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init(imgFlags) & imgFlags))
 	{
 		printf(

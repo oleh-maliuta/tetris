@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 	App app(
 		app_settings["app_version"],
 		std::stoi(app_settings["fps"]),
-		app_settings["vertical_sync"] == "1",
+		app_settings["v_sync"] == "1",
 		440,
 		640,
 		App::Location::MAIN_MENU);
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 
 	pages[app.getPreviousLocation()]->clean();
 
-	for (auto& el : pages) {
+	for (const auto& el : pages) {
 		delete el.second;
 	}
 

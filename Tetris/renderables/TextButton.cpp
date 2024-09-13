@@ -1,7 +1,7 @@
 #include "TextButton.h"
 
 TextButton::TextButton(
-	App* app,
+	SDL_Renderer* renderer,
 	const std::string& fontPath,
 	const std::string& content,
 	const int& fontSize,
@@ -13,7 +13,7 @@ TextButton::TextButton(
 	const SDL_Color& fontColor,
 	const int& paddingLeft,
 	const int& paddingRight)
-	: Renderable(app) {
+	: Renderable(renderer) {
 	this->fontPath = fontPath;
 	this->content = content;
 	this->fontSize = fontSize;
@@ -38,8 +38,6 @@ bool TextButton::isCursorIn(int x, int y) {
 }
 
 void TextButton::init() {
-	SDL_Renderer* renderer = this->app->getRenderer();
-
 	this->font = TTF_OpenFont(
 		this->fontPath.c_str(),
 		this->fontSize);
@@ -48,14 +46,13 @@ void TextButton::init() {
 	{
 		printf("Failed to load lazy font! SDL_ttf Error: %s\n",
 			TTF_GetError());
-		this->app->setRunning(false);
 	}
 
 	Uint32 textWrap = static_cast<Uint32>(
 		this->bodyWidth - this->paddingLeft - this->paddingRight);
 
 	this->textTexture = Loader::getTextureFromSolidUtf8Text(
-		renderer,
+		this->renderer,
 		this->font,
 		this->fontColor,
 		this->content.c_str(),
@@ -71,7 +68,6 @@ void TextButton::render() {
 		return;
 	}
 
-	SDL_Renderer* renderer = this->app->getRenderer();
 	SDL_Rect body = { this->positionX, this->positionY, this->bodyWidth, this->bodyHeight };
 	SDL_Rect textRectangle = {
 		this->bodyWidth / 2 - this->textWidth / 2,
@@ -80,11 +76,11 @@ void TextButton::render() {
 		this->textHeight
 	};
 
-	SDL_SetRenderDrawColor(renderer, this->bodyColor.r, this->bodyColor.g, this->bodyColor.b, this->bodyColor.a);
-	SDL_RenderSetViewport(renderer, &body);
-	SDL_RenderFillRect(renderer, nullptr);
-	SDL_RenderCopy(renderer, this->textTexture, nullptr, &textRectangle);
-	SDL_RenderSetViewport(renderer, nullptr);
+	SDL_SetRenderDrawColor(this->renderer, this->bodyColor.r, this->bodyColor.g, this->bodyColor.b, this->bodyColor.a);
+	SDL_RenderSetViewport(this->renderer, &body);
+	SDL_RenderFillRect(this->renderer, nullptr);
+	SDL_RenderCopy(this->renderer, this->textTexture, nullptr, &textRectangle);
+	SDL_RenderSetViewport(this->renderer, nullptr);
 
 	Renderable::render();
 }
@@ -168,12 +164,11 @@ void TextButton::setFontColor(const SDL_Color& value) {
 	this->fontColor = value;
 
 	if (this->isInitialized) {
-		SDL_Renderer* renderer = this->app->getRenderer();
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
 		this->textTexture = Loader::getTextureFromSolidUtf8Text(
-			renderer,
+			this->renderer,
 			this->font,
 			this->fontColor,
 			this->content.c_str(),
@@ -192,12 +187,11 @@ void TextButton::setContent(const std::string& value) {
 	this->content = value;
 
 	if (this->isInitialized) {
-		SDL_Renderer* renderer = this->app->getRenderer();
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
 		this->textTexture = Loader::getTextureFromSolidUtf8Text(
-			renderer,
+			this->renderer,
 			this->font,
 			this->fontColor,
 			this->content.c_str(),
@@ -216,12 +210,11 @@ void TextButton::setFontPath(const std::string& value) {
 	this->fontPath = value;
 
 	if (this->isInitialized) {
-		SDL_Renderer* renderer = this->app->getRenderer();
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
 		this->textTexture = Loader::getTextureFromSolidUtf8Text(
-			renderer,
+			this->renderer,
 			this->font,
 			this->fontColor,
 			this->content.c_str(),
@@ -240,12 +233,11 @@ void TextButton::setFontSize(const int& value) {
 	this->fontSize = value;
 
 	if (this->isInitialized) {
-		SDL_Renderer* renderer = this->app->getRenderer();
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
 		this->textTexture = Loader::getTextureFromSolidUtf8Text(
-			renderer,
+			this->renderer,
 			this->font,
 			this->fontColor,
 			this->content.c_str(),

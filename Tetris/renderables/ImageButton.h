@@ -13,7 +13,7 @@ class ImageButton :
 public:
 
     ImageButton(
-        App* app,
+        SDL_Renderer* renderer,
         const std::string& imagePath,
         const int& x = 0,
         const int& y = 0,

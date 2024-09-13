@@ -4,8 +4,8 @@
 #define PAGES_PAGE_H
 
 #include <map>
-#include "../App.h"
 #include "../renderables/Renderable.h"
+#include "../App.h"
 
 class Page
 {

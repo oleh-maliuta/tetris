@@ -13,7 +13,7 @@ class Text :
 public:
 
     Text(
-        App* app,
+        SDL_Renderer* renderer,
         const std::string& fontPath,
         const std::string& content,
         const int& fontSize = 15,

@@ -6,13 +6,13 @@ MainMenuPage::MainMenuPage(App* app)
 	Uint32 versionInfoTextWrap = static_cast<Uint32>(this->app->getWindowWidth()) - 6;
 
 	Texture* logo__texture = new Texture(
-		this->app,
+		this->app->getRenderer(),
 		"assets/images/png/game_logo.png",
 		this->app->getWindowWidth() / 2 - 78,
 		100);
 
 	Text* version_info__text = new Text(
-		this->app,
+		this->app->getRenderer(),
 		"assets/fonts/open_sans/normal.ttf",
 		this->app->getVersion(),
 		15,
@@ -21,7 +21,7 @@ MainMenuPage::MainMenuPage(App* app)
 		this->app->getWindowHeight() - 20);
 
 	TextButton* settings__text_button = new TextButton(
-		this->app,
+		this->app->getRenderer(),
 		"assets/fonts/swansea/normal.ttf",
 		"Settings",
 		30,
@@ -35,7 +35,7 @@ MainMenuPage::MainMenuPage(App* app)
 		5);
 
 	TextButton* quit__text_button = new TextButton(
-		this->app,
+		this->app->getRenderer(),
 		"assets/fonts/swansea/normal.ttf",
 		"Quit",
 		30,

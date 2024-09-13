@@ -13,7 +13,7 @@ class Texture :
 public:
 
     Texture(
-        App* app,
+        SDL_Renderer* renderer,
         const std::string& path,
         const int& x = 0,
         const int& y = 0,
