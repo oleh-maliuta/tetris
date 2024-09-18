@@ -6,7 +6,9 @@ Renderable::Renderable(SDL_Renderer* renderer) {
 
 Renderable::~Renderable() {}
 
-bool Renderable::isCursorIn(int x, int y) {
+bool Renderable::isCursorIn(
+	const float& x,
+	const float& y) {
 	return false;
 }
 

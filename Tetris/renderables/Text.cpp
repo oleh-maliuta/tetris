@@ -6,11 +6,11 @@ Text::Text(
 	const std::string& content,
 	const int& fontSize,
 	const Uint32* wrapLength,
-	const int& x,
-	const int& y,
+	const float& x,
+	const float& y,
 	const SDL_Color& fontColor,
 	const SDL_RendererFlip& flip,
-	const SDL_Point* rotationPoint,
+	const SDL_FPoint* rotationPoint,
 	const double& angle)
 	: Renderable(renderer) {
 	this->fontPath = fontPath;
@@ -21,7 +21,7 @@ Text::Text(
 	this->fontColor = fontColor;
 	this->fontSize = fontSize;
 	this->flip = flip;
-	this->rotationPoint = rotationPoint != nullptr ? new SDL_Point(*rotationPoint) : nullptr;
+	this->rotationPoint = rotationPoint != nullptr ? new SDL_FPoint(*rotationPoint) : nullptr;
 	this->angle = angle;
 }
 
@@ -31,13 +31,19 @@ Text::~Text() {
 	delete this->rotationPoint;
 }
 
-bool Text::isCursorIn(int x, int y) {
+bool Text::isCursorIn(
+	const float& x,
+	const float& y) {
 	return
 		x >= this->positionX && x < this->positionX + this->width &&
 		y >= this->positionY && y < this->positionY + this->height;
 }
 
 void Text::init() {
+	if (this->isInitialized) {
+		return;
+	}
+
 	this->font = TTF_OpenFont(
 		this->fontPath.c_str(),
 		this->fontSize);
@@ -65,9 +71,9 @@ void Text::render() {
 		return;
 	}
 
-	SDL_Rect dstRectangle = { this->positionX, this->positionY, this->width, this->height };
+	SDL_FRect dstRectangle = { this->positionX, this->positionY, this->width, this->height };
 
-	SDL_RenderCopyEx(
+	SDL_RenderCopyExF(
 		this->renderer,
 		this->texture,
 		nullptr,
@@ -80,6 +86,10 @@ void Text::render() {
 }
 
 void Text::destroy() {
+	if (!this->isInitialized) {
+		return;
+	}
+
 	if (this->font != nullptr) {
 		TTF_CloseFont(this->font);
 		this->font = nullptr;
@@ -93,8 +103,8 @@ void Text::destroy() {
 	Renderable::destroy();
 }
 
-SDL_Point* Text::getRotationPoint() const {
-	return this->rotationPoint != nullptr ? new SDL_Point(*this->rotationPoint) : nullptr;
+SDL_FPoint* Text::getRotationPoint() const {
+	return this->rotationPoint != nullptr ? new SDL_FPoint(*this->rotationPoint) : nullptr;
 }
 
 Uint32* Text::getWrapLength() const {
@@ -121,33 +131,33 @@ double Text::getAngle() const {
 	return this->angle;
 }
 
+float Text::getPositionX() const {
+	return this->positionX;
+}
+
+float Text::getPositionY() const {
+	return this->positionY;
+}
+
+float Text::getWidth() const {
+	return this->width;
+}
+
+float Text::getHeight() const {
+	return this->height;
+}
+
 int Text::getFontSize() const {
 	return this->fontSize;
 }
 
-int Text::getPositionX() const {
-	return this->positionX;
-}
-
-int Text::getPositionY() const {
-	return this->positionY;
-}
-
-int Text::getWidth() const {
-	return this->width;
-}
-
-int Text::getHeight() const {
-	return this->height;
-}
-
-void Text::setRotationPoint(const SDL_Point* value) {
+void Text::setRotationPoint(const SDL_FPoint* value) {
 	if (this->rotationPoint != nullptr) {
 		delete this->rotationPoint;
 	}
 
 	if (value != nullptr) {
-		this->rotationPoint = new SDL_Point(*value);
+		this->rotationPoint = new SDL_FPoint(*value);
 	}
 	else {
 		this->rotationPoint = nullptr;
@@ -237,6 +247,14 @@ void Text::setAngle(const double& value) {
 	this->angle = value;
 }
 
+void Text::setPositionX(const float& value) {
+	this->positionX = value;
+}
+
+void Text::setPositionY(const float& value) {
+	this->positionY = value;
+}
+
 void Text::setFontSize(const int& value) {
 	if (this->texture != nullptr) {
 		SDL_DestroyTexture(this->texture);
@@ -255,17 +273,4 @@ void Text::setFontSize(const int& value) {
 			&this->width,
 			&this->height);
 	}
-}
-
-void Text::setPositionX(const int& value) {
-	this->positionX = value;
-}
-
-void Text::setPositionY(const int& value) {
-	this->positionY = value;
-}
-
-void Text::setPosition(const int& x, const int& y) {
-	this->positionX = x;
-	this->positionY = y;
 }

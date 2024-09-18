@@ -5,14 +5,14 @@ TextButton::TextButton(
 	const std::string& fontPath,
 	const std::string& content,
 	const int& fontSize,
-	const int& width,
-	const int& height,
-	const int& x,
-	const int& y,
+	const float& width,
+	const float& height,
+	const float& x,
+	const float& y,
 	const SDL_Color& bodyColor,
 	const SDL_Color& fontColor,
-	const int& paddingLeft,
-	const int& paddingRight)
+	const float& paddingLeft,
+	const float& paddingRight)
 	: Renderable(renderer) {
 	this->fontPath = fontPath;
 	this->content = content;
@@ -31,13 +31,19 @@ TextButton::~TextButton() {
 	this->destroy();
 }
 
-bool TextButton::isCursorIn(int x, int y) {
+bool TextButton::isCursorIn(
+	const float& x,
+	const float& y) {
 	return
 		x >= this->positionX && x < this->positionX + this->bodyWidth &&
 		y >= this->positionY && y < this->positionY + this->bodyHeight;
 }
 
 void TextButton::init() {
+	if (this->isInitialized) {
+		return;
+	}
+
 	this->font = TTF_OpenFont(
 		this->fontPath.c_str(),
 		this->fontSize);
@@ -68,24 +74,26 @@ void TextButton::render() {
 		return;
 	}
 
-	SDL_Rect body = { this->positionX, this->positionY, this->bodyWidth, this->bodyHeight };
-	SDL_Rect textRectangle = {
-		this->bodyWidth / 2 - this->textWidth / 2,
-		this->bodyHeight / 2 - this->textHeight / 2,
+	SDL_FRect body = { this->positionX, this->positionY, this->bodyWidth, this->bodyHeight };
+	SDL_FRect textRectangle = {
+		body.x + this->bodyWidth / 2 - this->textWidth / 2,
+		body.y + this->bodyHeight / 2 - this->textHeight / 2,
 		this->textWidth,
 		this->textHeight
 	};
 
 	SDL_SetRenderDrawColor(this->renderer, this->bodyColor.r, this->bodyColor.g, this->bodyColor.b, this->bodyColor.a);
-	SDL_RenderSetViewport(this->renderer, &body);
-	SDL_RenderFillRect(this->renderer, nullptr);
-	SDL_RenderCopy(this->renderer, this->textTexture, nullptr, &textRectangle);
-	SDL_RenderSetViewport(this->renderer, nullptr);
+	SDL_RenderFillRectF(this->renderer, &body);
+	SDL_RenderCopyF(this->renderer, this->textTexture, nullptr, &textRectangle);
 
 	Renderable::render();
 }
 
 void TextButton::destroy() {
+	if (!this->isInitialized) {
+		return;
+	}
+
 	if (this->font != nullptr) {
 		TTF_CloseFont(this->font);
 		this->font = nullptr;
@@ -119,35 +127,35 @@ int TextButton::getFontSize() const {
 	return this->fontSize;
 }
 
-int TextButton::getPositionX() const {
+float TextButton::getPositionX() const {
 	return this->positionX;
 }
 
-int TextButton::getPositionY() const {
+float TextButton::getPositionY() const {
 	return this->positionY;
 }
 
-int TextButton::getBodyWidth() const {
+float TextButton::getBodyWidth() const {
 	return this->bodyWidth;
 }
 
-int TextButton::getBodyHeight() const {
+float TextButton::getBodyHeight() const {
 	return this->bodyHeight;
 }
 
-int TextButton::getTextWidth() const {
+float TextButton::getTextWidth() const {
 	return this->textWidth;
 }
 
-int TextButton::getTextHeight() const {
+float TextButton::getTextHeight() const {
 	return this->textHeight;
 }
 
-int TextButton::getPaddingLeft() const {
+float TextButton::getPaddingLeft() const {
 	return this->paddingLeft;
 }
 
-int TextButton::getPaddingRight() const {
+float TextButton::getPaddingRight() const {
 	return this->paddingRight;
 }
 
@@ -247,26 +255,26 @@ void TextButton::setFontSize(const int& value) {
 	}
 }
 
-void TextButton::setPositionX(const int& value) {
+void TextButton::setPositionX(const float& value) {
 	this->positionX = value;
 }
 
-void TextButton::setPositionY(const int& value) {
+void TextButton::setPositionY(const float& value) {
 	this->positionY = value;
 }
 
-void TextButton::setBodyWidth(const int& value) {
+void TextButton::setBodyWidth(const float& value) {
 	this->bodyWidth = value;
 }
 
-void TextButton::setBodyHeight(const int& value) {
+void TextButton::setBodyHeight(const float& value) {
 	this->bodyHeight = value;
 }
 
-void TextButton::setPaddingLeft(const int& value) {
+void TextButton::setPaddingLeft(const float& value) {
 	this->paddingLeft = value;
 }
 
-void TextButton::setPaddingRight(const int& value) {
+void TextButton::setPaddingRight(const float& value) {
 	this->paddingRight = value;
 }

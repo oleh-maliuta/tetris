@@ -15,22 +15,24 @@ public:
     Texture(
         SDL_Renderer* renderer,
         const std::string& path,
-        const int& x = 0,
-        const int& y = 0,
-        const int* width = nullptr,
-        const int* height = nullptr,
-        const SDL_Point* rotationPoint = nullptr,
+        const float& x = 0,
+        const float& y = 0,
+        const float* width = nullptr,
+        const float* height = nullptr,
+        const SDL_FPoint* rotationPoint = nullptr,
         const SDL_RendererFlip& flip = SDL_FLIP_NONE,
         const SDL_Color& moduleColor = { 255, 255, 255 },
         const double& angle = 0);
     ~Texture();
 
-    virtual bool isCursorIn(int x, int y) override;
+    virtual bool isCursorIn(
+        const float& x,
+        const float& y) override;
     virtual void init() override;
     virtual void render() override;
     virtual void destroy() override;
 
-    SDL_Point* getRotationPoint() const;
+    SDL_FPoint* getRotationPoint() const;
     SDL_RendererFlip getFlip() const;
     SDL_Color getModuleColor() const;
     std::string getFilePath() const;
@@ -38,39 +40,39 @@ public:
     Uint8 getModuleGreen() const;
     Uint8 getModuleBlue() const;
     double getAngle() const;
-    int getPositionX() const;
-    int getPositionY() const;
-    int getWidth() const;
-    int getHeight() const;
+    float getPositionX() const;
+    float getPositionY() const;
+    float getWidth() const;
+    float getHeight() const;
 
-    void setRotationPoint(const SDL_Point* value);
+    void setRotationPoint(const SDL_FPoint* value);
     void setFilePath(const std::string& value);
+    void setModuleColor(const SDL_Color& color);
     void setModuleRed(const Uint8& value);
     void setModuleGreen(const Uint8& value);
     void setModuleBlue(const Uint8& value);
-    void setModuleColor(const SDL_Color& color);
-    void setPositionX(const int& value);
-    void setPositionY(const int& value);
-    void setWidth(const int* value);
-    void setHeight(const int* value);
     void setAngle(const double& value);
+    void setPositionX(const float& value);
+    void setPositionY(const float& value);
+    void setWidth(const float* value);
+    void setHeight(const float* value);
 
 private:
 
     SDL_Texture* sdlTexture = nullptr;
-    SDL_Point* rotationPoint;
+    SDL_FPoint* rotationPoint;
     SDL_RendererFlip flip;
     std::string filePath;
     Uint8 moduleRed;
     Uint8 moduleGreen;
     Uint8 moduleBlue;
-    int* width;
-    int* height;
-    int defaultWidth;
-    int defaultHeight;
-    int positionX;
-    int positionY;
     double angle;
+    float* width;
+    float* height;
+    float defaultWidth;
+    float defaultHeight;
+    float positionX;
+    float positionY;
 };
 
 #endif

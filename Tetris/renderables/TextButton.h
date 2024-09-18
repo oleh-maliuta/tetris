@@ -17,17 +17,19 @@ public:
         const std::string& fontPath,
         const std::string& content,
         const int& fontSize = 15,
-        const int& width = 0,
-        const int& height = 0,
-        const int& x = 0,
-        const int& y = 0,
+        const float& width = 0,
+        const float& height = 0,
+        const float& x = 0,
+        const float& y = 0,
         const SDL_Color& bodyColor = { 0, 0, 0, 255 },
         const SDL_Color& fontColor = { 0, 0, 0, 255 },
-        const int& paddingLeft = 0,
-        const int& paddingRight = 0);
+        const float& paddingLeft = 0,
+        const float& paddingRight = 0);
     ~TextButton();
 
-    virtual bool isCursorIn(int x, int y) override;
+    virtual bool isCursorIn(
+        const float& x,
+        const float& y) override;
     virtual void init() override;
     virtual void render() override;
     virtual void destroy() override;
@@ -37,26 +39,26 @@ public:
     std::string getContent() const;
     std::string getFontPath() const;
     int getFontSize() const;
-    int getPositionX() const;
-    int getPositionY() const;
-    int getBodyWidth() const;
-    int getBodyHeight() const;
-    int getTextWidth() const;
-    int getTextHeight() const;
-    int getPaddingLeft() const;
-    int getPaddingRight() const;
+    float getPositionX() const;
+    float getPositionY() const;
+    float getBodyWidth() const;
+    float getBodyHeight() const;
+    float getTextWidth() const;
+    float getTextHeight() const;
+    float getPaddingLeft() const;
+    float getPaddingRight() const;
 
     void setBodyColor(const SDL_Color& value);
     void setFontColor(const SDL_Color& value);
     void setContent(const std::string& value);
     void setFontPath(const std::string& value);
     void setFontSize(const int& value);
-    void setPositionX(const int& value);
-    void setPositionY(const int& value);
-    void setBodyWidth(const int& value);
-    void setBodyHeight(const int& value);
-    void setPaddingLeft(const int& value);
-    void setPaddingRight(const int& value);
+    void setPositionX(const float& value);
+    void setPositionY(const float& value);
+    void setBodyWidth(const float& value);
+    void setBodyHeight(const float& value);
+    void setPaddingLeft(const float& value);
+    void setPaddingRight(const float& value);
 
 private:
 
@@ -67,14 +69,14 @@ private:
     std::string content;
     std::string fontPath;
     int fontSize;
-    int positionX;
-    int positionY;
-    int bodyWidth;
-    int bodyHeight;
-    int textWidth = 0;
-    int textHeight = 0;
-    int paddingLeft;
-    int paddingRight;
+    float positionX;
+    float positionY;
+    float bodyWidth;
+    float bodyHeight;
+    float textWidth = 0;
+    float textHeight = 0;
+    float paddingLeft;
+    float paddingRight;
 };
 
 #endif

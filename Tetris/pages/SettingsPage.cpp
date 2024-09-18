@@ -20,7 +20,8 @@ SettingsPage::SettingsPage(App* app)
 		15,
 		&versionInfoTextWrap,
 		3,
-		this->app->getWindowHeight() - 20);
+		this->app->getWindowHeight() - 20,
+		{ 255, 255, 255, 255 });
 
 	Text* v_sync__text = new Text(
 		this->app->getRenderer(),
@@ -29,7 +30,8 @@ SettingsPage::SettingsPage(App* app)
 		20,
 		&vSyncTextWrap,
 		130,
-		100);
+		100,
+		{ 255, 255, 255, 255 });
 
 	TextButton* apply__text_button = new TextButton(
 		this->app->getRenderer(),
@@ -55,6 +57,8 @@ SettingsPage::SettingsPage(App* app)
 		5,
 		5,
 		5);
+
+	this->backgroundColor = { 1, 0, 20, 255 };
 
 	this->renderables["version_info__text"] = version_info__text;
 	this->renderables["v_sync__texture"] = v_sync__texture;

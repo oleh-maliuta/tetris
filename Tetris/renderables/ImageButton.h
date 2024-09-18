@@ -15,34 +15,38 @@ public:
     ImageButton(
         SDL_Renderer* renderer,
         const std::string& imagePath,
-        const int& x = 0,
-        const int& y = 0,
+        const float& x = 0,
+        const float& y = 0,
         const SDL_Color& bodyColor = { 0, 0, 0, 255 },
-        const int& paddingTop = 0,
-        const int& paddingBottom = 0,
-        const int& paddingLeft = 0,
-        const int& paddingRight = 0,
-        const int* width = nullptr,
-        const int* height = nullptr,
+        const float& paddingTop = 0,
+        const float& paddingBottom = 0,
+        const float& paddingLeft = 0,
+        const float& paddingRight = 0,
+        const float* width = nullptr,
+        const float* height = nullptr,
         const SDL_Color& imageModuleColor = { 255, 255, 255, 255 });
     ~ImageButton();
 
-    virtual bool isCursorIn(int x, int y) override;
+    virtual bool isCursorIn(
+        const float& x,
+        const float& y) override;
     virtual void init() override;
     virtual void render() override;
     virtual void destroy() override;
 
-    int getPositionX() const;
-    int getPositionY() const;
-    int getImageWidth() const;
-    int getImageHeight() const;
-    int getWidth() const;
-    int getHeight() const;
+    SDL_Color getBodyColor() const;
+    float getPositionX() const;
+    float getPositionY() const;
+    float getImageWidth() const;
+    float getImageHeight() const;
+    float getWidth() const;
+    float getHeight() const;
 
-    void setPositionX(const int& value);
-    void setPositionY(const int& value);
-    void setImageWidth(const int* value);
-    void setImageHeight(const int* value);
+    void setBodyColor(const SDL_Color& value);
+    void setPositionX(const float& value);
+    void setPositionY(const float& value);
+    void setImageWidth(const float* value);
+    void setImageHeight(const float* value);
 
 private:
 
@@ -52,16 +56,16 @@ private:
     Uint8 moduleRed;
     Uint8 moduleGreen;
     Uint8 moduleBlue;
-    int* imageWidth;
-    int* imageHeight;
-    int defaultImageWidth;
-    int defaultImageHeight;
-    int positionX;
-    int positionY;
-    int paddingTop;
-    int paddingBottom;
-    int paddingLeft;
-    int paddingRight;
+    float* imageWidth;
+    float* imageHeight;
+    float defaultImageWidth;
+    float defaultImageHeight;
+    float positionX;
+    float positionY;
+    float paddingTop;
+    float paddingBottom;
+    float paddingLeft;
+    float paddingRight;
 };
 
 #endif

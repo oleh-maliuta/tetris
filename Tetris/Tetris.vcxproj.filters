@@ -36,6 +36,12 @@
     <ClCompile Include="renderables\ImageButton.cpp">
       <Filter>renderables</Filter>
     </ClCompile>
+    <ClCompile Include="pages\PlayPage.cpp">
+      <Filter>pages</Filter>
+    </ClCompile>
+    <ClCompile Include="renderables\Rectangle.cpp">
+      <Filter>renderables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pages\MainMenuPage.h">
@@ -62,6 +68,12 @@
       <Filter>renderables</Filter>
     </ClInclude>
     <ClInclude Include="renderables\ImageButton.h">
+      <Filter>renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="pages\PlayPage.h">
+      <Filter>pages</Filter>
+    </ClInclude>
+    <ClInclude Include="renderables\Rectangle.h">
       <Filter>renderables</Filter>
     </ClInclude>
   </ItemGroup>

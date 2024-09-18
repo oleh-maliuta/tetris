@@ -3,7 +3,7 @@
 App::App(
 	const int& windowWidth,
 	const int& windowHeight) {
-	std::map<std::string, std::string> app_settings;
+	std::unordered_map<std::string, std::string> app_settings;
 	this->getAppSettings(app_settings);
 
 	this->version = app_settings["app_version"];
@@ -66,6 +66,16 @@ App::App(
 
 	SDL_RenderSetVSync(this->renderer, this->vSync);
 
+	SDL_Surface* iconSurface = IMG_Load("assets/images/png/icon.png");
+
+	if (iconSurface == nullptr) {
+		printf("Failed to load icon image! SDL_Error: %s\n",
+			IMG_GetError());
+	}
+
+	SDL_SetWindowIcon(this->window, iconSurface);
+	SDL_FreeSurface(iconSurface);
+
 	this->isRunning = true;
 }
 
@@ -74,11 +84,11 @@ App::~App() {
 		delete el.second;
 	}
 
-	std::map<std::string, std::string> data;
-
-	data["app_version"] = this->version;
-	data["fps"] = std::to_string(this->fps);
-	data["v_sync"] = this->vSync ? "1" : "0";
+	std::unordered_map<std::string, std::string> data = {
+		{"app_version", this->version},
+		{"fps",	std::to_string(this->fps)},
+		{"v_sync", this->vSync ? "1" : "0"}
+	};
 
 	this->saveAppSettings(data);
 
@@ -122,13 +132,13 @@ void App::run(const std::string& startPage) {
 		this->deltaTime = static_cast<float>(SDL_GetTicks()) / this->lastFrameTime / 1000.0f;
 		this->lastFrameTime = SDL_GetTicks();
 
-		this->pages[this->previousLocation]->exec();
-
 		if (this->currentLocation != this->previousLocation) {
 			this->pages[this->previousLocation]->clean();
 			this->pages[this->currentLocation]->init();
 			this->previousLocation = this->currentLocation;
 		}
+
+		this->pages[this->previousLocation]->exec();
 	}
 
 	this->pages[this->previousLocation]->clean();
@@ -188,7 +198,7 @@ void App::setRunning(const bool& value) {
 	this->isRunning = value;
 }
 
-bool App::getAppSettings(std::map<std::string, std::string>& data) {
+bool App::getAppSettings(std::unordered_map<std::string, std::string>& data) {
 	std::ifstream app_settings_file("app_settings.txt");
 
 	if (!app_settings_file.is_open()) {
@@ -212,7 +222,7 @@ bool App::getAppSettings(std::map<std::string, std::string>& data) {
 	return true;
 }
 
-bool App::saveAppSettings(const std::map<std::string, std::string>& data) {
+bool App::saveAppSettings(const std::unordered_map<std::string, std::string>& data) {
 	std::ofstream app_settings_file("app_settings.txt");
 
 	if (!app_settings_file.is_open()) {

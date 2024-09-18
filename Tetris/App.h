@@ -8,6 +8,7 @@ class Page;
 #include <stdio.h>
 #include <string>
 #include <map>
+#include <unordered_map>
 #include <fstream>
 #include <SDL.h>
 #include <SDL_image.h>
@@ -59,8 +60,8 @@ private:
 	bool vSync;
 	bool isRunning = false;
 
-	static bool getAppSettings(std::map<std::string, std::string>& data);
-	static bool saveAppSettings(const std::map<std::string, std::string>& data);
+	static bool getAppSettings(std::unordered_map<std::string, std::string>& data);
+	static bool saveAppSettings(const std::unordered_map<std::string, std::string>& data);
 };
 
 template<class T>

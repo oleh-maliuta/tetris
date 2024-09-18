@@ -2,8 +2,8 @@
 
 void Loader::getImageSize(
 	const char* path,
-	int* widthRef,
-	int* heightRef) {
+	float* widthRef,
+	float* heightRef) {
 	SDL_Surface* surface = IMG_Load(path);
 
 	if (surface == nullptr) {
@@ -22,10 +22,10 @@ void Loader::getImageSize(
 	}
 
 	if (widthRef != nullptr) {
-		*widthRef = surface->w;
+		*widthRef = static_cast<float>(surface->w);
 	}
 	if (heightRef != nullptr) {
-		*heightRef = surface->h;
+		*heightRef = static_cast<float>(surface->h);
 	}
 }
 
@@ -51,8 +51,8 @@ SDL_Texture* Loader::getTextureFromSolidUtf8Text(
 	const SDL_Color& color,
 	const char* text,
 	const Uint32* wrapLength,
-	int* widthRef,
-	int* heightRef
+	float* widthRef,
+	float* heightRef
 ) {
 	SDL_Surface* textSurface = wrapLength != nullptr ?
 		TTF_RenderUTF8_Solid_Wrapped(font, text, color, *wrapLength) :
@@ -74,10 +74,10 @@ SDL_Texture* Loader::getTextureFromSolidUtf8Text(
 
 	if (textSurface != nullptr) {
 		if (widthRef != nullptr) {
-			*widthRef = textSurface->w;
+			*widthRef = static_cast<float>(textSurface->w);
 		}
 		if (heightRef != nullptr) {
-			*heightRef = textSurface->h;
+			*heightRef = static_cast<float>(textSurface->h);
 		}
 	}
 

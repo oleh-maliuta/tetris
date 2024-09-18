@@ -13,7 +13,9 @@ public:
 	Renderable(SDL_Renderer* renderer);
 	virtual ~Renderable();
 
-	virtual bool isCursorIn(int x, int y);
+	virtual bool isCursorIn(
+		const float& x,
+		const float& y);
 	virtual void init();
 	virtual void render();
 	virtual void destroy();

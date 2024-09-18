@@ -3,15 +3,15 @@
 ImageButton::ImageButton(
 	SDL_Renderer* renderer,
 	const std::string& imagePath,
-	const int& x,
-	const int& y,
+	const float& x,
+	const float& y,
 	const SDL_Color& bodyColor,
-	const int& paddingTop,
-	const int& paddingBottom,
-	const int& paddingLeft,
-	const int& paddingRight,
-	const int* width,
-	const int* height,
+	const float& paddingTop,
+	const float& paddingBottom,
+	const float& paddingLeft,
+	const float& paddingRight,
+	const float* width,
+	const float* height,
 	const SDL_Color& imageModuleColor)
 	: Renderable(renderer) {
 	this->imagePath = imagePath;
@@ -22,8 +22,8 @@ ImageButton::ImageButton(
 	this->paddingBottom = paddingBottom;
 	this->paddingLeft = paddingLeft;
 	this->paddingRight = paddingRight;
-	this->imageWidth = width != nullptr ? new int(*width) : nullptr;
-	this->imageHeight = height != nullptr ? new int(*height) : nullptr;
+	this->imageWidth = width != nullptr ? new float(*width) : nullptr;
+	this->imageHeight = height != nullptr ? new float(*height) : nullptr;
 	this->moduleRed = imageModuleColor.r;
 	this->moduleGreen = imageModuleColor.g;
 	this->moduleBlue = imageModuleColor.b;
@@ -37,9 +37,11 @@ ImageButton::~ImageButton() {
 	delete this->imageHeight;
 }
 
-bool ImageButton::isCursorIn(int x, int y) {
-	int posX = this->getPositionX();
-	int posY = this->getPositionY();
+bool ImageButton::isCursorIn(
+	const float& x,
+	const float& y) {
+	const float posX = this->getPositionX();
+	const float posY = this->getPositionY();
 
 	return
 		x >= posX && x < posX + this->getWidth() &&
@@ -47,6 +49,9 @@ bool ImageButton::isCursorIn(int x, int y) {
 }
 
 void ImageButton::init() {
+	if (this->isInitialized) {
+		return;
+	}
 
 	this->texture = Loader::getTextureFromImage(
 		this->renderer,
@@ -60,78 +65,88 @@ void ImageButton::render() {
 		return;
 	}
 
-	int bodyWidth = this->getWidth();
-	int bodyHeight = this->getHeight();
-	int imageWidth = this->getImageWidth();
-	int imageHeight = this->getImageHeight();
-	SDL_Rect body = { this->positionX, this->positionY, bodyWidth, bodyHeight };
-	SDL_Rect imageRectangle = {
-		bodyWidth / 2 - imageWidth / 2,
-		bodyHeight / 2 - imageHeight / 2,
+	const float bodyWidth = this->getWidth();
+	const float bodyHeight = this->getHeight();
+	const float imageWidth = this->getImageWidth();
+	const float imageHeight = this->getImageHeight();
+	SDL_FRect body = { this->positionX, this->positionY, bodyWidth, bodyHeight };
+	SDL_FRect imageRectangle = {
+		body.x + bodyWidth / 2 - imageWidth / 2,
+		body.y + bodyHeight / 2 - imageHeight / 2,
 		imageWidth,
 		imageHeight
 	};
 
 	SDL_SetRenderDrawColor(this->renderer, this->bodyColor.r, this->bodyColor.g, this->bodyColor.b, this->bodyColor.a);
-	SDL_RenderSetViewport(this->renderer, &body);
-	SDL_RenderFillRect(this->renderer, nullptr);
-	SDL_RenderCopy(this->renderer, this->texture, nullptr, &imageRectangle);
+	SDL_RenderFillRectF(this->renderer, &body);
+	SDL_RenderCopyF(this->renderer, this->texture, nullptr, &imageRectangle);
 	SDL_SetTextureColorMod(this->texture, this->moduleRed, this->moduleGreen, this->moduleBlue);
-	SDL_RenderSetViewport(this->renderer, nullptr);
 
 	Renderable::render();
 }
 
 void ImageButton::destroy() {
+	if (!this->isInitialized) {
+		return;
+	}
+
 	Renderable::destroy();
 }
 
-int ImageButton::getPositionX() const {
+SDL_Color ImageButton::getBodyColor() const {
+	return this->bodyColor;
+}
+
+float ImageButton::getPositionX() const {
 	return this->positionX;
 }
 
-int ImageButton::getPositionY() const {
+float ImageButton::getPositionY() const {
 	return this->positionY;
 }
 
-int ImageButton::getImageWidth() const {
+float ImageButton::getImageWidth() const {
 	return this->imageWidth != nullptr ? *this->imageWidth : this->defaultImageWidth;
 }
 
-int ImageButton::getImageHeight() const {
+float ImageButton::getImageHeight() const {
 	return this->imageHeight != nullptr ? *this->imageHeight : this->defaultImageHeight;
 }
 
-int ImageButton::getWidth() const {
+float ImageButton::getWidth() const {
 	return (this->imageWidth != nullptr ? *this->imageWidth : this->defaultImageWidth) + this->paddingLeft + this->paddingRight;
 }
 
-int ImageButton::getHeight() const {
+float ImageButton::getHeight() const {
 	return (this->imageHeight != nullptr ? *this->imageHeight : this->defaultImageHeight) + this->paddingTop + this->paddingBottom;
 }
 
-void ImageButton::setPositionX(const int& value) {
+void ImageButton::setBodyColor(const SDL_Color& value) {
+	this->bodyColor = value;
+}
+
+void ImageButton::setPositionX(const float& value) {
 	this->positionX = value;
 }
 
-void ImageButton::setPositionY(const int& value) {
+void ImageButton::setPositionY(const float& value) {
 	this->positionY = value;
 }
 
-void ImageButton::setImageWidth(const int* value) {
+void ImageButton::setImageWidth(const float* value) {
 	delete this->imageWidth;
 	this->imageWidth = nullptr;
 
 	if (value != nullptr) {
-		this->imageWidth = new int(*value);
+		this->imageWidth = new float(*value);
 	}
 }
 
-void ImageButton::setImageHeight(const int* value) {
+void ImageButton::setImageHeight(const float* value) {
 	delete this->imageHeight;
 	this->imageHeight = nullptr;
 
 	if (value != nullptr) {
-		this->imageHeight = new int(*value);
+		this->imageHeight = new float(*value);
 	}
 }

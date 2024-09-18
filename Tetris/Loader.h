@@ -14,8 +14,8 @@ public:
 
 	static void getImageSize(
 		const char* path,
-		int* widthRef,
-		int* heightRef);
+		float* widthRef,
+		float* heightRef);
 	static SDL_Texture* getTextureFromImage(
 		SDL_Renderer* renderer,
 		const char* path);
@@ -25,8 +25,8 @@ public:
 		const SDL_Color& color,
 		const char* text,
 		const Uint32* wrapLength,
-		int* widthRef,
-		int* heightRef);
+		float* widthRef,
+		float* heightRef);
 };
 
 #endif
