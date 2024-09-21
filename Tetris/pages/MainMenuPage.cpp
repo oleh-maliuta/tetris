@@ -8,8 +8,8 @@ MainMenuPage::MainMenuPage(App* app)
 	Texture* logo__texture = new Texture(
 		this->app->getRenderer(),
 		"assets/images/png/game_logo.png",
-		this->app->getWindowWidth() / 2 - 78,
-		80);
+		this->app->getWindowWidth() / 2 - 233.5f,
+		50);
 
 	Text* version_info__text = new Text(
 		this->app->getRenderer(),
@@ -29,7 +29,7 @@ MainMenuPage::MainMenuPage(App* app)
 		400,
 		65,
 		this->app->getWindowWidth() / 2 - 200,
-		200,
+		260,
 		{ 0, 55, 164, 255 },
 		{ 255, 255, 255, 255 },
 		5,
@@ -43,7 +43,7 @@ MainMenuPage::MainMenuPage(App* app)
 		400,
 		65,
 		this->app->getWindowWidth() / 2 - 200,
-		320,
+		360,
 		{ 0, 55, 164, 255 },
 		{ 255, 255, 255, 255 },
 		5,
@@ -57,13 +57,13 @@ MainMenuPage::MainMenuPage(App* app)
 		400,
 		65,
 		this->app->getWindowWidth() / 2 - 200,
-		440,
+		460,
 		{ 0, 55, 164, 255 },
 		{ 255, 255, 255, 255 },
 		5,
 		5);
 
-	this->backgroundColor = { 1, 0, 20, 255 };
+	this->backgroundColor = { 0, 15, 49, 255 };
 
 	this->renderables["logo__texture"] = logo__texture;
 	this->renderables["version_info__text"] = version_info__text;

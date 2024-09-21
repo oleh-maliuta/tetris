@@ -58,7 +58,7 @@ SettingsPage::SettingsPage(App* app)
 		5,
 		5);
 
-	this->backgroundColor = { 1, 0, 20, 255 };
+	this->backgroundColor = { 0, 15, 49, 255 };
 
 	this->renderables["version_info__text"] = version_info__text;
 	this->renderables["v_sync__texture"] = v_sync__texture;

@@ -6,7 +6,7 @@ PlayPage::PlayPage(App* app)
 	const SDL_Point cellSize = { 25, 25 };
 	const int cellGab = 3;
 
-	this->backgroundColor = { 1, 0, 20, 255 };
+	this->backgroundColor = { 0, 15, 49, 255 };
 
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 10; j++) {
@@ -21,7 +21,7 @@ PlayPage::PlayPage(App* app)
 				cellSize.y,
 				startCellPos.x + ((cellGab + cellSize.x) * j),
 				startCellPos.y + ((cellGab + cellSize.y) * i),
-				{ 150, 150, 150, 255 });
+				{ 35, 50, 79, 255 });
 
 			this->renderables[cellName] = cell;
 		}
