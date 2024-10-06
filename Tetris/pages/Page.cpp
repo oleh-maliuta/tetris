@@ -95,3 +95,19 @@ void Page::render() {
 		el.second->render();
 	}
 }
+
+void Page::addRenderable(
+	const std::string& key,
+	Renderable* obj) {
+	this->renderables.push_back(std::pair(key, obj));
+}
+
+Renderable* Page::getRenderable(const std::string& key) {
+	for (const auto& el : this->renderables) {
+		if (el.first == key) {
+			return el.second;
+		}
+	}
+
+	return nullptr;
+}

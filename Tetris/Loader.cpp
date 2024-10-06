@@ -29,6 +29,35 @@ void Loader::getImageSize(
 	}
 }
 
+void Loader::getUtf8TextSize(
+	TTF_Font* font,
+	const char* text,
+	const Uint32* wrapLength,
+	float* widthRef,
+	float* heightRef
+) {
+	SDL_Surface* textSurface = wrapLength != nullptr ?
+		TTF_RenderUTF8_Solid_Wrapped(font, text, {}, *wrapLength) :
+		TTF_RenderUTF8_Solid(font, text, {});
+
+	if (textSurface == nullptr)
+	{
+		printf("Unable to render a text surface! SDL_ttf Error: %s\n",
+			TTF_GetError());
+	}
+
+	if (textSurface != nullptr) {
+		if (widthRef != nullptr) {
+			*widthRef = static_cast<float>(textSurface->w);
+		}
+		if (heightRef != nullptr) {
+			*heightRef = static_cast<float>(textSurface->h);
+		}
+	}
+
+	SDL_FreeSurface(textSurface);
+}
+
 SDL_Texture* Loader::getTextureFromImage(
 	SDL_Renderer* renderer,
 	const char* path

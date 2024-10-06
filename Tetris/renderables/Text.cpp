@@ -23,6 +23,19 @@ Text::Text(
 	this->flip = flip;
 	this->rotationPoint = rotationPoint != nullptr ? new SDL_FPoint(*rotationPoint) : nullptr;
 	this->angle = angle;
+
+	TTF_Font* testFont = TTF_OpenFont(
+		this->fontPath.c_str(),
+		this->fontSize);
+
+	Loader::getUtf8TextSize(
+		testFont,
+		this->content.c_str(),
+		this->wrapLength,
+		&this->width,
+		&this->height);
+
+	TTF_CloseFont(testFont);
 }
 
 Text::~Text() {

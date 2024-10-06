@@ -5,7 +5,9 @@
 
 #include <format>
 #include "Page.h"
+#include "../Loader.h"
 #include "../renderables/Rectangle.h"
+#include "../renderables/Text.h"
 
 class PlayPage :
     public Page

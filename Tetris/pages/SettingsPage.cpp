@@ -26,7 +26,7 @@ SettingsPage::SettingsPage(App* app)
 	Text* v_sync__text = new Text(
 		this->app->getRenderer(),
 		"assets/fonts/open_sans/bold.ttf",
-		"V. Sync.",
+		"V-Sync",
 		20,
 		&vSyncTextWrap,
 		130,
@@ -60,11 +60,11 @@ SettingsPage::SettingsPage(App* app)
 
 	this->backgroundColor = { 0, 15, 49, 255 };
 
-	this->renderables["version_info__text"] = version_info__text;
-	this->renderables["v_sync__texture"] = v_sync__texture;
-	this->renderables["v_sync__text"] = v_sync__text;
-	this->renderables["apply__text_button"] = apply__text_button;
-	this->renderables["return__image_button"] = return__image_button;
+	this->addRenderable("version_info__text", version_info__text);
+	this->addRenderable("v_sync__texture", v_sync__texture);
+	this->addRenderable("v_sync__text", v_sync__text);
+	this->addRenderable("apply__text_button", apply__text_button);
+	this->addRenderable("return__image_button", return__image_button);
 
 	v_sync__texture->setOnRelease([pageRef, v_sync__texture] {
 		pageRef->setVSync(!pageRef->getVSync());
@@ -122,10 +122,10 @@ void SettingsPage::render() {
 }
 
 void SettingsPage::initData() {
-	Texture* v_sync__texture = dynamic_cast<Texture*>(this->renderables["v_sync__texture"]);
+	Texture* v_sync__texture = dynamic_cast<Texture*>(this->getRenderable("v_sync__texture"));
 
 	this->vSync = this->app->getVSync();
-
+	
 	v_sync__texture->setFilePath(this->vSync ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png");
 }
 

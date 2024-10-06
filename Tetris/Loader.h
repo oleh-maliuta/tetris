@@ -16,6 +16,12 @@ public:
 		const char* path,
 		float* widthRef,
 		float* heightRef);
+	static void getUtf8TextSize(
+		TTF_Font* font,
+		const char* text,
+		const Uint32* wrapLength,
+		float* widthRef,
+		float* heightRef);
 	static SDL_Texture* getTextureFromImage(
 		SDL_Renderer* renderer,
 		const char* path);

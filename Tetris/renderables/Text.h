@@ -70,8 +70,8 @@ private:
     double angle;
     float positionX;
     float positionY;
-    float width = 0;
-    float height = 0;
+    float width;
+    float height;
     int fontSize;
 };
 

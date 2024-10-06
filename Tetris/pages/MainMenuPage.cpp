@@ -65,11 +65,11 @@ MainMenuPage::MainMenuPage(App* app)
 
 	this->backgroundColor = { 0, 15, 49, 255 };
 
-	this->renderables["logo__texture"] = logo__texture;
-	this->renderables["version_info__text"] = version_info__text;
-	this->renderables["play__text_button"] = play__text_button;
-	this->renderables["settings__text_button"] = settings__text_button;
-	this->renderables["quit__text_button"] = quit__text_button;
+	this->addRenderable("logo__texture", logo__texture);
+	this->addRenderable("version_info__text", version_info__text);
+	this->addRenderable("play__text_button", play__text_button);
+	this->addRenderable("settings__text_button", settings__text_button);
+	this->addRenderable("quit__text_button", quit__text_button);
 
 	play__text_button->setOnRelease([appRef] { appRef->changePage("play"); });
 	settings__text_button->setOnRelease([appRef] { appRef->changePage("settings"); });
