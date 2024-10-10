@@ -67,7 +67,7 @@ void Text::init() {
 			TTF_GetError());
 	}
 
-	this->texture = Loader::getTextureFromSolidUtf8Text(
+	this->texture = Loader::getTextureFromUtf8Text(
 		this->renderer,
 		this->font,
 		this->fontColor,
@@ -195,7 +195,7 @@ void Text::setWrapLength(const Uint32* value) {
 	}
 
 	if (this->isInitialized) {
-		this->texture = Loader::getTextureFromSolidUtf8Text(
+		this->texture = Loader::getTextureFromUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -215,7 +215,7 @@ void Text::setFontColor(const SDL_Color& value) {
 	this->fontColor = value;
 	
 	if (this->isInitialized) {
-		this->texture = Loader::getTextureFromSolidUtf8Text(
+		this->texture = Loader::getTextureFromUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -239,7 +239,7 @@ void Text::setContent(const std::string& value) {
 	this->content = value;
 	
 	if (this->isInitialized) {
-		this->texture = Loader::getTextureFromSolidUtf8Text(
+		this->texture = Loader::getTextureFromUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -277,7 +277,7 @@ void Text::setFontSize(const int& value) {
 	this->fontSize = value;
 
 	if (this->isInitialized) {
-		this->texture = Loader::getTextureFromSolidUtf8Text(
+		this->texture = Loader::getTextureFromUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,

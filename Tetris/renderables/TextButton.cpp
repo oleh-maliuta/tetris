@@ -57,7 +57,7 @@ void TextButton::init() {
 	Uint32 textWrap = static_cast<Uint32>(
 		this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-	this->textTexture = Loader::getTextureFromSolidUtf8Text(
+	this->textTexture = Loader::getTextureFromUtf8Text(
 		this->renderer,
 		this->font,
 		this->fontColor,
@@ -175,7 +175,7 @@ void TextButton::setFontColor(const SDL_Color& value) {
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-		this->textTexture = Loader::getTextureFromSolidUtf8Text(
+		this->textTexture = Loader::getTextureFromUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -198,7 +198,7 @@ void TextButton::setContent(const std::string& value) {
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-		this->textTexture = Loader::getTextureFromSolidUtf8Text(
+		this->textTexture = Loader::getTextureFromUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -221,7 +221,7 @@ void TextButton::setFontPath(const std::string& value) {
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-		this->textTexture = Loader::getTextureFromSolidUtf8Text(
+		this->textTexture = Loader::getTextureFromUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -244,7 +244,7 @@ void TextButton::setFontSize(const int& value) {
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-		this->textTexture = Loader::getTextureFromSolidUtf8Text(
+		this->textTexture = Loader::getTextureFromUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,

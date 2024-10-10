@@ -46,6 +46,7 @@
     <ClInclude Include="renderables\Text.h" />
     <ClInclude Include="renderables\TextButton.h" />
     <ClInclude Include="renderables\Texture.h" />
+    <ClInclude Include="structures\Tetris_Cell.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app_settings.txt" />

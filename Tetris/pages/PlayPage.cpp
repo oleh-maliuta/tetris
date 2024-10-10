@@ -48,6 +48,17 @@ PlayPage::PlayPage(App* app)
 		{ 255, 255, 255, 255 });
 	level_label__text->setPositionX(330 + 150 / 2 - level_label__text->getWidth() / 2);
 
+	Text* level_value__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		std::to_string(this->level),
+		25,
+		&labelTextWrap,
+		0.f,
+		260.f,
+		{ 255, 255, 255, 255 });
+	level_value__text->setPositionX(330 + 150 / 2 - level_value__text->getWidth() / 2);
+
 	Rectangle* lines__rectangle = new Rectangle(
 		this->app->getRenderer(),
 		150,
@@ -66,6 +77,17 @@ PlayPage::PlayPage(App* app)
 		325.f,
 		{ 255, 255, 255, 255 });
 	lines_label__text->setPositionX(330 + 150 / 2 - lines_label__text->getWidth() / 2);
+
+	Text* lines_value__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		std::to_string(this->lines),
+		25,
+		&labelTextWrap,
+		0.f,
+		380.f,
+		{ 255, 255, 255, 255 });
+	lines_value__text->setPositionX(330 + 150 / 2 - lines_value__text->getWidth() / 2);
 
 	Rectangle* score__rectangle = new Rectangle(
 		this->app->getRenderer(),
@@ -86,14 +108,28 @@ PlayPage::PlayPage(App* app)
 		{ 255, 255, 255, 255 });
 	score_label__text->setPositionX(330 + 150 / 2 - score_label__text->getWidth() / 2);
 
+	Text* score_value__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		std::to_string(this->score),
+		25,
+		&labelTextWrap,
+		0.f,
+		500.f,
+		{ 255, 255, 255, 255 });
+	score_value__text->setPositionX(330 + 150 / 2 - score_value__text->getWidth() / 2);
+
 	this->addRenderable("next_piece__rectangle", next_piece__rectangle);
 	this->addRenderable("next_piece_label__text", next_piece_label__text);
 	this->addRenderable("level__rectangle", level__rectangle);
 	this->addRenderable("level_label__text", level_label__text);
+	this->addRenderable("level_value__text", level_value__text);
 	this->addRenderable("lines__rectangle", lines__rectangle);
 	this->addRenderable("lines_label__text", lines_label__text);
+	this->addRenderable("lines_value__text", lines_value__text);
 	this->addRenderable("score__rectangle", score__rectangle);
 	this->addRenderable("score_label__text", score_label__text);
+	this->addRenderable("score_value__text", score_value__text);
 
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 10; j++) {

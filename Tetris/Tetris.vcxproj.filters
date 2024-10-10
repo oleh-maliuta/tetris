@@ -7,6 +7,9 @@
     <Filter Include="renderables">
       <UniqueIdentifier>{d711916f-db72-44ba-b487-224a1890a7e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="structures">
+      <UniqueIdentifier>{5a302f1a-8142-4d53-89ba-9bcf3d93cb06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pages\MainMenuPage.cpp">
@@ -75,6 +78,9 @@
     </ClInclude>
     <ClInclude Include="renderables\Rectangle.h">
       <Filter>renderables</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\Tetris_Cell.h">
+      <Filter>structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

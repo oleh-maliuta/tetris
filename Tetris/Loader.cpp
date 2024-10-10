@@ -74,7 +74,7 @@ SDL_Texture* Loader::getTextureFromImage(
 	return texture;
 }
 
-SDL_Texture* Loader::getTextureFromSolidUtf8Text(
+SDL_Texture* Loader::getTextureFromUtf8Text(
 	SDL_Renderer* renderer,
 	TTF_Font* font,
 	const SDL_Color& color,
@@ -84,8 +84,8 @@ SDL_Texture* Loader::getTextureFromSolidUtf8Text(
 	float* heightRef
 ) {
 	SDL_Surface* textSurface = wrapLength != nullptr ?
-		TTF_RenderUTF8_Solid_Wrapped(font, text, color, *wrapLength) :
-		TTF_RenderUTF8_Solid(font, text, color);
+		TTF_RenderUTF8_Blended_Wrapped(font, text, color, *wrapLength) :
+		TTF_RenderUTF8_Blended(font, text, color);
 
 	if (textSurface == nullptr)
 	{

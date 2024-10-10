@@ -8,6 +8,7 @@
 #include "../Loader.h"
 #include "../renderables/Rectangle.h"
 #include "../renderables/Text.h"
+#include "../structures/Tetris_Cell.h"
 
 class PlayPage :
     public Page
@@ -26,6 +27,13 @@ protected:
 	virtual void render() override;
 
 private:
+
+	std::list<Tetris_Cell> cells;
+	unsigned int currentPiece = 0;
+	unsigned int nextPiece = 0;
+	unsigned int level = 0;
+	unsigned int lines = 0;
+	unsigned int score = 0;
 };
 
 #endif
