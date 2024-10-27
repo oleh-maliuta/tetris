@@ -1,8 +1,9 @@
-#include "App.h"
+#include "Application.h"
 
-App::App(
+Tetris::Application::Application(
 	const int& windowWidth,
-	const int& windowHeight) {
+	const int& windowHeight)
+{
 	std::unordered_map<std::string, std::string> app_settings;
 	this->getAppSettings(app_settings);
 
@@ -65,6 +66,7 @@ App::App(
 	}
 
 	SDL_RenderSetVSync(this->renderer, this->vSync);
+	SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
 
 	SDL_Surface* iconSurface = IMG_Load("assets/images/png/icon.png");
 
@@ -79,7 +81,8 @@ App::App(
 	this->isRunning = true;
 }
 
-App::~App() {
+Tetris::Application::~Application()
+{
 	for (const auto& el : this->pages) {
 		delete el.second;
 	}
@@ -99,7 +102,9 @@ App::~App() {
 	SDL_Quit();
 }
 
-void App::changePage(const std::string& key) {
+void Tetris::Application::changePage(
+	const std::string& key)
+{
 	if (this->pages.find(key) == this->pages.end()) {
 		printf("Could not change the page because it does not exist.\n");
 		this->setRunning(false);
@@ -109,7 +114,9 @@ void App::changePage(const std::string& key) {
 	this->currentLocation = key;
 }
 
-void App::run(const std::string& startPage) {
+void Tetris::Application::run(
+	const std::string& startPage)
+{
 	if (this->pages.find(startPage) == this->pages.end()) {
 		printf("Start page not found.\n");
 		return;
@@ -144,47 +151,60 @@ void App::run(const std::string& startPage) {
 	this->pages[this->previousLocation]->clean();
 }
 
-SDL_Renderer* App::getRenderer() const {
+SDL_Renderer* Tetris::Application::getRenderer() const
+{
 	return this->renderer;
 }
 
-std::string App::getVersion() const {
+std::string Tetris::Application::getVersion() const
+{
 	return this->version;
 }
 
-float App::getDeltaTime() const {
+float Tetris::Application::getDeltaTime() const
+{
 	return this->deltaTime;
 }
 
-int App::getLastFrameTime() const {
+int Tetris::Application::getLastFrameTime() const
+{
 	return this->lastFrameTime;
 }
 
-int App::getFps() const {
+int Tetris::Application::getFps() const
+{
 	return this->fps;
 }
 
-int App::getWindowWidth() const {
+int Tetris::Application::getWindowWidth() const
+{
 	return this->windowWidth;
 }
 
-int App::getWindowHeight() const {
+int Tetris::Application::getWindowHeight() const
+{
 	return this->windowHeight;
 }
 
-bool App::getVSync() const {
+bool Tetris::Application::getVSync() const
+{
 	return this->vSync;
 }
 
-bool App::getRunning() const {
+bool Tetris::Application::getRunning() const
+{
 	return this->isRunning;
 }
 
-void App::setFps(const int& value) {
+void Tetris::Application::setFps(
+	const int& value)
+{
 	this->fps = value;
 }
 
-void App::setVSync(const bool& value) {
+void Tetris::Application::setVSync(
+	const bool& value)
+{
 	if (this->vSync == value) {
 		return;
 	}
@@ -194,11 +214,15 @@ void App::setVSync(const bool& value) {
 	SDL_RenderSetVSync(this->renderer, this->vSync);
 }
 
-void App::setRunning(const bool& value) {
+void Tetris::Application::setRunning(
+	const bool& value)
+{
 	this->isRunning = value;
 }
 
-bool App::getAppSettings(std::unordered_map<std::string, std::string>& data) {
+bool Tetris::Application::getAppSettings(
+	std::unordered_map<std::string, std::string>& data)
+{
 	std::ifstream app_settings_file("app_settings.txt");
 
 	if (!app_settings_file.is_open()) {
@@ -222,7 +246,9 @@ bool App::getAppSettings(std::unordered_map<std::string, std::string>& data) {
 	return true;
 }
 
-bool App::saveAppSettings(const std::unordered_map<std::string, std::string>& data) {
+bool Tetris::Application::saveAppSettings(
+	const std::unordered_map<std::string, std::string>& data)
+{
 	std::ofstream app_settings_file("app_settings.txt");
 
 	if (!app_settings_file.is_open()) {

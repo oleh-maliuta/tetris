@@ -6,33 +6,36 @@
 #include <functional>
 #include <SDL.h>
 
-class Renderable
+namespace Tetris
 {
-public:
+	class Renderable
+	{
+	public:
 
-	Renderable(SDL_Renderer* renderer);
-	virtual ~Renderable();
+		Renderable(SDL_Renderer* renderer);
+		virtual ~Renderable();
 
-	virtual bool isCursorIn(
-		const float& x,
-		const float& y);
-	virtual void init();
-	virtual void render();
-	virtual void destroy();
+		virtual bool isCursorIn(
+			const float& x,
+			const float& y);
+		virtual void init();
+		virtual void render();
+		virtual void destroy();
 
-	bool getVisibility() const;
-	std::function<void()> getOnRelease() const;
+		bool getVisibility() const;
+		std::function<void()> getOnRelease() const;
 
-	void setVisibility(const bool& value);
-	void setOnRelease(const std::function<void()>& value);
+		void setVisibility(const bool& value);
+		void setOnRelease(const std::function<void()>& value);
 
-protected:
+	protected:
 
-	SDL_Renderer* renderer = nullptr;
-	bool visibility = true;
-	bool isInitialized = false;
+		SDL_Renderer* renderer = nullptr;
+		bool visibility = true;
+		bool isInitialized = false;
 
-	std::function<void()> onRelease = [] {};
-};
+		std::function<void()> onRelease = [] {};
+	};
+}
 
 #endif

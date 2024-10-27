@@ -5,9 +5,13 @@
 
 #include <cstdint>
 
-struct Tetris_Cell {
-	std::int8_t x, y;
-	std::uint8_t r, g, b;
-};
+namespace Tetris
+{
+	struct Tetris_Cell
+	{
+		std::int8_t x, y;
+		std::uint8_t r, g, b;
+	};
+}
 
 #endif

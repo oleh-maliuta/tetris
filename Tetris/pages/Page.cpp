@@ -1,16 +1,20 @@
 #include "Page.h"
 
-Page::Page(App* app) {
+Tetris::Page::Page(
+	Application* app)
+{
 	this->app = app;
 }
 
-Page::~Page() {
+Tetris::Page::~Page()
+{
 	for (const auto& el : this->renderables) {
 		delete el.second;
 	}
 }
 
-void Page::exec() {
+void Tetris::Page::exec()
+{
 	this->input();
 	this->update();
 
@@ -28,7 +32,8 @@ void Page::exec() {
 	SDL_RenderPresent(renderer);
 }
 
-void Page::init() {
+void Tetris::Page::init()
+{
 	for (const auto& el : this->renderables) {
 		el.second->init();
 	}
@@ -36,7 +41,8 @@ void Page::init() {
 	this->isInitialized = true;
 }
 
-void Page::clean() {
+void Tetris::Page::clean()
+{
 	for (const auto& el : this->renderables) {
 		el.second->destroy();
 	}
@@ -44,7 +50,8 @@ void Page::clean() {
 	this->isInitialized = false;
 }
 
-void Page::input() {
+void Tetris::Page::input()
+{
 	SDL_Event event;
 	int mousePosX, mousePosY;
 
@@ -88,21 +95,25 @@ void Page::input() {
 	}
 }
 
-void Page::update() {}
+void Tetris::Page::update() {}
 
-void Page::render() {
+void Tetris::Page::render()
+{
 	for (const auto& el : this->renderables) {
 		el.second->render();
 	}
 }
 
-void Page::addRenderable(
+void Tetris::Page::addRenderable(
 	const std::string& key,
-	Renderable* obj) {
+	Renderable* obj)
+{
 	this->renderables.push_back(std::pair(key, obj));
 }
 
-Renderable* Page::getRenderable(const std::string& key) {
+Tetris::Renderable* Tetris::Page::getRenderable(
+	const std::string& key)
+{
 	for (const auto& el : this->renderables) {
 		if (el.first == key) {
 			return el.second;

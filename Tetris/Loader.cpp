@@ -1,9 +1,10 @@
 #include "Loader.h"
 
-void Loader::getImageSize(
+void Tetris::Loader::getImageSize(
 	const char* path,
 	float* widthRef,
-	float* heightRef) {
+	float* heightRef)
+{
 	SDL_Surface* surface = IMG_Load(path);
 
 	if (surface == nullptr) {
@@ -29,13 +30,13 @@ void Loader::getImageSize(
 	}
 }
 
-void Loader::getUtf8TextSize(
+void Tetris::Loader::getUtf8TextSize(
 	TTF_Font* font,
 	const char* text,
 	const Uint32* wrapLength,
 	float* widthRef,
-	float* heightRef
-) {
+	float* heightRef)
+{
 	SDL_Surface* textSurface = wrapLength != nullptr ?
 		TTF_RenderUTF8_Solid_Wrapped(font, text, {}, *wrapLength) :
 		TTF_RenderUTF8_Solid(font, text, {});
@@ -58,10 +59,10 @@ void Loader::getUtf8TextSize(
 	SDL_FreeSurface(textSurface);
 }
 
-SDL_Texture* Loader::getTextureFromImage(
+SDL_Texture* Tetris::Loader::getTextureFromImage(
 	SDL_Renderer* renderer,
-	const char* path
-) {
+	const char* path) 
+{
 	SDL_Texture* texture = IMG_LoadTexture(renderer, path);
 
 	if (texture == nullptr) {
@@ -74,15 +75,15 @@ SDL_Texture* Loader::getTextureFromImage(
 	return texture;
 }
 
-SDL_Texture* Loader::getTextureFromUtf8Text(
+SDL_Texture* Tetris::Loader::getTextureFromUtf8Text(
 	SDL_Renderer* renderer,
 	TTF_Font* font,
 	const SDL_Color& color,
 	const char* text,
 	const Uint32* wrapLength,
 	float* widthRef,
-	float* heightRef
-) {
+	float* heightRef)
+{
 	SDL_Surface* textSurface = wrapLength != nullptr ?
 		TTF_RenderUTF8_Blended_Wrapped(font, text, color, *wrapLength) :
 		TTF_RenderUTF8_Blended(font, text, color);

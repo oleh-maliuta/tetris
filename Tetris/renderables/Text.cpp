@@ -1,6 +1,6 @@
 #include "Text.h"
 
-Text::Text(
+Tetris::Text::Text(
 	SDL_Renderer* renderer,
 	const std::string& fontPath,
 	const std::string& content,
@@ -12,7 +12,8 @@ Text::Text(
 	const SDL_RendererFlip& flip,
 	const SDL_FPoint* rotationPoint,
 	const double& angle)
-	: Renderable(renderer) {
+	: Renderable(renderer)
+{
 	this->fontPath = fontPath;
 	this->content = content;
 	this->wrapLength = wrapLength != nullptr ? new Uint32(*wrapLength) : nullptr;
@@ -38,21 +39,24 @@ Text::Text(
 	TTF_CloseFont(testFont);
 }
 
-Text::~Text() {
+Tetris::Text::~Text()
+{
 	this->destroy();
 	delete this->wrapLength;
 	delete this->rotationPoint;
 }
 
-bool Text::isCursorIn(
+bool Tetris::Text::isCursorIn(
 	const float& x,
-	const float& y) {
+	const float& y)
+{
 	return
 		x >= this->positionX && x < this->positionX + this->width &&
 		y >= this->positionY && y < this->positionY + this->height;
 }
 
-void Text::init() {
+void Tetris::Text::init()
+{
 	if (this->isInitialized) {
 		return;
 	}
@@ -79,7 +83,8 @@ void Text::init() {
 	Renderable::init();
 }
 
-void Text::render() {
+void Tetris::Text::render()
+{
 	if (!this->visibility || !this->isInitialized) {
 		return;
 	}
@@ -98,7 +103,8 @@ void Text::render() {
 	Renderable::render();
 }
 
-void Text::destroy() {
+void Tetris::Text::destroy()
+{
 	if (!this->isInitialized) {
 		return;
 	}
@@ -116,55 +122,73 @@ void Text::destroy() {
 	Renderable::destroy();
 }
 
-SDL_FPoint* Text::getRotationPoint() const {
-	return this->rotationPoint != nullptr ? new SDL_FPoint(*this->rotationPoint) : nullptr;
+SDL_FPoint* Tetris::Text::getRotationPoint() const
+{
+	return this->rotationPoint != nullptr ?
+		new SDL_FPoint(*this->rotationPoint) :
+		nullptr;
 }
 
-Uint32* Text::getWrapLength() const {
-	return this->wrapLength != nullptr ? new Uint32(*this->wrapLength) : nullptr;
+Uint32* Tetris::Text::getWrapLength() const
+{
+	return this->wrapLength != nullptr ?
+		new Uint32(*this->wrapLength) :
+		nullptr;
 }
 
-SDL_Color Text::getFontColor() const {
+SDL_Color Tetris::Text::getFontColor() const
+{
 	return this->fontColor;
 }
 
-SDL_RendererFlip Text::getFlip() const {
+SDL_RendererFlip Tetris::Text::getFlip() const
+{
 	return this->flip;
 }
 
-std::string Text::getContent() const {
+std::string Tetris::Text::getContent() const
+{
 	return this->content;
 }
 
-std::string Text::getFontPath() const {
+std::string Tetris::Text::getFontPath() const
+{
 	return this->fontPath;
 }
 
-double Text::getAngle() const {
+double Tetris::Text::getAngle() const
+{
 	return this->angle;
 }
 
-float Text::getPositionX() const {
+float Tetris::Text::getPositionX() const
+{
 	return this->positionX;
 }
 
-float Text::getPositionY() const {
+float Tetris::Text::getPositionY() const
+{
 	return this->positionY;
 }
 
-float Text::getWidth() const {
+float Tetris::Text::getWidth() const
+{
 	return this->width;
 }
 
-float Text::getHeight() const {
+float Tetris::Text::getHeight() const
+{
 	return this->height;
 }
 
-int Text::getFontSize() const {
+int Tetris::Text::getFontSize() const
+{
 	return this->fontSize;
 }
 
-void Text::setRotationPoint(const SDL_FPoint* value) {
+void Tetris::Text::setRotationPoint(
+	const SDL_FPoint* value)
+{
 	if (this->rotationPoint != nullptr) {
 		delete this->rotationPoint;
 	}
@@ -177,7 +201,9 @@ void Text::setRotationPoint(const SDL_FPoint* value) {
 	}
 }
 
-void Text::setWrapLength(const Uint32* value) {
+void Tetris::Text::setWrapLength(
+	const Uint32* value)
+{
 	if (this->texture != nullptr) {
 		SDL_DestroyTexture(this->texture);
 		this->texture = nullptr;
@@ -206,7 +232,9 @@ void Text::setWrapLength(const Uint32* value) {
 	}
 }
 
-void Text::setFontColor(const SDL_Color& value) {
+void Tetris::Text::setFontColor(
+	const SDL_Color& value)
+{
 	if (this->texture != nullptr) {
 		SDL_DestroyTexture(this->texture);
 		this->texture = nullptr;
@@ -226,11 +254,15 @@ void Text::setFontColor(const SDL_Color& value) {
 	}
 }
 
-void Text::setFlip(const SDL_RendererFlip& value) {
+void Tetris::Text::setFlip(
+	const SDL_RendererFlip& value)
+{
 	this->flip = value;
 }
 
-void Text::setContent(const std::string& value) {
+void Tetris::Text::setContent(
+	const std::string& value)
+{
 	if (this->texture != nullptr) {
 		SDL_DestroyTexture(this->texture);
 		this->texture = nullptr;
@@ -250,25 +282,35 @@ void Text::setContent(const std::string& value) {
 	}
 }
 
-void Text::setFontPath(const std::string& value) {
+void Tetris::Text::setFontPath(
+	const std::string& value)
+{
 	this->destroy();
 	this->fontPath = value;
 	this->init();
 }
 
-void Text::setAngle(const double& value) {
+void Tetris::Text::setAngle(
+	const double& value)
+{
 	this->angle = value;
 }
 
-void Text::setPositionX(const float& value) {
+void Tetris::Text::setPositionX(
+	const float& value)
+{
 	this->positionX = value;
 }
 
-void Text::setPositionY(const float& value) {
+void Tetris::Text::setPositionY(
+	const float& value)
+{
 	this->positionY = value;
 }
 
-void Text::setFontSize(const int& value) {
+void Tetris::Text::setFontSize(
+	const int& value)
+{
 	if (this->texture != nullptr) {
 		SDL_DestroyTexture(this->texture);
 		this->texture = nullptr;

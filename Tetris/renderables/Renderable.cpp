@@ -1,39 +1,50 @@
 #include "Renderable.h"
 
-Renderable::Renderable(SDL_Renderer* renderer) {
+Tetris::Renderable::Renderable(
+	SDL_Renderer* renderer)
+{
 	this->renderer = renderer;
 }
 
-Renderable::~Renderable() {}
+Tetris::Renderable::~Renderable() {}
 
-bool Renderable::isCursorIn(
+bool Tetris::Renderable::isCursorIn(
 	const float& x,
-	const float& y) {
+	const float& y)
+{
 	return false;
 }
 
-void Renderable::init() {
+void Tetris::Renderable::init()
+{
 	this->isInitialized = true;
 }
 
-void Renderable::render() {}
+void Tetris::Renderable::render() {}
 
-void Renderable::destroy() {
+void Tetris::Renderable::destroy()
+{
 	this->isInitialized = false;
 }
 
-bool Renderable::getVisibility() const {
+bool Tetris::Renderable::getVisibility() const
+{
 	return this->visibility;
 }
 
-std::function<void()> Renderable::getOnRelease() const {
+std::function<void()> Tetris::Renderable::getOnRelease() const
+{
 	return this->onRelease;
 }
 
-void Renderable::setVisibility(const bool& value) {
+void Tetris::Renderable::setVisibility(
+	const bool& value)
+{
 	this->visibility = value;
 }
 
-void Renderable::setOnRelease(const std::function<void()>& value) {
+void Tetris::Renderable::setOnRelease(
+	const std::function<void()>& value)
+{
 	this->onRelease = value;
 }

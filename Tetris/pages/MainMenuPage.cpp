@@ -1,8 +1,10 @@
 #include "MainMenuPage.h"
 
-MainMenuPage::MainMenuPage(App* app)
-	: Page(app) {
-	App* appRef = this->app;
+Tetris::MainMenuPage::MainMenuPage(
+	Application* app)
+	: Page(app)
+{
+	Application* appRef = this->app;
 	Uint32 versionInfoTextWrap = static_cast<Uint32>(this->app->getWindowWidth()) - 6;
 
 	Texture* logo__texture = new Texture(
@@ -76,7 +78,8 @@ MainMenuPage::MainMenuPage(App* app)
 	quit__text_button->setOnRelease([appRef] { appRef->setRunning(false); });
 }
 
-void MainMenuPage::init() {
+void Tetris::MainMenuPage::init()
+{
 	if (this->isInitialized) {
 		return;
 	}
@@ -84,7 +87,8 @@ void MainMenuPage::init() {
 	Page::init();
 }
 
-void MainMenuPage::clean() {
+void Tetris::MainMenuPage::clean()
+{
 	if (!this->isInitialized) {
 		return;
 	}
@@ -92,15 +96,18 @@ void MainMenuPage::clean() {
 	Page::clean();
 }
 
-void MainMenuPage::input() {
+void Tetris::MainMenuPage::input()
+{
 	Page::input();
 }
 
-void MainMenuPage::update() {
+void Tetris::MainMenuPage::update()
+{
 	Page::update();
 }
 
-void MainMenuPage::render() {
+void Tetris::MainMenuPage::render()
+{
 	if (!this->isInitialized) {
 		return;
 	}

@@ -4,36 +4,42 @@
 #define PAGE_PLAYPAGE_H
 
 #include <format>
+#include <random>
 #include "Page.h"
 #include "../Loader.h"
 #include "../renderables/Rectangle.h"
 #include "../renderables/Text.h"
+#include "../renderables/Texture.h"
 #include "../structures/Tetris_Cell.h"
 
-class PlayPage :
-    public Page
+namespace Tetris
 {
-public:
+	class PlayPage :
+		public Page
+	{
+	public:
 
-	PlayPage(App* app);
+		PlayPage(Application* app);
 
-	virtual void init() override;
-	virtual void clean() override;
+		virtual void init() override;
+		virtual void clean() override;
 
-protected:
+	protected:
 
-	virtual void input() override;
-	virtual void update() override;
-	virtual void render() override;
+		virtual void input() override;
+		virtual void update() override;
+		virtual void render() override;
 
-private:
+	private:
 
-	std::list<Tetris_Cell> cells;
-	unsigned int currentPiece = 0;
-	unsigned int nextPiece = 0;
-	unsigned int level = 0;
-	unsigned int lines = 0;
-	unsigned int score = 0;
-};
+		std::list<Tetris_Cell> cells;
+		Texture* nextBlockHint = nullptr;
+		double blockFallingDelay = 0;
+		char currentBlock = 0;
+		unsigned int level = 1;
+		unsigned int lines = 0;
+		unsigned int score = 0;
+	};
+}
 
 #endif

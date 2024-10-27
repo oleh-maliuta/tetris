@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-Texture::Texture(
+Tetris::Texture::Texture(
 	SDL_Renderer* renderer,
 	const std::string& path,
 	const float& x,
@@ -10,8 +10,9 @@ Texture::Texture(
 	const SDL_FPoint* rotationPoint,
 	const SDL_RendererFlip& flip,
 	const SDL_Color& moduleColor,
-	const double& angle
-) : Renderable(renderer) {
+	const double& angle)
+	: Renderable(renderer)
+{
 	this->filePath = path;
 	this->positionX = x;
 	this->positionY = y;
@@ -24,19 +25,24 @@ Texture::Texture(
 	this->moduleBlue = moduleColor.b;
 	this->angle = angle;
 
-	Loader::getImageSize(path.c_str(), &this->defaultWidth, &this->defaultHeight);
+	Loader::getImageSize(
+		path.c_str(),
+		&this->defaultWidth,
+		&this->defaultHeight);
 }
 
-Texture::~Texture() {
+Tetris::Texture::~Texture()
+{
 	this->destroy();
 	delete this->width;
 	delete this->height;
 	delete this->rotationPoint;
 }
 
-bool Texture::isCursorIn(
+bool Tetris::Texture::isCursorIn(
 	const float& x,
-	const float& y) {
+	const float& y)
+{
 	const float posX = this->getPositionX();
 	const float posY = this->getPositionY();
 
@@ -45,7 +51,8 @@ bool Texture::isCursorIn(
 		y >= posY && y < posY + this->getHeight();
 }
 
-void Texture::init() {
+void Tetris::Texture::init()
+{
 	if (this->isInitialized) {
 		return;
 	}
@@ -57,7 +64,8 @@ void Texture::init() {
 	Renderable::init();
 }
 
-void Texture::render() {
+void Tetris::Texture::render()
+{
 	if (!this->visibility || !this->isInitialized) {
 		return;
 	}
@@ -77,7 +85,6 @@ void Texture::render() {
 		this->angle,
 		this->rotationPoint,
 		this->flip);
-
 	SDL_SetTextureColorMod(
 		this->sdlTexture,
 		this->moduleRed,
@@ -87,7 +94,8 @@ void Texture::render() {
 	Renderable::render();
 }
 
-void Texture::destroy() {
+void Tetris::Texture::destroy()
+{
 	if (!this->isInitialized) {
 		return;
 	}
@@ -100,15 +108,20 @@ void Texture::destroy() {
 	Renderable::destroy();
 }
 
-SDL_FPoint* Texture::getRotationPoint() const {
-	return this->rotationPoint != nullptr ? new SDL_FPoint(*this->rotationPoint) : nullptr;
+SDL_FPoint* Tetris::Texture::getRotationPoint() const
+{
+	return this->rotationPoint != nullptr ?
+		new SDL_FPoint(*this->rotationPoint) :
+		nullptr;
 }
 
-SDL_RendererFlip Texture::getFlip() const {
+SDL_RendererFlip Tetris::Texture::getFlip() const
+{
 	return this->flip;
 }
 
-SDL_Color Texture::getModuleColor() const {
+SDL_Color Tetris::Texture::getModuleColor() const
+{
 	return {
 		this->moduleRed,
 		this->moduleGreen,
@@ -116,35 +129,43 @@ SDL_Color Texture::getModuleColor() const {
 	};
 }
 
-std::string Texture::getFilePath() const {
+std::string Tetris::Texture::getFilePath() const
+{
 	return this->filePath;
 }
 
-Uint8 Texture::getModuleRed() const {
+Uint8 Tetris::Texture::getModuleRed() const
+{
 	return this->moduleRed;
 }
 
-Uint8 Texture::getModuleGreen() const {
+Uint8 Tetris::Texture::getModuleGreen() const
+{
 	return this->moduleGreen;
 }
 
-Uint8 Texture::getModuleBlue() const {
+Uint8 Tetris::Texture::getModuleBlue() const
+{
 	return this->moduleBlue;
 }
 
-double Texture::getAngle() const {
+double Tetris::Texture::getAngle() const
+{
 	return this->angle;
 }
 
-float Texture::getPositionX() const {
+float Tetris::Texture::getPositionX() const
+{
 	return this->positionX;
 }
 
-float Texture::getPositionY() const {
+float Tetris::Texture::getPositionY() const
+{
 	return this->positionY;
 }
 
-float Texture::getWidth() const {
+float Tetris::Texture::getWidth() const
+{
 	if (this->width != nullptr) {
 		return *this->width;
 	}
@@ -152,7 +173,8 @@ float Texture::getWidth() const {
 	return this->defaultWidth;
 }
 
-float Texture::getHeight() const {
+float Tetris::Texture::getHeight() const
+{
 	if (this->height != nullptr) {
 		return *this->height;
 	}
@@ -160,7 +182,9 @@ float Texture::getHeight() const {
 	return this->defaultHeight;
 }
 
-void Texture::setRotationPoint(const SDL_FPoint* value) {
+void Tetris::Texture::setRotationPoint(
+	const SDL_FPoint* value)
+{
 	if (this->rotationPoint != nullptr) {
 		delete this->rotationPoint;
 	}
@@ -173,7 +197,9 @@ void Texture::setRotationPoint(const SDL_FPoint* value) {
 	}
 }
 
-void Texture::setFilePath(const std::string& value) {
+void Tetris::Texture::setFilePath(
+	const std::string& value)
+{
 	if (this->sdlTexture != nullptr) {
 		SDL_DestroyTexture(this->sdlTexture);
 		this->sdlTexture = nullptr;
@@ -188,37 +214,53 @@ void Texture::setFilePath(const std::string& value) {
 	}
 }
 
-void Texture::setModuleColor(const SDL_Color& color) {
+void Tetris::Texture::setModuleColor(
+	const SDL_Color& color)
+{
 	this->moduleRed = color.r;
 	this->moduleGreen = color.g;
 	this->moduleBlue = color.b;
 }
 
-void Texture::setModuleRed(const Uint8& value) {
+void Tetris::Texture::setModuleRed(
+	const Uint8& value)
+{
 	this->moduleRed = value;
 }
 
-void Texture::setModuleGreen(const Uint8& value) {
+void Tetris::Texture::setModuleGreen(
+	const Uint8& value)
+{
 	this->moduleGreen = value;
 }
 
-void Texture::setModuleBlue(const Uint8& value) {
+void Tetris::Texture::setModuleBlue(
+	const Uint8& value)
+{
 	this->moduleBlue = value;
 }
 
-void Texture::setAngle(const double& value) {
+void Tetris::Texture::setAngle(
+	const double& value)
+{
 	this->angle = value;
 }
 
-void Texture::setPositionX(const float& value) {
+void Tetris::Texture::setPositionX(
+	const float& value)
+{
 	this->positionX = value;
 }
 
-void Texture::setPositionY(const float& value) {
+void Tetris::Texture::setPositionY(
+	const float& value)
+{
 	this->positionY = value;
 }
 
-void Texture::setWidth(const float* value) {
+void Tetris::Texture::setWidth(
+	const float* value)
+{
 	delete this->width;
 	this->width = nullptr;
 
@@ -227,7 +269,9 @@ void Texture::setWidth(const float* value) {
 	}
 }
 
-void Texture::setHeight(const float* value) {
+void Tetris::Texture::setHeight(
+	const float* value)
+{
 	delete this->height;
 	this->height = nullptr;
 

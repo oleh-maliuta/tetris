@@ -22,7 +22,7 @@
       <Filter>pages</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="renderables\Renderable.cpp">
       <Filter>renderables</Filter>
@@ -56,7 +56,7 @@
     <ClInclude Include="pages\SettingsPage.h">
       <Filter>pages</Filter>
     </ClInclude>
-    <ClInclude Include="App.h" />
+    <ClInclude Include="Application.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="renderables\Renderable.h">
       <Filter>renderables</Filter>

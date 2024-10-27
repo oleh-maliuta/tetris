@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pages\MainMenuPage.cpp" />
@@ -34,7 +34,7 @@
     <ClCompile Include="renderables\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.h" />
+    <ClInclude Include="Application.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="pages\MainMenuPage.h" />
     <ClInclude Include="pages\Page.h" />

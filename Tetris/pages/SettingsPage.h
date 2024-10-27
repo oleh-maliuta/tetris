@@ -10,31 +10,32 @@
 #include "../renderables/TextButton.h"
 #include "../renderables/ImageButton.h"
 
-class SettingsPage
-	: public Page
+namespace Tetris
 {
-public:
+	class SettingsPage
+		: public Page
+	{
+	public:
 
-	SettingsPage(App* app);
-	
-	virtual void init() override;
-	virtual void clean() override;
+		SettingsPage(Application* app);
 
-	bool getVSync() const;
+		virtual void init() override;
+		virtual void clean() override;
 
-	void setVSync(const bool& value);
+		bool getVSync() const;
 
-protected:
-	
-	virtual void input() override;
-	virtual void update() override;
-	virtual void render() override;
+		void setVSync(const bool& value);
 
-private:
+	protected:
 
-	void initData();
+		virtual void input() override;
+		virtual void update() override;
+		virtual void render() override;
 
-	bool vSync;
-};
+	private:
+
+		bool vSync = false;
+	};
+}
 
 #endif

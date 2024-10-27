@@ -3,45 +3,48 @@
 #ifndef PAGES_PAGE_H
 #define PAGES_PAGE_H
 
-class App;
-
 #include <utility>
 #include <list>
 #include "../renderables/Renderable.h"
-#include "../App.h"
+#include "../Application.h"
 
-class Page
+namespace Tetris
 {
-public:
+	class Application;
 
-	Page(App* app);
-	virtual ~Page();
+	class Page
+	{
+	public:
 
-	virtual void init();
-	virtual void clean();
+		Page(Application* app);
+		virtual ~Page();
 
-	void exec();
+		virtual void init();
+		virtual void clean();
 
-protected:
+		void exec();
 
-	App* app = nullptr;
-	std::map<SDL_Keycode, std::function<void()>> keyDownEvents;
-	std::map<SDL_Keycode, std::function<void()>> keyUpEvents;
-	SDL_Color backgroundColor = { 255, 255, 255, 255 };
-	bool isInitialized = false;
+	protected:
 
-	virtual void input();
-	virtual void update();
-	virtual void render();
+		Application* app = nullptr;
+		std::map<SDL_Keycode, std::function<void()>> keyDownEvents;
+		std::map<SDL_Keycode, std::function<void()>> keyUpEvents;
+		SDL_Color backgroundColor = { 255, 255, 255, 255 };
+		bool isInitialized = false;
 
-	void addRenderable(
-		const std::string& key,
-		Renderable* obj);
-	Renderable* getRenderable(const std::string& key);
+		virtual void input();
+		virtual void update();
+		virtual void render();
 
-private:
+		void addRenderable(
+			const std::string& key,
+			Renderable* obj);
+		Renderable* getRenderable(const std::string& key);
 
-	std::list<std::pair<std::string, Renderable*>> renderables;
-};
+	private:
+
+		std::list<std::pair<std::string, Renderable*>> renderables;
+	};
+}
 
 #endif

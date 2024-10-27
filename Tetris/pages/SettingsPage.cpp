@@ -1,8 +1,10 @@
 #include "SettingsPage.h"
 
-SettingsPage::SettingsPage(App* app)
-	: Page(app) {
-	App* appRef = this->app;
+Tetris::SettingsPage::SettingsPage(
+	Application* app)
+	: Page(app)
+{
+	Tetris::Application* appRef = this->app;
 	SettingsPage* pageRef = this;
 	Uint32 versionInfoTextWrap = this->app->getWindowWidth() - 6;
 	Uint32 vSyncTextWrap = 100;
@@ -76,20 +78,25 @@ SettingsPage::SettingsPage(App* app)
 			appRef->setVSync(pageRef->getVSync());
 		}
 	});
-
-	this->initData();
 }
 
-void SettingsPage::init() {
+void Tetris::SettingsPage::init()
+{
 	if (this->isInitialized) {
 		return;
 	}
 
-	this->initData();
+	Texture* v_sync__texture = dynamic_cast<Texture*>(this->getRenderable("v_sync__texture"));
+
+	this->vSync = this->app->getVSync();
+
+	v_sync__texture->setFilePath(this->vSync ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png");
+
 	Page::init();
 }
 
-void SettingsPage::clean() {
+void Tetris::SettingsPage::clean()
+{
 	if (!this->isInitialized) {
 		return;
 	}
@@ -97,35 +104,32 @@ void SettingsPage::clean() {
 	Page::clean();
 }
 
-bool SettingsPage::getVSync() const {
+bool Tetris::SettingsPage::getVSync() const
+{
 	return this->vSync;
 }
 
-void SettingsPage::setVSync(const bool& value) {
+void Tetris::SettingsPage::setVSync(
+	const bool& value)
+{
 	this->vSync = value;
 }
 
-void SettingsPage::input() {
+void Tetris::SettingsPage::input()
+{
 	Page::input();
 }
 
-void SettingsPage::update() {
+void Tetris::SettingsPage::update()
+{
 	Page::update();
 }
 
-void SettingsPage::render() {
+void Tetris::SettingsPage::render()
+{
 	if (!this->isInitialized) {
 		return;
 	}
 
 	Page::render();
 }
-
-void SettingsPage::initData() {
-	Texture* v_sync__texture = dynamic_cast<Texture*>(this->getRenderable("v_sync__texture"));
-
-	this->vSync = this->app->getVSync();
-	
-	v_sync__texture->setFilePath(this->vSync ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png");
-}
-

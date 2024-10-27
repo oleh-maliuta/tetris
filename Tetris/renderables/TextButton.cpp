@@ -1,6 +1,6 @@
 #include "TextButton.h"
 
-TextButton::TextButton(
+Tetris::TextButton::TextButton(
 	SDL_Renderer* renderer,
 	const std::string& fontPath,
 	const std::string& content,
@@ -13,7 +13,8 @@ TextButton::TextButton(
 	const SDL_Color& fontColor,
 	const float& paddingLeft,
 	const float& paddingRight)
-	: Renderable(renderer) {
+	: Renderable(renderer)
+{
 	this->fontPath = fontPath;
 	this->content = content;
 	this->fontSize = fontSize;
@@ -27,19 +28,22 @@ TextButton::TextButton(
 	this->paddingRight = paddingRight;
 }
 
-TextButton::~TextButton() {
+Tetris::TextButton::~TextButton()
+{
 	this->destroy();
 }
 
-bool TextButton::isCursorIn(
+bool Tetris::TextButton::isCursorIn(
 	const float& x,
-	const float& y) {
+	const float& y)
+{
 	return
 		x >= this->positionX && x < this->positionX + this->bodyWidth &&
 		y >= this->positionY && y < this->positionY + this->bodyHeight;
 }
 
-void TextButton::init() {
+void Tetris::TextButton::init()
+{
 	if (this->isInitialized) {
 		return;
 	}
@@ -69,7 +73,8 @@ void TextButton::init() {
 	Renderable::init();
 }
 
-void TextButton::render() {
+void Tetris::TextButton::render()
+{
 	if (!this->visibility || !this->isInitialized) {
 		return;
 	}
@@ -89,7 +94,8 @@ void TextButton::render() {
 	Renderable::render();
 }
 
-void TextButton::destroy() {
+void Tetris::TextButton::destroy()
+{
 	if (!this->isInitialized) {
 		return;
 	}
@@ -107,63 +113,80 @@ void TextButton::destroy() {
 	Renderable::destroy();
 }
 
-SDL_Color TextButton::getBodyColor() const {
+SDL_Color Tetris::TextButton::getBodyColor() const
+{
 	return this->bodyColor;
 }
 
-SDL_Color TextButton::getFontColor() const {
+SDL_Color Tetris::TextButton::getFontColor() const
+{
 	return this->fontColor;
 }
 
-std::string TextButton::getContent() const {
+std::string Tetris::TextButton::getContent() const
+{
 	return this->content;
 }
 
-std::string TextButton::getFontPath() const {
+std::string Tetris::TextButton::getFontPath() const
+{
 	return this->fontPath;
 }
 
-int TextButton::getFontSize() const {
+int Tetris::TextButton::getFontSize() const
+{
 	return this->fontSize;
 }
 
-float TextButton::getPositionX() const {
+float Tetris::TextButton::getPositionX() const
+{
 	return this->positionX;
 }
 
-float TextButton::getPositionY() const {
+float Tetris::TextButton::getPositionY() const
+{
 	return this->positionY;
 }
 
-float TextButton::getBodyWidth() const {
+float Tetris::TextButton::getBodyWidth() const
+{
 	return this->bodyWidth;
 }
 
-float TextButton::getBodyHeight() const {
+float Tetris::TextButton::getBodyHeight() const
+{
 	return this->bodyHeight;
 }
 
-float TextButton::getTextWidth() const {
+float Tetris::TextButton::getTextWidth() const
+{
 	return this->textWidth;
 }
 
-float TextButton::getTextHeight() const {
+float Tetris::TextButton::getTextHeight() const
+{
 	return this->textHeight;
 }
 
-float TextButton::getPaddingLeft() const {
+float Tetris::TextButton::getPaddingLeft() const
+{
 	return this->paddingLeft;
 }
 
-float TextButton::getPaddingRight() const {
+float Tetris::TextButton::getPaddingRight() const
+{
 	return this->paddingRight;
 }
 
-void TextButton::setBodyColor(const SDL_Color& value) {
+void Tetris::TextButton::setBodyColor(
+	const SDL_Color& value)
+{
 	this->bodyColor = value;
 }
 
-void TextButton::setFontColor(const SDL_Color& value) {
+void Tetris::TextButton::setFontColor(
+	const SDL_Color& value)
+{
 	if (this->textTexture != nullptr) {
 		SDL_DestroyTexture(this->textTexture);
 		this->textTexture = nullptr;
@@ -186,7 +209,9 @@ void TextButton::setFontColor(const SDL_Color& value) {
 	}
 }
 
-void TextButton::setContent(const std::string& value) {
+void Tetris::TextButton::setContent(
+	const std::string& value)
+{
 	if (this->textTexture != nullptr) {
 		SDL_DestroyTexture(this->textTexture);
 		this->textTexture = nullptr;
@@ -209,7 +234,9 @@ void TextButton::setContent(const std::string& value) {
 	}
 }
 
-void TextButton::setFontPath(const std::string& value) {
+void Tetris::TextButton::setFontPath(
+	const std::string& value)
+{
 	if (this->textTexture != nullptr) {
 		SDL_DestroyTexture(this->textTexture);
 		this->textTexture = nullptr;
@@ -232,7 +259,9 @@ void TextButton::setFontPath(const std::string& value) {
 	}
 }
 
-void TextButton::setFontSize(const int& value) {
+void Tetris::TextButton::setFontSize(
+	const int& value)
+{
 	if (this->textTexture != nullptr) {
 		SDL_DestroyTexture(this->textTexture);
 		this->textTexture = nullptr;
@@ -255,26 +284,38 @@ void TextButton::setFontSize(const int& value) {
 	}
 }
 
-void TextButton::setPositionX(const float& value) {
+void Tetris::TextButton::setPositionX(
+	const float& value)
+{
 	this->positionX = value;
 }
 
-void TextButton::setPositionY(const float& value) {
+void Tetris::TextButton::setPositionY(
+	const float& value)
+{
 	this->positionY = value;
 }
 
-void TextButton::setBodyWidth(const float& value) {
+void Tetris::TextButton::setBodyWidth(
+	const float& value)
+{
 	this->bodyWidth = value;
 }
 
-void TextButton::setBodyHeight(const float& value) {
+void Tetris::TextButton::setBodyHeight(
+	const float& value)
+{
 	this->bodyHeight = value;
 }
 
-void TextButton::setPaddingLeft(const float& value) {
+void Tetris::TextButton::setPaddingLeft(
+	const float& value)
+{
 	this->paddingLeft = value;
 }
 
-void TextButton::setPaddingRight(const float& value) {
+void Tetris::TextButton::setPaddingRight(
+	const float& value)
+{
 	this->paddingRight = value;
 }

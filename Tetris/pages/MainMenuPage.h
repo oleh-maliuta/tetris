@@ -9,21 +9,24 @@
 #include "../renderables/Text.h"
 #include "../renderables/TextButton.h"
 
-class MainMenuPage
-	: public Page
+namespace Tetris
 {
-public:
+	class MainMenuPage
+		: public Page
+	{
+	public:
 
-	MainMenuPage(App* app);
+		MainMenuPage(Application* app);
 
-	virtual void init() override;
-	virtual void clean() override;
+		virtual void init() override;
+		virtual void clean() override;
 
-protected:
+	protected:
 
-	virtual void input() override;
-	virtual void update() override;
-	virtual void render() override;
-};
+		virtual void input() override;
+		virtual void update() override;
+		virtual void render() override;
+	};
+}
 
 #endif
