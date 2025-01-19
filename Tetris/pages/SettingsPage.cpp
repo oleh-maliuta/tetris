@@ -70,7 +70,10 @@ Tetris::SettingsPage::SettingsPage(
 
 	v_sync__texture->setOnRelease([pageRef, v_sync__texture] {
 		pageRef->setVSync(!pageRef->getVSync());
-		v_sync__texture->setFilePath(pageRef->getVSync() ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png");
+		v_sync__texture->setFilePath(
+			pageRef->getVSync() ?
+			"assets/images/png/checked.png" :
+			"assets/images/png/unchecked.png");
 	});
 	return__image_button->setOnRelease([appRef] { appRef->changePage("main_menu"); });
 	apply__text_button->setOnRelease([appRef, pageRef] {
@@ -86,13 +89,16 @@ void Tetris::SettingsPage::init()
 		return;
 	}
 
-	Texture* v_sync__texture = dynamic_cast<Texture*>(this->getRenderable("v_sync__texture"));
+	Page::init();
+
+	Texture* v_sync__texture = this->getRenderable<Texture>("v_sync__texture");
 
 	this->vSync = this->app->getVSync();
 
-	v_sync__texture->setFilePath(this->vSync ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png");
-
-	Page::init();
+	v_sync__texture->setFilePath(
+		this->vSync ?
+		"assets/images/png/checked.png" :
+		"assets/images/png/unchecked.png");
 }
 
 void Tetris::SettingsPage::clean()
@@ -115,21 +121,4 @@ void Tetris::SettingsPage::setVSync(
 	this->vSync = value;
 }
 
-void Tetris::SettingsPage::input()
-{
-	Page::input();
-}
-
-void Tetris::SettingsPage::update()
-{
-	Page::update();
-}
-
-void Tetris::SettingsPage::render()
-{
-	if (!this->isInitialized) {
-		return;
-	}
-
-	Page::render();
-}
+void Tetris::SettingsPage::update() {}

@@ -4,13 +4,34 @@ Tetris::PlayPage::PlayPage(
 	Application* app)
 	: Page(app)
 {
-	const SDL_Point startCellPos = { 20, 20 };
-	const SDL_Point cellSize = { 25, 25 };
+	const SDL_FPoint startCellPos = { 20.f, 20.f };
+	const SDL_FPoint cellSize = { 25.f, 25.f };
 	const int cellGab = 3;
 	Uint32 labelTextWrap = static_cast<Uint32>(150);
 	float nextShapeSize = 90.0;
 
+	this->cellInfo = {};
 	this->backgroundColor = { 0, 15, 49, 255 };
+
+	this->shapeSpawnPositions = {
+		{'i', {{ 4, 0 }, { 4, -1 }, { 4, -2 }, { 4, -3 }}},
+		{'o', {{ 4, 0 }, { 4, -1 }, { 5, 0 }, { 5, -1 }}},
+		{'t', {{ 3, 0 }, { 4, 0 }, { 5, 0 }, { 4, -1 }}},
+		{'j', {{ 3, 0 }, { 4, 0 }, { 5, 0 }, { 3, -1 }}},
+		{'l', {{ 3, 0 }, { 4, 0 }, { 5, 0 }, { 5, -1 }}},
+		{'s', {{ 3, 0 }, { 4, 0 }, { 4, -1 }, { 5, -1 }}},
+		{'z', {{ 4, 0 }, { 5, 0 }, { 4, -1 }, { 3, -1 }}}
+	};
+
+	this->shapeSpawnColors = {
+		{'i', { 255, 255, 255, 255 }},
+		{'o', { 255, 255, 255, 255 }},
+		{'t', { 255, 255, 255, 255 }},
+		{'j', { 255, 255, 255, 255 }},
+		{'l', { 255, 255, 255, 255 }},
+		{'s', { 255, 255, 255, 255 }},
+		{'z', { 255, 255, 255, 255 }}
+	};
 
 	Rectangle* next_block__rectangle = new Rectangle(
 		this->app->getRenderer(),
@@ -210,20 +231,18 @@ Tetris::PlayPage::PlayPage(
 	this->addRenderable("score_label__text", score_label__text);
 	this->addRenderable("score_value__text", score_value__text);
 
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 10; j++) {
+	for (int c = 0; c < 10; c++) {
+		for (int r = 0; r < 20; r++) {
 			const std::string cellName = std::format(
-				"cell_{}_{}__rectangle",
-				i + 1,
-				j + 1);
+				"cell_{}_{}__rectangle", c, r);
 
 			Rectangle* cell = new Rectangle(
 				this->app->getRenderer(),
-				cellSize.x,
-				cellSize.y,
-				startCellPos.x + ((cellGab + cellSize.x) * j),
-				startCellPos.y + ((cellGab + cellSize.y) * i),
-				{ 35, 50, 79, 255 });
+				static_cast<float>(cellSize.x),
+				static_cast<float>(cellSize.y),
+				static_cast<float>(startCellPos.x + ((cellGab + cellSize.x) * c)),
+				static_cast<float>(startCellPos.y + ((cellGab + cellSize.y) * r)),
+				this->DEFAULT_CELL_COLOR);
 
 			this->addRenderable(cellName, cell);
 		}
@@ -236,38 +255,19 @@ void Tetris::PlayPage::init()
 		return;
 	}
 
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distribution(0, 6);
+	Page::init();
 
-	const char* blockCharacters = "iotjlsz";
-	int current_block_num = distribution(gen);
-	int next_block_num = distribution(gen);
-
-	if (current_block_num == next_block_num) {
-		if (next_block_num == 6) {
-			next_block_num = 0;
-		}
-		else {
-			next_block_num++;
+	for (int c = 0; c < 10; c++) {
+		for (int r = 0; r < 20; r++) {
+			this->cellInfo[c][r] = false;
 		}
 	}
 
-	Texture* next_block_hint__texture = dynamic_cast<Texture*>(
-		this->getRenderable(std::format(
-			"next_{}_block_hint__texture",
-			blockCharacters[next_block_num])));
-
-	this->nextBlockHint = next_block_hint__texture;
-	this->currentBlock = blockCharacters[current_block_num];
-	this->blockFallingDelay = 0;
+	this->blockFallingInterval = this->START_BLOCK_FALLING_INTERVAL;
+	this->lastTimerState = SDL_GetTicks();
 	this->level = 1;
 	this->lines = 0;
 	this->score = 0;
-
-	this->nextBlockHint->setVisibility(true);
-
-	Page::init();
 }
 
 void Tetris::PlayPage::clean()
@@ -276,27 +276,155 @@ void Tetris::PlayPage::clean()
 		return;
 	}
 
-	this->cells.clear();
-	this->nextBlockHint->setVisibility(false);
-
 	Page::clean();
-}
+	this->movingBlocks.clear();
+	this->idleBlocks.clear();
+	this->nextBlockHint->setVisibility(false);
+	delete this->currentBlock;
+	delete this->nextBlock;
 
-void Tetris::PlayPage::input()
-{
-	Page::input();
+	this->currentBlock = nullptr;
+	this->nextBlock = nullptr;
 }
 
 void Tetris::PlayPage::update()
 {
-	Page::update();
-}
+	const Uint32 currentTimerState = SDL_GetTicks();
 
-void Tetris::PlayPage::render()
-{
-	if (!this->isInitialized) {
+	if (currentTimerState - this->lastTimerState >= this->blockFallingInterval) {
+		this->lastTimerState = currentTimerState;
+	}
+	else {
 		return;
 	}
 
-	Page::render();
+	if (this->movingBlocks.size() == 0) {
+		this->chooseShape();
+
+		std::vector<TetrisCellPosition> blockPositions = PlayPage::shapeSpawnPositions[*this->currentBlock];
+		SDL_Color blockColor = PlayPage::shapeSpawnColors[*this->currentBlock];
+
+		for (auto& blockPosition : blockPositions) {
+			this->movingBlocks.push_back({
+				blockPosition.x,
+				blockPosition.y,
+				blockColor.r,
+				blockColor.g,
+				blockColor.b,
+				blockColor.a
+			});
+		}
+	}
+	else {
+		bool touchedTheGround = false;
+
+		for (auto& block : this->movingBlocks) {
+			if (block.y == 19) {
+				touchedTheGround = true;
+				break;
+			}
+
+			if (block.y > 0 && this->cellInfo[static_cast<size_t>(block.x)][static_cast<size_t>(block.y) + 1]) {
+				const auto blockBelow = std::find_if(
+					this->movingBlocks.begin(),
+					this->movingBlocks.end(),
+					[&block](const Tetris::TetrisBlockData& otherBlock) {
+						return otherBlock.x == block.x && otherBlock.y == block.y + 1;
+					});
+
+				if (blockBelow == this->movingBlocks.end()) {
+					touchedTheGround = true;
+					break;
+				}
+			}
+		}
+
+		if (touchedTheGround) {
+			this->idleBlocks.splice(this->idleBlocks.end(), this->movingBlocks);
+		}
+		else {
+			for (auto& block : this->movingBlocks) {
+				if (block.y > 0 && block.y < 19) {
+					this->cellInfo
+						[static_cast<size_t>(block.x)]
+						[static_cast<size_t>(block.y)] = false;
+				}
+				block.y++;
+			}
+
+			for (auto& block : this->movingBlocks) {
+				if (block.y > 0 && block.y <= 19) {
+					this->cellInfo
+						[static_cast<size_t>(block.x)]
+						[static_cast<size_t>(block.y)] = true;
+				}
+			}
+		}
+	}
+
+	Rectangle* cells[10][20] = {};
+
+	for (int c = 0; c < 10; c++) {
+		for (int r = 0; r < 20; r++) {
+			cells[c][r] = this->getRenderable<Rectangle>(
+				std::format("cell_{}_{}__rectangle", c, r));
+			cells[c][r]->setColor({
+				this->DEFAULT_CELL_COLOR.r,
+				this->DEFAULT_CELL_COLOR.g,
+				this->DEFAULT_CELL_COLOR.b,
+				this->DEFAULT_CELL_COLOR.a });
+		}
+	}
+
+	for (auto& block : this->movingBlocks) {
+		if (block.y < 0) {
+			continue;
+		}
+
+		cells[block.x][block.y]->setColor({
+			block.r,
+			block.g,
+			block.b,
+			block.a });
+	}
+
+	for (auto& block : this->idleBlocks) {
+		if (block.y < 0) {
+			continue;
+		}
+
+		cells[block.x][block.y]->setColor({
+			block.r,
+			block.g,
+			block.b,
+			block.a });
+	}
+}
+
+void Tetris::PlayPage::chooseShape()
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distribution(0, 6);
+
+	std::string blockCharacters = "iotjlsz";
+	int current_block_num = this->nextBlock != nullptr ?
+		blockCharacters.find(*this->nextBlock) :
+		distribution(gen);
+	int next_block_num = distribution(gen);
+
+	Texture* next_block_hint__texture = this->getRenderable<Texture>(
+		std::format(
+			"next_{}_block_hint__texture",
+			blockCharacters[next_block_num]));
+
+	if (this->nextBlockHint != nullptr) {
+		this->nextBlockHint->setVisibility(false);
+	}
+
+	this->currentBlock = new char(blockCharacters[current_block_num]);
+	this->nextBlock = new char(blockCharacters[next_block_num]);
+	this->nextBlockHint = next_block_hint__texture;
+
+	this->nextBlockHint->setVisibility(true);
 }

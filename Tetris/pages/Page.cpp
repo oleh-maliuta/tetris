@@ -43,11 +43,24 @@ void Tetris::Page::init()
 
 void Tetris::Page::clean()
 {
+	if (!this->isInitialized) {
+		return;
+	}
+
 	for (const auto& el : this->renderables) {
 		el.second->destroy();
 	}
 
 	this->isInitialized = false;
+}
+
+void Tetris::Page::update() {}
+
+void Tetris::Page::addRenderable(
+	const std::string& key,
+	Renderable* obj)
+{
+	this->renderables.push_back(std::pair(key, obj));
 }
 
 void Tetris::Page::input()
@@ -95,30 +108,9 @@ void Tetris::Page::input()
 	}
 }
 
-void Tetris::Page::update() {}
-
 void Tetris::Page::render()
 {
 	for (const auto& el : this->renderables) {
 		el.second->render();
 	}
-}
-
-void Tetris::Page::addRenderable(
-	const std::string& key,
-	Renderable* obj)
-{
-	this->renderables.push_back(std::pair(key, obj));
-}
-
-Tetris::Renderable* Tetris::Page::getRenderable(
-	const std::string& key)
-{
-	for (const auto& el : this->renderables) {
-		if (el.first == key) {
-			return el.second;
-		}
-	}
-
-	return nullptr;
 }

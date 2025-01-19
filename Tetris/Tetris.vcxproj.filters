@@ -79,7 +79,10 @@
     <ClInclude Include="renderables\Rectangle.h">
       <Filter>renderables</Filter>
     </ClInclude>
-    <ClInclude Include="structures\Tetris_Cell.h">
+    <ClInclude Include="structures\TetrisBlockData.h">
+      <Filter>structures</Filter>
+    </ClInclude>
+    <ClInclude Include="structures\TetrisCellPosition.h">
       <Filter>structures</Filter>
     </ClInclude>
   </ItemGroup>

@@ -17,6 +17,9 @@ namespace Tetris
 {
 	class Page;
 
+	/// <summary>
+	/// Represents an application that runs using SDL library.
+	/// </summary>
 	class Application
 	{
 	public:
@@ -70,7 +73,9 @@ namespace Tetris
 	void Tetris::Application::usePage(
 		const std::string& key)
 	{
-		static_assert(std::is_base_of<Page, T>::value, "The class must be derived from Page class.");
+		if (!std::is_base_of<Page, T>::value) {
+			return;
+		}
 
 		const auto it = this->pages.find(key);
 

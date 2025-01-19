@@ -10,6 +10,9 @@
 
 namespace Tetris
 {
+	/// <summary>
+	/// Includes tools to load some assets or get their properties.
+	/// </summary>
 	class Loader
 	{
 	public:

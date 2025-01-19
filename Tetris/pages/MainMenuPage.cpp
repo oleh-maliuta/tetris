@@ -96,21 +96,4 @@ void Tetris::MainMenuPage::clean()
 	Page::clean();
 }
 
-void Tetris::MainMenuPage::input()
-{
-	Page::input();
-}
-
-void Tetris::MainMenuPage::update()
-{
-	Page::update();
-}
-
-void Tetris::MainMenuPage::render()
-{
-	if (!this->isInitialized) {
-		return;
-	}
-
-	Page::render();
-}
+void Tetris::MainMenuPage::update() {}

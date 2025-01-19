@@ -32,19 +32,40 @@ namespace Tetris
 		SDL_Color backgroundColor = { 255, 255, 255, 255 };
 		bool isInitialized = false;
 
-		virtual void input();
 		virtual void update();
-		virtual void render();
+
+		template<class T>
+		T* getRenderable(
+			const std::string& key);
 
 		void addRenderable(
 			const std::string& key,
 			Renderable* obj);
-		Renderable* getRenderable(const std::string& key);
 
 	private:
 
 		std::list<std::pair<std::string, Renderable*>> renderables;
+
+		void input();
+		void render();
 	};
+
+	template<class T>
+	T* Page::getRenderable(
+		const std::string& key)
+	{
+		if (!std::is_base_of<Renderable, T>::value) {
+			return nullptr;
+		}
+
+		for (const auto& el : this->renderables) {
+			if (el.first == key) {
+				return dynamic_cast<T*>(el.second);
+			}
+		}
+
+		return nullptr;
+	}
 }
 
 #endif
