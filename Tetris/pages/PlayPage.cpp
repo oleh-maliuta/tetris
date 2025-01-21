@@ -10,7 +10,6 @@ Tetris::PlayPage::PlayPage(
 	Uint32 labelTextWrap = static_cast<Uint32>(150);
 	float nextShapeSize = 90.0;
 
-	this->cellInfo = {};
 	this->backgroundColor = { 0, 15, 49, 255 };
 
 	this->shapeSpawnPositions = {
@@ -247,6 +246,8 @@ Tetris::PlayPage::PlayPage(
 			this->addRenderable(cellName, cell);
 		}
 	}
+
+	this->initKeyDownEvents();
 }
 
 void Tetris::PlayPage::init()
@@ -264,10 +265,11 @@ void Tetris::PlayPage::init()
 	}
 
 	this->blockFallingInterval = this->START_BLOCK_FALLING_INTERVAL;
-	this->lastTimerState = SDL_GetTicks();
 	this->level = 1;
 	this->lines = 0;
 	this->score = 0;
+
+	this->initRegularEvents();
 }
 
 void Tetris::PlayPage::clean()
@@ -277,7 +279,7 @@ void Tetris::PlayPage::clean()
 	}
 
 	Page::clean();
-	this->movingBlocks.clear();
+	this->fallingBlocks.clear();
 	this->idleBlocks.clear();
 	this->nextBlockHint->setVisibility(false);
 	delete this->currentBlock;
@@ -289,23 +291,14 @@ void Tetris::PlayPage::clean()
 
 void Tetris::PlayPage::update()
 {
-	const Uint32 currentTimerState = SDL_GetTicks();
-
-	if (currentTimerState - this->lastTimerState >= this->blockFallingInterval) {
-		this->lastTimerState = currentTimerState;
-	}
-	else {
-		return;
-	}
-
-	if (this->movingBlocks.size() == 0) {
+	if (this->fallingBlocks.size() == 0) {
 		this->chooseShape();
 
 		std::vector<TetrisCellPosition> blockPositions = PlayPage::shapeSpawnPositions[*this->currentBlock];
 		SDL_Color blockColor = PlayPage::shapeSpawnColors[*this->currentBlock];
 
 		for (auto& blockPosition : blockPositions) {
-			this->movingBlocks.push_back({
+			this->fallingBlocks.push_back({
 				blockPosition.x,
 				blockPosition.y,
 				blockColor.r,
@@ -313,52 +306,6 @@ void Tetris::PlayPage::update()
 				blockColor.b,
 				blockColor.a
 			});
-		}
-	}
-	else {
-		bool touchedTheGround = false;
-
-		for (auto& block : this->movingBlocks) {
-			if (block.y == 19) {
-				touchedTheGround = true;
-				break;
-			}
-
-			if (block.y > 0 && this->cellInfo[static_cast<size_t>(block.x)][static_cast<size_t>(block.y) + 1]) {
-				const auto blockBelow = std::find_if(
-					this->movingBlocks.begin(),
-					this->movingBlocks.end(),
-					[&block](const Tetris::TetrisBlockData& otherBlock) {
-						return otherBlock.x == block.x && otherBlock.y == block.y + 1;
-					});
-
-				if (blockBelow == this->movingBlocks.end()) {
-					touchedTheGround = true;
-					break;
-				}
-			}
-		}
-
-		if (touchedTheGround) {
-			this->idleBlocks.splice(this->idleBlocks.end(), this->movingBlocks);
-		}
-		else {
-			for (auto& block : this->movingBlocks) {
-				if (block.y > 0 && block.y < 19) {
-					this->cellInfo
-						[static_cast<size_t>(block.x)]
-						[static_cast<size_t>(block.y)] = false;
-				}
-				block.y++;
-			}
-
-			for (auto& block : this->movingBlocks) {
-				if (block.y > 0 && block.y <= 19) {
-					this->cellInfo
-						[static_cast<size_t>(block.x)]
-						[static_cast<size_t>(block.y)] = true;
-				}
-			}
 		}
 	}
 
@@ -376,7 +323,7 @@ void Tetris::PlayPage::update()
 		}
 	}
 
-	for (auto& block : this->movingBlocks) {
+	for (auto& block : this->fallingBlocks) {
 		if (block.y < 0) {
 			continue;
 		}
@@ -427,4 +374,90 @@ void Tetris::PlayPage::chooseShape()
 	this->nextBlockHint = next_block_hint__texture;
 
 	this->nextBlockHint->setVisibility(true);
+}
+
+void Tetris::PlayPage::initKeyDownEvents()
+{
+	this->keyDownEvents[SDLK_d] = [=]() {
+		if (this->fallingBlocks.size() == 0) {
+			return;
+		}
+
+		bool isActionEnabled = true;
+
+		for (auto& block : this->fallingBlocks) {
+			if (block.x >= 9 || (block.y >= 0 && this->cellInfo[block.x + 1][block.y])) {
+				isActionEnabled = false;
+				break;
+			}
+		}
+
+		if (isActionEnabled) {
+			for (auto& block : this->fallingBlocks) {
+				block.x++;
+			}
+		}
+	};
+
+	this->keyDownEvents[SDLK_a] = [=]() {
+		if (this->fallingBlocks.size() == 0) {
+			return;
+		}
+
+		bool isActionEnabled = true;
+
+		for (auto& block : this->fallingBlocks) {
+			if (block.x <= 0 || (block.y >= 0 && this->cellInfo[block.x - 1][block.y])) {
+				isActionEnabled = false;
+				break;
+			}
+		}
+
+		if (isActionEnabled) {
+			for (auto& block : this->fallingBlocks) {
+				block.x--;
+			}
+		}
+	};
+}
+
+void Tetris::PlayPage::initRegularEvents()
+{
+	this->addRegularEvent(
+		"shape-falling",
+		this->blockFallingInterval,
+		[](Uint32 interval, void* param) -> Uint32 {
+			PlayPage* page = static_cast<PlayPage*>(param);
+
+			if (page->fallingBlocks.size() == 0) {
+				return page->blockFallingInterval;
+			}
+
+			bool touchedTheGround = false;
+
+			for (auto& block : page->fallingBlocks) {
+				if (block.y >= -1 && (block.y == 19 || page->cellInfo[block.x][block.y + 1])) {
+					touchedTheGround = true;
+					break;
+				}
+			}
+
+			if (touchedTheGround) {
+				for (auto& block : page->fallingBlocks) {
+					if (block.y >= 0 && block.y <= 19) {
+						page->cellInfo[block.x][block.y] = true;
+					}
+				}
+
+				page->idleBlocks.splice(page->idleBlocks.end(), page->fallingBlocks);
+			}
+			else {
+				for (auto& block : page->fallingBlocks) {
+					block.y++;
+				}
+			}
+
+			return page->blockFallingInterval;
+		},
+		this);
 }

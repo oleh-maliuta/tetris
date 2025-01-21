@@ -51,6 +51,11 @@ void Tetris::Page::clean()
 		el.second->destroy();
 	}
 
+	for (const auto& el : this->regularEvents) {
+		SDL_RemoveTimer(el.second);
+	}
+	this->regularEvents.clear();
+
 	this->isInitialized = false;
 }
 
@@ -61,6 +66,32 @@ void Tetris::Page::addRenderable(
 	Renderable* obj)
 {
 	this->renderables.push_back(std::pair(key, obj));
+}
+
+void Tetris::Page::addRegularEvent(
+	const std::string& key,
+	Uint32 interval,
+	SDL_TimerCallback callback,
+	void* param)
+{
+	const auto it = this->regularEvents.find(key);
+	if (it != this->regularEvents.end()) {
+		SDL_RemoveTimer(this->regularEvents[key]);
+	}
+
+	SDL_TimerID timerID = SDL_AddTimer(interval, callback, param);
+
+	this->regularEvents[key] = timerID;
+}
+
+void Tetris::Page::removeRegularEvent(
+	const std::string& key)
+{
+	const auto it = this->regularEvents.find(key);
+	if (it != this->regularEvents.end()) {
+		SDL_RemoveTimer(this->regularEvents[key]);
+		this->regularEvents.erase(it);
+	}
 }
 
 void Tetris::Page::input()

@@ -41,9 +41,17 @@ namespace Tetris
 		void addRenderable(
 			const std::string& key,
 			Renderable* obj);
+		void addRegularEvent(
+			const std::string& key,
+			Uint32 interval,
+			SDL_TimerCallback callback,
+			void* param);
+		void removeRegularEvent(
+			const std::string& key);
 
 	private:
 
+		std::map<std::string, SDL_TimerID> regularEvents;
 		std::list<std::pair<std::string, Renderable*>> renderables;
 
 		void input();
