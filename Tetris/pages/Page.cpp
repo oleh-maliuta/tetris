@@ -76,7 +76,7 @@ void Tetris::Page::addRegularEvent(
 {
 	const auto it = this->regularEvents.find(key);
 	if (it != this->regularEvents.end()) {
-		SDL_RemoveTimer(this->regularEvents[key]);
+		SDL_RemoveTimer(it->second);
 	}
 
 	SDL_TimerID timerID = SDL_AddTimer(interval, callback, param);
@@ -89,8 +89,8 @@ void Tetris::Page::removeRegularEvent(
 {
 	const auto it = this->regularEvents.find(key);
 	if (it != this->regularEvents.end()) {
-		SDL_RemoveTimer(this->regularEvents[key]);
-		this->regularEvents.erase(it);
+		SDL_RemoveTimer(it->second);
+		this->regularEvents.erase(it->first);
 	}
 }
 

@@ -23,13 +23,13 @@ Tetris::PlayPage::PlayPage(
 	};
 
 	this->shapeSpawnColors = {
-		{'i', { 255, 255, 255, 255 }},
-		{'o', { 255, 255, 255, 255 }},
-		{'t', { 255, 255, 255, 255 }},
-		{'j', { 255, 255, 255, 255 }},
-		{'l', { 255, 255, 255, 255 }},
-		{'s', { 255, 255, 255, 255 }},
-		{'z', { 255, 255, 255, 255 }}
+		{'i', { 251, 112, 36, 255 }},
+		{'o', { 243, 209, 26, 255 }},
+		{'t', { 167, 47, 232, 255 }},
+		{'j', { 117, 196, 63, 255 }},
+		{'l', { 61, 194, 132, 255 }},
+		{'s', { 238, 30, 40, 255 }},
+		{'z', { 31, 197, 240, 255 }}
 	};
 
 	Rectangle* next_block__rectangle = new Rectangle(
@@ -237,17 +237,36 @@ Tetris::PlayPage::PlayPage(
 
 			Rectangle* cell = new Rectangle(
 				this->app->getRenderer(),
-				static_cast<float>(cellSize.x),
-				static_cast<float>(cellSize.y),
-				static_cast<float>(startCellPos.x + ((cellGab + cellSize.x) * c)),
-				static_cast<float>(startCellPos.y + ((cellGab + cellSize.y) * r)),
+				cellSize.x,
+				cellSize.y,
+				startCellPos.x + ((cellGab + cellSize.x) * c),
+				startCellPos.y + ((cellGab + cellSize.y) * r),
 				this->DEFAULT_CELL_COLOR);
 
 			this->addRenderable(cellName, cell);
 		}
 	}
 
+	for (int c = 0; c < 10; c++) {
+		for (int r = 0; r < 20; r++) {
+			const std::string cellMarkerName = std::format(
+				"cell_marker_{}_{}__rectangle", c, r);
+
+			Rectangle* cellMarker = new Rectangle(
+				this->app->getRenderer(),
+				cellSize.x / 2.f,
+				cellSize.y / 2.f,
+				startCellPos.x + ((cellGab + cellSize.x) * c) + cellSize.x / 4.f,
+				startCellPos.y + ((cellGab + cellSize.y) * r) + cellSize.y / 4.f,
+				{ 255, 255, 255, 255 });
+			cellMarker->setVisibility(false);
+
+			this->addRenderable(cellMarkerName, cellMarker);
+		}
+	}
+
 	this->initKeyDownEvents();
+	this->initKeyUpEvents();
 }
 
 void Tetris::PlayPage::init()
@@ -268,6 +287,7 @@ void Tetris::PlayPage::init()
 	this->level = 1;
 	this->lines = 0;
 	this->score = 0;
+	this->isBlockFallingAccelerated = false;
 
 	this->initRegularEvents();
 }
@@ -289,6 +309,58 @@ void Tetris::PlayPage::clean()
 	this->nextBlock = nullptr;
 }
 
+void Tetris::PlayPage::updateBlockMarkers()
+{
+	for (auto& marker : this->blockMarkers) {
+		if (marker.y < 0) {
+			continue;
+		}
+
+		Rectangle* cellMarker = this->getRenderable<Rectangle>(
+			std::format("cell_marker_{}_{}__rectangle", marker.x, marker.y));
+
+		cellMarker->setVisibility(false);
+	}
+
+	this->blockMarkers.clear();
+
+	if (this->fallingBlocks.size() == 0) {
+		return;
+	}
+
+	for (auto& block : this->fallingBlocks) {
+		this->blockMarkers.push_back({ block.x, block.y });
+	}
+
+	bool touchedTheGround = false;
+
+	while (!touchedTheGround) {
+		for (auto& marker : this->blockMarkers) {
+			if (marker.y >= -1 && (marker.y == 19 || this->cellInfo[marker.x][marker.y + 1])) {
+				touchedTheGround = true;
+				break;
+			}
+		}
+
+		if (!touchedTheGround) {
+			for (auto& marker : this->blockMarkers) {
+				marker.y++;
+			}
+		}
+	}
+
+	for (auto& marker : this->blockMarkers) {
+		if (marker.y < 0) {
+			continue;
+		}
+
+		Rectangle* cellMarker = this->getRenderable<Rectangle>(
+			std::format("cell_marker_{}_{}__rectangle", marker.x, marker.y));
+
+		cellMarker->setVisibility(true);
+	}
+}
+
 void Tetris::PlayPage::update()
 {
 	if (this->fallingBlocks.size() == 0) {
@@ -307,6 +379,8 @@ void Tetris::PlayPage::update()
 				blockColor.a
 			});
 		}
+
+		this->updateBlockMarkers();
 	}
 
 	Rectangle* cells[10][20] = {};
@@ -378,7 +452,7 @@ void Tetris::PlayPage::chooseShape()
 
 void Tetris::PlayPage::initKeyDownEvents()
 {
-	this->keyDownEvents[SDLK_d] = [=]() {
+	this->keyDownEvents[SDLK_RIGHT] = [=]() {
 		if (this->fallingBlocks.size() == 0) {
 			return;
 		}
@@ -396,10 +470,12 @@ void Tetris::PlayPage::initKeyDownEvents()
 			for (auto& block : this->fallingBlocks) {
 				block.x++;
 			}
+
+			this->updateBlockMarkers();
 		}
 	};
 
-	this->keyDownEvents[SDLK_a] = [=]() {
+	this->keyDownEvents[SDLK_LEFT] = [=]() {
 		if (this->fallingBlocks.size() == 0) {
 			return;
 		}
@@ -417,6 +493,37 @@ void Tetris::PlayPage::initKeyDownEvents()
 			for (auto& block : this->fallingBlocks) {
 				block.x--;
 			}
+
+			this->updateBlockMarkers();
+		}
+	};
+
+	this->keyDownEvents[SDLK_DOWN] = [=]() {
+		if (!this->isBlockFallingAccelerated) {
+			const Uint32 resultInterval = static_cast<Uint32>(
+				ceil(this->blockFallingInterval / 10));
+
+			this->isBlockFallingAccelerated = true;
+			this->blockFallingTimerCallback()(0, this);
+			this->addRegularEvent(
+				"block-falling",
+				resultInterval,
+				this->blockFallingTimerCallback(),
+				this);
+		}
+	};
+}
+
+void Tetris::PlayPage::initKeyUpEvents()
+{
+	this->keyUpEvents[SDLK_DOWN] = [=]() {
+		if (this->isBlockFallingAccelerated) {
+			this->isBlockFallingAccelerated = false;
+			this->addRegularEvent(
+				"block-falling",
+				this->blockFallingInterval,
+				this->blockFallingTimerCallback(),
+				this);
 		}
 	};
 }
@@ -424,40 +531,48 @@ void Tetris::PlayPage::initKeyDownEvents()
 void Tetris::PlayPage::initRegularEvents()
 {
 	this->addRegularEvent(
-		"shape-falling",
+		"block-falling",
 		this->blockFallingInterval,
-		[](Uint32 interval, void* param) -> Uint32 {
-			PlayPage* page = static_cast<PlayPage*>(param);
-
-			if (page->fallingBlocks.size() == 0) {
-				return page->blockFallingInterval;
-			}
-
-			bool touchedTheGround = false;
-
-			for (auto& block : page->fallingBlocks) {
-				if (block.y >= -1 && (block.y == 19 || page->cellInfo[block.x][block.y + 1])) {
-					touchedTheGround = true;
-					break;
-				}
-			}
-
-			if (touchedTheGround) {
-				for (auto& block : page->fallingBlocks) {
-					if (block.y >= 0 && block.y <= 19) {
-						page->cellInfo[block.x][block.y] = true;
-					}
-				}
-
-				page->idleBlocks.splice(page->idleBlocks.end(), page->fallingBlocks);
-			}
-			else {
-				for (auto& block : page->fallingBlocks) {
-					block.y++;
-				}
-			}
-
-			return page->blockFallingInterval;
-		},
+		this->blockFallingTimerCallback(),
 		this);
+}
+
+SDL_TimerCallback Tetris::PlayPage::blockFallingTimerCallback()
+{
+	return [](Uint32 interval, void* param) -> Uint32 {
+		PlayPage* page = static_cast<PlayPage*>(param);
+		const Uint32 resultInterval = page->isBlockFallingAccelerated ?
+			static_cast<Uint32>(ceil(page->blockFallingInterval / 10)) :
+			page->blockFallingInterval;
+
+		if (page->fallingBlocks.size() == 0) {
+			return resultInterval;
+		}
+
+		bool touchedTheGround = false;
+
+		for (auto& block : page->fallingBlocks) {
+			if (block.y >= -1 && (block.y == 19 || page->cellInfo[block.x][block.y + 1])) {
+				touchedTheGround = true;
+				break;
+			}
+		}
+
+		if (touchedTheGround) {
+			for (auto& block : page->fallingBlocks) {
+				if (block.y >= 0 && block.y <= 19) {
+					page->cellInfo[block.x][block.y] = true;
+				}
+			}
+
+			page->idleBlocks.splice(page->idleBlocks.end(), page->fallingBlocks);
+		}
+		else {
+			for (auto& block : page->fallingBlocks) {
+				block.y++;
+			}
+		}
+
+		return resultInterval;
+	};
 }

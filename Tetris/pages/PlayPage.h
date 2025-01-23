@@ -28,11 +28,17 @@ namespace Tetris
 		std::list<TetrisBlockData> fallingBlocks;
 		std::list<TetrisBlockData> idleBlocks;
 		bool cellInfo[10][20];
+		Uint32 blockFallingInterval = START_BLOCK_FALLING_INTERVAL;
+		bool isBlockFallingAccelerated = false;
+
+		SDL_TimerCallback blockFallingTimerCallback();
 
 		PlayPage(Application* app);
 
 		virtual void init() override;
 		virtual void clean() override;
+
+		void updateBlockMarkers();
 
 	protected:
 
@@ -44,8 +50,8 @@ namespace Tetris
 
 		std::map<char, std::vector<TetrisCellPosition>> shapeSpawnPositions;
 		std::map<char, SDL_Color> shapeSpawnColors;
+		std::list<TetrisCellPosition> blockMarkers;
 		Texture* nextBlockHint = nullptr;
-		Uint32 blockFallingInterval = 1000;
 		char* currentBlock = nullptr;
 		char* nextBlock = nullptr;
 		unsigned int level = 1;
@@ -54,6 +60,7 @@ namespace Tetris
 
 		void chooseShape();
 		void initKeyDownEvents();
+		void initKeyUpEvents();
 		void initRegularEvents();
 	};
 }
