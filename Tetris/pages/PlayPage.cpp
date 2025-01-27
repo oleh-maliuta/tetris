@@ -8,28 +8,46 @@ Tetris::PlayPage::PlayPage(
 	const SDL_FPoint cellSize = { 25.f, 25.f };
 	const int cellGab = 3;
 	Uint32 labelTextWrap = static_cast<Uint32>(150);
-	float nextShapeSize = 90.0;
+	float nextPieceSize = 90.0f;
 
 	this->backgroundColor = { 0, 15, 49, 255 };
 
-	this->shapeSpawnPositions = {
-		{'i', {{ 4, 0 }, { 4, -1 }, { 4, -2 }, { 4, -3 }}},
-		{'o', {{ 4, 0 }, { 4, -1 }, { 5, 0 }, { 5, -1 }}},
-		{'t', {{ 3, 0 }, { 4, 0 }, { 5, 0 }, { 4, -1 }}},
-		{'j', {{ 3, 0 }, { 4, 0 }, { 5, 0 }, { 3, -1 }}},
-		{'l', {{ 3, 0 }, { 4, 0 }, { 5, 0 }, { 5, -1 }}},
-		{'s', {{ 3, 0 }, { 4, 0 }, { 4, -1 }, { 5, -1 }}},
-		{'z', {{ 4, 0 }, { 5, 0 }, { 4, -1 }, { 3, -1 }}}
-	};
-
-	this->shapeSpawnColors = {
-		{'i', { 251, 112, 36, 255 }},
-		{'o', { 243, 209, 26, 255 }},
-		{'t', { 167, 47, 232, 255 }},
-		{'j', { 117, 196, 63, 255 }},
-		{'l', { 61, 194, 132, 255 }},
-		{'s', { 238, 30, 40, 255 }},
-		{'z', { 31, 197, 240, 255 }}
+	this->pieceData = {
+		{'i', {
+				{{ 4, 21 }, { 4, 19 }, { 4, 20 }, { 4, 22 }},
+				251, 112, 36, 255
+			}
+		},
+		{'o', {
+				{{ 4, 19 }, { 4, 20 }, { 5, 19 }, { 5, 20 }},
+				243, 209, 26, 255
+			}
+		},
+		{'t', {
+				{{ 4, 19 }, { 3, 19 }, { 5, 19 }, { 4, 20 }},
+				167, 47, 232, 255
+			}
+		},
+		{'j', {
+				{{ 4, 19 }, { 3, 19 }, { 5, 19 }, { 3, 20 }},
+				117, 196, 63, 255
+			}
+		},
+		{'l', {
+				{{ 4, 19 }, { 3, 19 }, { 5, 19 }, { 5, 20 }},
+				61, 194, 132, 255
+			}
+		},
+		{'s', {
+				{{ 4, 19 }, { 3, 19 }, { 4, 20 }, { 5, 20 }},
+				238, 30, 40, 255
+			}
+		},
+		{'z', {
+				{{ 4, 19 }, { 5, 19 }, { 4, 20 }, { 3, 20 }},
+				31, 197, 240, 255
+			}
+		},
 	};
 
 	Rectangle* next_block__rectangle = new Rectangle(
@@ -56,9 +74,9 @@ Tetris::PlayPage::PlayPage(
 		"assets/images/png/i_block.png",
 		0.0,
 		75.0,
-		&nextShapeSize,
-		&nextShapeSize);
-	next_i_block_hint__texture->setPositionX(330 + 150 / 2 - nextShapeSize / 2);
+		&nextPieceSize,
+		&nextPieceSize);
+	next_i_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
 	next_i_block_hint__texture->setVisibility(false);
 
 	Texture* next_o_block_hint__texture = new Texture(
@@ -66,9 +84,9 @@ Tetris::PlayPage::PlayPage(
 		"assets/images/png/o_block.png",
 		0.0,
 		75.0,
-		&nextShapeSize,
-		&nextShapeSize);
-	next_o_block_hint__texture->setPositionX(330 + 150 / 2 - nextShapeSize / 2);
+		&nextPieceSize,
+		&nextPieceSize);
+	next_o_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
 	next_o_block_hint__texture->setVisibility(false);
 
 	Texture* next_t_block_hint__texture = new Texture(
@@ -76,9 +94,9 @@ Tetris::PlayPage::PlayPage(
 		"assets/images/png/t_block.png",
 		0.0,
 		75.0,
-		&nextShapeSize,
-		&nextShapeSize);
-	next_t_block_hint__texture->setPositionX(330 + 150 / 2 - nextShapeSize / 2);
+		&nextPieceSize,
+		&nextPieceSize);
+	next_t_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
 	next_t_block_hint__texture->setVisibility(false);
 
 	Texture* next_j_block_hint__texture = new Texture(
@@ -86,9 +104,9 @@ Tetris::PlayPage::PlayPage(
 		"assets/images/png/j_block.png",
 		0.0,
 		75.0,
-		&nextShapeSize,
-		&nextShapeSize);
-	next_j_block_hint__texture->setPositionX(330 + 150 / 2 - nextShapeSize / 2);
+		&nextPieceSize,
+		&nextPieceSize);
+	next_j_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
 	next_j_block_hint__texture->setVisibility(false);
 
 	Texture* next_l_block_hint__texture = new Texture(
@@ -96,9 +114,9 @@ Tetris::PlayPage::PlayPage(
 		"assets/images/png/l_block.png",
 		0.0,
 		75.0,
-		&nextShapeSize,
-		&nextShapeSize);
-	next_l_block_hint__texture->setPositionX(330 + 150 / 2 - nextShapeSize / 2);
+		&nextPieceSize,
+		&nextPieceSize);
+	next_l_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
 	next_l_block_hint__texture->setVisibility(false);
 
 	Texture* next_s_block_hint__texture = new Texture(
@@ -106,9 +124,9 @@ Tetris::PlayPage::PlayPage(
 		"assets/images/png/s_block.png",
 		0.0,
 		75.0,
-		&nextShapeSize,
-		&nextShapeSize);
-	next_s_block_hint__texture->setPositionX(330 + 150 / 2 - nextShapeSize / 2);
+		&nextPieceSize,
+		&nextPieceSize);
+	next_s_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
 	next_s_block_hint__texture->setVisibility(false);
 
 	Texture* next_z_block_hint__texture = new Texture(
@@ -116,9 +134,9 @@ Tetris::PlayPage::PlayPage(
 		"assets/images/png/z_block.png",
 		0.0,
 		75.0,
-		&nextShapeSize,
-		&nextShapeSize);
-	next_z_block_hint__texture->setPositionX(330 + 150 / 2 - nextShapeSize / 2);
+		&nextPieceSize,
+		&nextPieceSize);
+	next_z_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
 	next_z_block_hint__texture->setVisibility(false);
 
 	Rectangle* level__rectangle = new Rectangle(
@@ -231,9 +249,9 @@ Tetris::PlayPage::PlayPage(
 	this->addRenderable("score_value__text", score_value__text);
 
 	for (int c = 0; c < 10; c++) {
-		for (int r = 0; r < 20; r++) {
+		for (int r = 0, rID = 19; r < 20; r++, rID--) {
 			const std::string cellName = std::format(
-				"cell_{}_{}__rectangle", c, r);
+				"cell_{}_{}__rectangle", c, rID);
 
 			Rectangle* cell = new Rectangle(
 				this->app->getRenderer(),
@@ -248,9 +266,9 @@ Tetris::PlayPage::PlayPage(
 	}
 
 	for (int c = 0; c < 10; c++) {
-		for (int r = 0; r < 20; r++) {
+		for (int r = 0, rID = 19; r < 20; r++, rID--) {
 			const std::string cellMarkerName = std::format(
-				"cell_marker_{}_{}__rectangle", c, r);
+				"cell_marker_{}_{}__rectangle", c, rID);
 
 			Rectangle* cellMarker = new Rectangle(
 				this->app->getRenderer(),
@@ -284,6 +302,7 @@ void Tetris::PlayPage::init()
 	}
 
 	this->blockFallingInterval = this->START_BLOCK_FALLING_INTERVAL;
+	this->pieceRotationIndex = 0;
 	this->level = 1;
 	this->lines = 0;
 	this->score = 0;
@@ -336,7 +355,7 @@ void Tetris::PlayPage::updateBlockMarkers()
 
 	while (!touchedTheGround) {
 		for (auto& marker : this->blockMarkers) {
-			if (marker.y >= -1 && (marker.y == 19 || this->cellInfo[marker.x][marker.y + 1])) {
+			if (marker.y <= 20 && (marker.y == 0 || this->cellInfo[marker.x][marker.y - 1])) {
 				touchedTheGround = true;
 				break;
 			}
@@ -344,13 +363,13 @@ void Tetris::PlayPage::updateBlockMarkers()
 
 		if (!touchedTheGround) {
 			for (auto& marker : this->blockMarkers) {
-				marker.y++;
+				marker.y--;
 			}
 		}
 	}
 
 	for (auto& marker : this->blockMarkers) {
-		if (marker.y < 0) {
+		if (marker.y > 19) {
 			continue;
 		}
 
@@ -361,22 +380,226 @@ void Tetris::PlayPage::updateBlockMarkers()
 	}
 }
 
+void Tetris::PlayPage::test_rotatePiece(
+	bool clockwise,
+	bool shouldOffset)
+{
+	int oldRotationIndex = this->pieceRotationIndex;
+	TetrisBlockData pivot = this->fallingBlocks.front();
+	this->pieceRotationIndex += clockwise ? 1 : -1;
+	this->pieceRotationIndex = PlayPage::test_mod(this->pieceRotationIndex, 4);
+
+	for (auto& block : this->fallingBlocks)
+	{
+		this->test_rotateTile(
+			block,
+			{ pivot.x, pivot.y },
+			clockwise);
+
+	}
+
+	if (!shouldOffset)
+	{
+		return;
+	}
+
+	bool canOffset = this->test_offset(
+		oldRotationIndex,
+		this->pieceRotationIndex);
+
+	if (!canOffset)
+	{
+		this->test_rotatePiece(!clockwise, false);
+	}
+}
+
+int Tetris::PlayPage::test_mod(int x, int m)
+{
+	return (x % m + m) % m;
+}
+
+void Tetris::PlayPage::test_rotateTile(
+	TetrisBlockData& curBlock,
+	TetrisCellPosition originPos,
+	bool clockwise)
+{
+	TetrisCellPosition relativePos = {
+		curBlock.x - originPos.x,
+		curBlock.y - originPos.y
+	};
+	TetrisCellPosition rotMatrix[2] = {};
+
+	if (clockwise) {
+		rotMatrix[0] = { 0, -1 };
+		rotMatrix[1] = { 1, 0 };
+	}
+	else {
+		rotMatrix[0] = { 0, 1 };
+		rotMatrix[1] = { -1, 0 };
+	}
+
+	int newXPos = (rotMatrix[0].x * relativePos.x) + (rotMatrix[1].x * relativePos.y);
+	int newYPos = (rotMatrix[0].y * relativePos.x) + (rotMatrix[1].y * relativePos.y);
+
+	TetrisCellPosition newPos = { newXPos, newYPos };
+	newPos.x += originPos.x;
+	newPos.y += originPos.y;
+
+	curBlock.x = newPos.x;
+	curBlock.y = newPos.y;
+}
+
+bool Tetris::PlayPage::test_offset(
+	int oldRotIndex,
+	int newRotIndex)
+{
+	TetrisCellPosition offsetVal1, offsetVal2, endOffset;
+	bool movePossible = false;
+
+	endOffset = { 0, 0 };
+
+	for (int testIndex = 0; testIndex < 5; testIndex++)
+	{
+		if (*this->currentBlock == 'i')
+		{
+			offsetVal1.x = this->I_OFFSET_DATA[testIndex][oldRotIndex].x;
+			offsetVal1.y = this->I_OFFSET_DATA[testIndex][oldRotIndex].y;
+			offsetVal2.x = this->I_OFFSET_DATA[testIndex][newRotIndex].x;
+			offsetVal2.y = this->I_OFFSET_DATA[testIndex][newRotIndex].y;
+		}
+		else
+		{
+			offsetVal1.x = this->J_L_S_T_Z_OFFSET_DATA[testIndex][oldRotIndex].x;
+			offsetVal1.y = this->J_L_S_T_Z_OFFSET_DATA[testIndex][oldRotIndex].y;
+			offsetVal2.x = this->J_L_S_T_Z_OFFSET_DATA[testIndex][newRotIndex].x;
+			offsetVal2.y = this->J_L_S_T_Z_OFFSET_DATA[testIndex][newRotIndex].y;
+		}
+
+		endOffset.x = offsetVal1.x - offsetVal2.x;
+		endOffset.y = offsetVal1.y - offsetVal2.y;
+
+		if (this->test_canMovePiece(endOffset))
+		{
+			movePossible = true;
+			break;
+		}
+	}
+
+	if (movePossible)
+	{
+		this->test_movePiece(endOffset);
+	}
+
+	return movePossible;
+}
+
+bool Tetris::PlayPage::test_canMovePiece(
+	TetrisCellPosition movement)
+{
+	for (auto& block : this->fallingBlocks)
+	{
+		TetrisCellPosition endPos = {
+			movement.x + block.x,
+			movement.y + block.y
+		};
+
+		if (!this->test_canTileMove(block, endPos))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Tetris::PlayPage::test_canTileMove(TetrisBlockData& curBlock, TetrisCellPosition endPos)
+{
+	if (!this->test_isInBounds(endPos))
+	{
+		return false;
+	}
+	if (!this->test_isPosEmpty(endPos))
+	{
+		return false;
+	}
+	return true;
+}
+
+bool Tetris::PlayPage::test_isInBounds(
+	TetrisCellPosition coordToTest)
+{
+	if (coordToTest.x < 0 || coordToTest.x >= 9 || coordToTest.y < 0)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+bool Tetris::PlayPage::test_isPosEmpty(
+	TetrisCellPosition coordToTest)
+{
+	if (coordToTest.y >= 20)
+	{
+		return true;
+	}
+
+	if (this->cellInfo[coordToTest.x][coordToTest.y])
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+bool Tetris::PlayPage::test_movePiece(
+	TetrisCellPosition movement)
+{
+	for (auto& block : this->fallingBlocks)
+	{
+		TetrisCellPosition endPos = {
+			movement.x + block.x,
+			movement.y + block.y
+		};
+
+		if (!this->test_canTileMove(block, endPos))
+		{
+			return false;
+		}
+	}
+
+	for (auto& block : this->fallingBlocks)
+	{
+		TetrisCellPosition endPos = {
+			block.x + movement.x,
+			block.y + movement.y
+		};
+
+		block.x = endPos.x;
+		block.y = endPos.y;
+	}
+
+	return true;
+}
+
 void Tetris::PlayPage::update()
 {
 	if (this->fallingBlocks.size() == 0) {
-		this->chooseShape();
+		this->choosePiece();
 
-		std::vector<TetrisCellPosition> blockPositions = PlayPage::shapeSpawnPositions[*this->currentBlock];
-		SDL_Color blockColor = PlayPage::shapeSpawnColors[*this->currentBlock];
+		TetrisPieceData currentPieceData = this->pieceData[*this->currentBlock];
 
-		for (auto& blockPosition : blockPositions) {
+		for (auto& blockPosition : currentPieceData.startBlockPositions) {
 			this->fallingBlocks.push_back({
 				blockPosition.x,
 				blockPosition.y,
-				blockColor.r,
-				blockColor.g,
-				blockColor.b,
-				blockColor.a
+				currentPieceData.r,
+				currentPieceData.g,
+				currentPieceData.b,
+				currentPieceData.a
 			});
 		}
 
@@ -398,7 +621,7 @@ void Tetris::PlayPage::update()
 	}
 
 	for (auto& block : this->fallingBlocks) {
-		if (block.y < 0) {
+		if (block.y > 19) {
 			continue;
 		}
 
@@ -410,7 +633,7 @@ void Tetris::PlayPage::update()
 	}
 
 	for (auto& block : this->idleBlocks) {
-		if (block.y < 0) {
+		if (block.y > 19) {
 			continue;
 		}
 
@@ -422,7 +645,7 @@ void Tetris::PlayPage::update()
 	}
 }
 
-void Tetris::PlayPage::chooseShape()
+void Tetris::PlayPage::choosePiece()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -460,7 +683,7 @@ void Tetris::PlayPage::initKeyDownEvents()
 		bool isActionEnabled = true;
 
 		for (auto& block : this->fallingBlocks) {
-			if (block.x >= 9 || (block.y >= 0 && this->cellInfo[block.x + 1][block.y])) {
+			if (block.x >= 9 || (block.y <= 19 && this->cellInfo[block.x + 1][block.y])) {
 				isActionEnabled = false;
 				break;
 			}
@@ -483,7 +706,7 @@ void Tetris::PlayPage::initKeyDownEvents()
 		bool isActionEnabled = true;
 
 		for (auto& block : this->fallingBlocks) {
-			if (block.x <= 0 || (block.y >= 0 && this->cellInfo[block.x - 1][block.y])) {
+			if (block.x <= 0 || (block.y <= 19 && this->cellInfo[block.x - 1][block.y])) {
 				isActionEnabled = false;
 				break;
 			}
@@ -496,6 +719,15 @@ void Tetris::PlayPage::initKeyDownEvents()
 
 			this->updateBlockMarkers();
 		}
+	};
+
+	this->keyDownEvents[SDLK_UP] = [=]() {
+		if (this->fallingBlocks.size() == 0 || *this->currentBlock == 'o') {
+			return;
+		}
+
+		this->test_rotatePiece(true, true);
+		this->updateBlockMarkers();
 	};
 
 	this->keyDownEvents[SDLK_DOWN] = [=]() {
@@ -552,7 +784,7 @@ SDL_TimerCallback Tetris::PlayPage::blockFallingTimerCallback()
 		bool touchedTheGround = false;
 
 		for (auto& block : page->fallingBlocks) {
-			if (block.y >= -1 && (block.y == 19 || page->cellInfo[block.x][block.y + 1])) {
+			if (block.y <= 20 && (block.y == 0 || page->cellInfo[block.x][block.y - 1])) {
 				touchedTheGround = true;
 				break;
 			}
@@ -569,7 +801,7 @@ SDL_TimerCallback Tetris::PlayPage::blockFallingTimerCallback()
 		}
 		else {
 			for (auto& block : page->fallingBlocks) {
-				block.y++;
+				block.y--;
 			}
 		}
 
