@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef PAGE_PLAYPAGE_H
-#define PAGE_PLAYPAGE_H
+#ifndef PAGES_PLAYPAGE_H
+#define PAGES_PLAYPAGE_H
 
 #include <algorithm>
 #include <format>
@@ -12,7 +12,9 @@
 #include "../Loader.h"
 #include "../renderables/Rectangle.h"
 #include "../renderables/Text.h"
+#include "../renderables/TextButton.h"
 #include "../renderables/Texture.h"
+#include "../renderables/Layout.h"
 #include "../structures/TetrisCellPosition.h"
 #include "../structures/TetrisBlockData.h"
 #include "../structures/TetrisPieceData.h"
@@ -67,8 +69,10 @@ namespace Tetris
 		short int pieceRotationIndex = 0;
 		char* currentBlock = nullptr;
 		bool isBlockFallingAccelerated = false;
+		bool pause = false;
+		bool gameOver = false;
 
-		SDL_TimerCallback blockFallingTimerCallback();
+		SDL_TimerCallback gameProcessTimerCallback();
 
 		PlayPage(Application* app);
 
@@ -77,29 +81,22 @@ namespace Tetris
 
 		void updateBlockMarkers();
 
-		void test_rotatePiece(
+		void rotatePiece(
 			bool clockwise,
 			bool shouldOffset);
-		int test_mod(
-			int x,
-			int m);
-		void test_rotateTile(
+		void rotateTile(
 			TetrisBlockData& curBlock,
 			TetrisCellPosition originPos,
 			bool clockwise);
-		bool test_offset(
+		bool offsetPiecePosition(
 			int oldRotIndex,
 			int newRotIndex);
-		bool test_canMovePiece(
+		bool canMovePiece(
 			TetrisCellPosition movement);
-		bool test_canTileMove(
+		bool canTileMove(
 			TetrisBlockData& curBlock,
-			TetrisCellPosition endPos);
-		bool test_isInBounds(
-			TetrisCellPosition coordToTest);
-		bool test_isPosEmpty(
-			TetrisCellPosition coordToTest);
-		bool test_movePiece(
+			TetrisCellPosition endPos) const;
+		bool movePiece(
 			TetrisCellPosition movement);
 
 	protected:
@@ -119,6 +116,8 @@ namespace Tetris
 		unsigned int score = 0;
 
 		void choosePiece();
+		void initPauseMenu();
+		void initGameOverMenu();
 		void initKeyDownEvents();
 		void initKeyUpEvents();
 		void initRegularEvents();

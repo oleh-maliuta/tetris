@@ -45,6 +45,9 @@
     <ClCompile Include="renderables\Rectangle.cpp">
       <Filter>renderables</Filter>
     </ClCompile>
+    <ClCompile Include="renderables\Layout.cpp">
+      <Filter>renderables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pages\MainMenuPage.h">
@@ -87,6 +90,9 @@
     </ClInclude>
     <ClInclude Include="structures\TetrisPieceData.h">
       <Filter>structures</Filter>
+    </ClInclude>
+    <ClInclude Include="renderables\Layout.h">
+      <Filter>renderables</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

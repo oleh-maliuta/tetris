@@ -27,6 +27,7 @@
     <ClCompile Include="pages\PlayPage.cpp" />
     <ClCompile Include="pages\SettingsPage.cpp" />
     <ClCompile Include="renderables\ImageButton.cpp" />
+    <ClCompile Include="renderables\Layout.cpp" />
     <ClCompile Include="renderables\Rectangle.cpp" />
     <ClCompile Include="renderables\Renderable.cpp" />
     <ClCompile Include="renderables\Text.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="pages\PlayPage.h" />
     <ClInclude Include="pages\SettingsPage.h" />
     <ClInclude Include="renderables\ImageButton.h" />
+    <ClInclude Include="renderables\Layout.h" />
     <ClInclude Include="renderables\Rectangle.h" />
     <ClInclude Include="renderables\Renderable.h" />
     <ClInclude Include="renderables\Text.h" />

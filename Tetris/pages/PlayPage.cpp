@@ -283,6 +283,8 @@ Tetris::PlayPage::PlayPage(
 		}
 	}
 
+	this->initPauseMenu();
+	this->initGameOverMenu();
 	this->initKeyDownEvents();
 	this->initKeyUpEvents();
 }
@@ -307,6 +309,8 @@ void Tetris::PlayPage::init()
 	this->lines = 0;
 	this->score = 0;
 	this->isBlockFallingAccelerated = false;
+	this->pause = false;
+	this->gameOver = false;
 
 	this->initRegularEvents();
 }
@@ -318,9 +322,13 @@ void Tetris::PlayPage::clean()
 	}
 
 	Page::clean();
+	if (this->nextBlockHint != nullptr) {
+		this->nextBlockHint->setVisibility(false);
+		this->nextBlockHint = nullptr;
+	}
+
 	this->fallingBlocks.clear();
 	this->idleBlocks.clear();
-	this->nextBlockHint->setVisibility(false);
 	delete this->currentBlock;
 	delete this->nextBlock;
 
@@ -380,18 +388,18 @@ void Tetris::PlayPage::updateBlockMarkers()
 	}
 }
 
-void Tetris::PlayPage::test_rotatePiece(
+void Tetris::PlayPage::rotatePiece(
 	bool clockwise,
 	bool shouldOffset)
 {
 	int oldRotationIndex = this->pieceRotationIndex;
 	TetrisBlockData pivot = this->fallingBlocks.front();
 	this->pieceRotationIndex += clockwise ? 1 : -1;
-	this->pieceRotationIndex = PlayPage::test_mod(this->pieceRotationIndex, 4);
+	this->pieceRotationIndex = (this->pieceRotationIndex % 4 + 4) % 4;
 
 	for (auto& block : this->fallingBlocks)
 	{
-		this->test_rotateTile(
+		this->rotateTile(
 			block,
 			{ pivot.x, pivot.y },
 			clockwise);
@@ -403,22 +411,17 @@ void Tetris::PlayPage::test_rotatePiece(
 		return;
 	}
 
-	bool canOffset = this->test_offset(
+	bool canOffset = this->offsetPiecePosition(
 		oldRotationIndex,
 		this->pieceRotationIndex);
 
 	if (!canOffset)
 	{
-		this->test_rotatePiece(!clockwise, false);
+		this->rotatePiece(!clockwise, false);
 	}
 }
 
-int Tetris::PlayPage::test_mod(int x, int m)
-{
-	return (x % m + m) % m;
-}
-
-void Tetris::PlayPage::test_rotateTile(
+void Tetris::PlayPage::rotateTile(
 	TetrisBlockData& curBlock,
 	TetrisCellPosition originPos,
 	bool clockwise)
@@ -449,14 +452,12 @@ void Tetris::PlayPage::test_rotateTile(
 	curBlock.y = newPos.y;
 }
 
-bool Tetris::PlayPage::test_offset(
+bool Tetris::PlayPage::offsetPiecePosition(
 	int oldRotIndex,
 	int newRotIndex)
 {
-	TetrisCellPosition offsetVal1, offsetVal2, endOffset;
+	TetrisCellPosition offsetVal1 = {}, offsetVal2 = {}, endOffset = { 0, 0 };
 	bool movePossible = false;
-
-	endOffset = { 0, 0 };
 
 	for (int testIndex = 0; testIndex < 5; testIndex++)
 	{
@@ -478,7 +479,7 @@ bool Tetris::PlayPage::test_offset(
 		endOffset.x = offsetVal1.x - offsetVal2.x;
 		endOffset.y = offsetVal1.y - offsetVal2.y;
 
-		if (this->test_canMovePiece(endOffset))
+		if (this->canMovePiece(endOffset))
 		{
 			movePossible = true;
 			break;
@@ -487,13 +488,13 @@ bool Tetris::PlayPage::test_offset(
 
 	if (movePossible)
 	{
-		this->test_movePiece(endOffset);
+		this->movePiece(endOffset);
 	}
 
 	return movePossible;
 }
 
-bool Tetris::PlayPage::test_canMovePiece(
+bool Tetris::PlayPage::canMovePiece(
 	TetrisCellPosition movement)
 {
 	for (auto& block : this->fallingBlocks)
@@ -503,7 +504,7 @@ bool Tetris::PlayPage::test_canMovePiece(
 			movement.y + block.y
 		};
 
-		if (!this->test_canTileMove(block, endPos))
+		if (!this->canTileMove(block, endPos))
 		{
 			return false;
 		}
@@ -511,51 +512,24 @@ bool Tetris::PlayPage::test_canMovePiece(
 	return true;
 }
 
-bool Tetris::PlayPage::test_canTileMove(TetrisBlockData& curBlock, TetrisCellPosition endPos)
+bool Tetris::PlayPage::canTileMove(
+	TetrisBlockData& curBlock,
+	TetrisCellPosition endPos) const
 {
-	if (!this->test_isInBounds(endPos))
+	if (endPos.x < 0 || endPos.x >= 9 || endPos.y < 0)
 	{
 		return false;
 	}
-	if (!this->test_isPosEmpty(endPos))
+
+	if (endPos.y < 20 && this->cellInfo[endPos.x][endPos.y])
 	{
 		return false;
 	}
+
 	return true;
 }
 
-bool Tetris::PlayPage::test_isInBounds(
-	TetrisCellPosition coordToTest)
-{
-	if (coordToTest.x < 0 || coordToTest.x >= 9 || coordToTest.y < 0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-
-bool Tetris::PlayPage::test_isPosEmpty(
-	TetrisCellPosition coordToTest)
-{
-	if (coordToTest.y >= 20)
-	{
-		return true;
-	}
-
-	if (this->cellInfo[coordToTest.x][coordToTest.y])
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-
-bool Tetris::PlayPage::test_movePiece(
+bool Tetris::PlayPage::movePiece(
 	TetrisCellPosition movement)
 {
 	for (auto& block : this->fallingBlocks)
@@ -565,7 +539,7 @@ bool Tetris::PlayPage::test_movePiece(
 			movement.y + block.y
 		};
 
-		if (!this->test_canTileMove(block, endPos))
+		if (!this->canTileMove(block, endPos))
 		{
 			return false;
 		}
@@ -587,23 +561,8 @@ bool Tetris::PlayPage::test_movePiece(
 
 void Tetris::PlayPage::update()
 {
-	if (this->fallingBlocks.size() == 0) {
-		this->choosePiece();
-
-		TetrisPieceData currentPieceData = this->pieceData[*this->currentBlock];
-
-		for (auto& blockPosition : currentPieceData.startBlockPositions) {
-			this->fallingBlocks.push_back({
-				blockPosition.x,
-				blockPosition.y,
-				currentPieceData.r,
-				currentPieceData.g,
-				currentPieceData.b,
-				currentPieceData.a
-			});
-		}
-
-		this->updateBlockMarkers();
+	if (this->pause) {
+		return;
 	}
 
 	Rectangle* cells[10][20] = {};
@@ -673,10 +632,117 @@ void Tetris::PlayPage::choosePiece()
 	this->nextBlockHint->setVisibility(true);
 }
 
+void Tetris::PlayPage::initPauseMenu()
+{
+	Uint32 windowWidth = static_cast<Uint32>(this->app->getWindowWidth());
+
+	Text* header__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"Pause",
+		50,
+		&windowWidth,
+		0.f,
+		120.f,
+		{ 255, 255, 255, 255 });
+	header__text->setPositionX(windowWidth / 2.f - header__text->getWidth() / 2.f);
+
+	TextButton* resume__text_button = new TextButton(
+		this->app->getRenderer(),
+		"assets/fonts/swansea/normal.ttf",
+		"Resume",
+		29,
+		400,
+		65,
+		this->app->getWindowWidth() / 2 - 200,
+		260,
+		{ 255, 255, 255, 255 },
+		{ 0, 0, 0, 255 },
+		5,
+		5);
+
+	Layout* menu = new Layout(
+		this->app->getRenderer(),
+		this->app->getWindowWidth(),
+		this->app->getWindowHeight(),
+		0.f,
+		0.f,
+		{ 0, 0, 0, 200 },
+		{
+			{ "header__text", header__text },
+			{ "resume__text_button", resume__text_button }
+		});
+	menu->setVisibility(false);
+
+	this->addRenderable("pause_menu__layout", menu);
+
+	resume__text_button->setOnRelease([=] {
+		if (!this->pause || this->gameOver) {
+			return;
+		}
+
+		const Uint32 resultInterval = this->isBlockFallingAccelerated ?
+			static_cast<Uint32>(ceil(this->blockFallingInterval / 10)) :
+			this->blockFallingInterval;
+		Layout* menu = this->getRenderable<Layout>("pause_menu__layout");
+
+		this->pause = false;
+		menu->setVisibility(false);
+		this->addRegularEvent(
+			"game-process",
+			resultInterval,
+			this->gameProcessTimerCallback(),
+			this);
+	});
+}
+
+void Tetris::PlayPage::initGameOverMenu()
+{
+	Uint32 windowWidth = static_cast<Uint32>(this->app->getWindowWidth());
+
+	Text* header__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"Game Over",
+		50,
+		&windowWidth,
+		0.f,
+		120.f,
+		{ 255, 0, 0, 255 });
+	header__text->setPositionX(windowWidth / 2.f - header__text->getWidth() / 2.f);
+
+	Layout* menu = new Layout(
+		this->app->getRenderer(),
+		this->app->getWindowWidth(),
+		this->app->getWindowHeight(),
+		0.f,
+		0.f,
+		{ 0, 0, 0, 200 },
+		{
+			{ "header__text", header__text }
+		});
+	menu->setVisibility(false);
+
+	this->addRenderable("game_over_menu__layout", menu);
+}
+
 void Tetris::PlayPage::initKeyDownEvents()
 {
-	this->keyDownEvents[SDLK_RIGHT] = [=]() {
-		if (this->fallingBlocks.size() == 0) {
+	this->keyDownEvents[SDLK_ESCAPE] = [=] {
+		if (this->pause) {
+			return;
+		}
+
+		Layout* menu = this->getRenderable<Layout>("pause_menu__layout");
+
+		this->pause = true;
+		this->isBlockFallingAccelerated = false;
+		menu->setVisibility(true);
+		this->removeRegularEvent("game-process");
+	};
+
+	this->keyDownEvents[SDLK_RIGHT] = [=] {
+		if (this->fallingBlocks.size() == 0 || this->pause) {
 			return;
 		}
 
@@ -698,8 +764,8 @@ void Tetris::PlayPage::initKeyDownEvents()
 		}
 	};
 
-	this->keyDownEvents[SDLK_LEFT] = [=]() {
-		if (this->fallingBlocks.size() == 0) {
+	this->keyDownEvents[SDLK_LEFT] = [=] {
+		if (this->fallingBlocks.size() == 0 || this->pause) {
 			return;
 		}
 
@@ -721,55 +787,59 @@ void Tetris::PlayPage::initKeyDownEvents()
 		}
 	};
 
-	this->keyDownEvents[SDLK_UP] = [=]() {
-		if (this->fallingBlocks.size() == 0 || *this->currentBlock == 'o') {
+	this->keyDownEvents[SDLK_UP] = [=] {
+		if (this->fallingBlocks.size() == 0 || *this->currentBlock == 'o' || this->pause) {
 			return;
 		}
 
-		this->test_rotatePiece(true, true);
+		this->rotatePiece(true, true);
 		this->updateBlockMarkers();
 	};
 
-	this->keyDownEvents[SDLK_DOWN] = [=]() {
-		if (!this->isBlockFallingAccelerated) {
-			const Uint32 resultInterval = static_cast<Uint32>(
-				ceil(this->blockFallingInterval / 10));
-
-			this->isBlockFallingAccelerated = true;
-			this->blockFallingTimerCallback()(0, this);
-			this->addRegularEvent(
-				"block-falling",
-				resultInterval,
-				this->blockFallingTimerCallback(),
-				this);
+	this->keyDownEvents[SDLK_DOWN] = [=] {
+		if (this->isBlockFallingAccelerated || this->pause) {
+			return;
 		}
+
+		const Uint32 resultInterval = static_cast<Uint32>(
+			ceil(this->blockFallingInterval / 10));
+
+		this->isBlockFallingAccelerated = true;
+		this->gameProcessTimerCallback()(0, this);
+		this->addRegularEvent(
+			"game-process",
+			resultInterval,
+			this->gameProcessTimerCallback(),
+			this);
 	};
 }
 
 void Tetris::PlayPage::initKeyUpEvents()
 {
-	this->keyUpEvents[SDLK_DOWN] = [=]() {
-		if (this->isBlockFallingAccelerated) {
-			this->isBlockFallingAccelerated = false;
-			this->addRegularEvent(
-				"block-falling",
-				this->blockFallingInterval,
-				this->blockFallingTimerCallback(),
-				this);
+	this->keyUpEvents[SDLK_DOWN] = [=] {
+		if (!this->isBlockFallingAccelerated || this->pause) {
+			return;
 		}
+
+		this->isBlockFallingAccelerated = false;
+		this->addRegularEvent(
+			"game-process",
+			this->blockFallingInterval,
+			this->gameProcessTimerCallback(),
+			this);
 	};
 }
 
 void Tetris::PlayPage::initRegularEvents()
 {
 	this->addRegularEvent(
-		"block-falling",
+		"game-process",
 		this->blockFallingInterval,
-		this->blockFallingTimerCallback(),
+		this->gameProcessTimerCallback(),
 		this);
 }
 
-SDL_TimerCallback Tetris::PlayPage::blockFallingTimerCallback()
+SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 {
 	return [](Uint32 interval, void* param) -> Uint32 {
 		PlayPage* page = static_cast<PlayPage*>(param);
@@ -778,6 +848,23 @@ SDL_TimerCallback Tetris::PlayPage::blockFallingTimerCallback()
 			page->blockFallingInterval;
 
 		if (page->fallingBlocks.size() == 0) {
+			page->choosePiece();
+
+			TetrisPieceData currentPieceData = page->pieceData[*page->currentBlock];
+
+			for (auto& blockPosition : currentPieceData.startBlockPositions) {
+				page->fallingBlocks.push_back({
+					blockPosition.x,
+					blockPosition.y,
+					currentPieceData.r,
+					currentPieceData.g,
+					currentPieceData.b,
+					currentPieceData.a
+					});
+			}
+
+			page->updateBlockMarkers();
+
 			return resultInterval;
 		}
 
@@ -792,8 +879,17 @@ SDL_TimerCallback Tetris::PlayPage::blockFallingTimerCallback()
 
 		if (touchedTheGround) {
 			for (auto& block : page->fallingBlocks) {
-				if (block.y >= 0 && block.y <= 19) {
+				if (block.y <= 19) {
 					page->cellInfo[block.x][block.y] = true;
+				}
+				else {
+					page->pause = true;
+					page->gameOver = true;
+					page->isBlockFallingAccelerated = false;
+					page->removeRegularEvent("game-process");
+
+					Layout* menu = page->getRenderable<Layout>("game_over_menu__layout");
+					menu->setVisibility(true);
 				}
 			}
 

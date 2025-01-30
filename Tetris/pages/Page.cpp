@@ -16,6 +16,11 @@ Tetris::Page::~Page()
 void Tetris::Page::exec()
 {
 	this->input();
+
+	if (!this->app->getRunning()) {
+		return;
+	}
+
 	this->update();
 
 	SDL_Renderer* renderer = this->app->getRenderer();
@@ -110,8 +115,22 @@ void Tetris::Page::input()
 		case SDL_MOUSEBUTTONUP: {
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				for (const auto& el : this->renderables) {
-					if (el.second->isCursorIn(mousePosX, mousePosY)) {
-						el.second->getOnRelease()();
+					if (el.second && el.second->getVisibility()) {
+						if (el.second->isCursorIn(mousePosX, mousePosY)) {
+							el.second->getOnRelease()();
+						}
+
+						Layout* layout = dynamic_cast<Layout*>(el.second);
+						if (layout) {
+							for (const auto& obj : layout->objects) {
+								if (
+									obj.second->getVisibility() &&
+									obj.second->isCursorIn(mousePosX, mousePosY))
+								{
+									obj.second->getOnRelease()();
+								}
+							}
+						}
 					}
 				}
 			}

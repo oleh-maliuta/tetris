@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "../renderables/Renderable.h"
 #include "../Application.h"
+#include "../renderables/Layout.h"
 
 namespace Tetris
 {
@@ -22,6 +23,10 @@ namespace Tetris
 
 		virtual void init();
 		virtual void clean();
+
+		template<class T>
+		T* getRenderable(
+			const std::string& key);
 
 		void exec();
 
@@ -43,10 +48,6 @@ namespace Tetris
 
 		virtual void update();
 
-		template<class T>
-		T* getRenderable(
-			const std::string& key);
-
 		void addRenderable(
 			const std::string& key,
 			Renderable* obj);
@@ -61,7 +62,7 @@ namespace Tetris
 	};
 
 	template<class T>
-	T* Page::getRenderable(
+	T* Tetris::Page::getRenderable(
 		const std::string& key)
 	{
 		if (!std::is_base_of<Renderable, T>::value) {
