@@ -114,6 +114,11 @@ void Tetris::Application::changePage(
 	this->currentLocation = key;
 }
 
+void Tetris::Application::restartPage()
+{
+	this->isRestartRequired = true;
+}
+
 void Tetris::Application::run(
 	const std::string& startPage)
 {
@@ -138,6 +143,12 @@ void Tetris::Application::run(
 
 		this->deltaTime = static_cast<float>(SDL_GetTicks()) / this->lastFrameTime / 1000.0f;
 		this->lastFrameTime = SDL_GetTicks();
+
+		if (this->isRestartRequired) {
+			this->pages[this->previousLocation]->clean();
+			this->pages[this->previousLocation]->init();
+			this->isRestartRequired = false;
+		}
 
 		if (this->currentLocation != this->previousLocation) {
 			this->pages[this->previousLocation]->clean();
@@ -191,7 +202,7 @@ bool Tetris::Application::getVSync() const
 	return this->vSync;
 }
 
-bool Tetris::Application::getRunning() const
+bool Tetris::Application::getIsRunning() const
 {
 	return this->isRunning;
 }

@@ -64,6 +64,7 @@ namespace Tetris
 
 		std::list<TetrisBlockData> fallingBlocks;
 		std::list<TetrisBlockData> idleBlocks;
+		std::list<TetrisCellPosition> blockMarkers;
 		bool cellInfo[10][20];
 		Uint32 blockFallingInterval = START_BLOCK_FALLING_INTERVAL;
 		short int pieceRotationIndex = 0;
@@ -71,8 +72,6 @@ namespace Tetris
 		bool isBlockFallingAccelerated = false;
 		bool pause = false;
 		bool gameOver = false;
-
-		SDL_TimerCallback gameProcessTimerCallback();
 
 		PlayPage(Application* app);
 
@@ -99,6 +98,8 @@ namespace Tetris
 		bool movePiece(
 			TetrisCellPosition movement);
 
+		SDL_TimerCallback gameProcessTimerCallback();
+
 	protected:
 
 		virtual void update() override;
@@ -108,7 +109,8 @@ namespace Tetris
 		const SDL_Color DEFAULT_CELL_COLOR = { 35, 50, 79, 255 };
 
 		std::map<char, TetrisPieceData> pieceData;
-		std::list<TetrisCellPosition> blockMarkers;
+		Rectangle* cells[10][20];
+		Rectangle* cellMarkers[10][20];
 		Texture* nextBlockHint = nullptr;
 		char* nextBlock = nullptr;
 		unsigned int level = 1;

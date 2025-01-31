@@ -17,7 +17,7 @@ void Tetris::Page::exec()
 {
 	this->input();
 
-	if (!this->app->getRunning()) {
+	if (!this->app->getIsRunning()) {
 		return;
 	}
 
@@ -27,10 +27,10 @@ void Tetris::Page::exec()
 
 	SDL_SetRenderDrawColor(
 		renderer,
-		backgroundColor.r,
-		backgroundColor.g,
-		backgroundColor.b,
-		backgroundColor.a);
+		this->backgroundColor.r,
+		this->backgroundColor.g,
+		this->backgroundColor.b,
+		this->backgroundColor.a);
 
 	SDL_RenderClear(renderer);
 	this->render();
@@ -97,6 +97,11 @@ void Tetris::Page::removeRegularEvent(
 		SDL_RemoveTimer(it->second);
 		this->regularEvents.erase(it->first);
 	}
+}
+
+Tetris::Application* Tetris::Page::getApp() const
+{
+	return this->app;
 }
 
 void Tetris::Page::input()

@@ -38,6 +38,8 @@ namespace Tetris
 		void removeRegularEvent(
 			const std::string& key);
 
+		Application* getApp() const;
+
 	protected:
 
 		Application* app = nullptr;

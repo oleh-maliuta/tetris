@@ -33,6 +33,7 @@ namespace Tetris
 		void usePage(const std::string& key);
 
 		void changePage(const std::string& key);
+		void restartPage();
 		void run(const std::string& startPage);
 
 		SDL_Renderer* getRenderer() const;
@@ -43,7 +44,7 @@ namespace Tetris
 		int getWindowWidth() const;
 		int getWindowHeight() const;
 		bool getVSync() const;
-		bool getRunning() const;
+		bool getIsRunning() const;
 
 		void setFps(const int& value);
 		void setVSync(const bool& value);
@@ -63,6 +64,7 @@ namespace Tetris
 		int windowWidth;
 		int windowHeight;
 		bool vSync;
+		bool isRestartRequired = false;
 		bool isRunning = false;
 
 		static bool getAppSettings(std::unordered_map<std::string, std::string>& data);

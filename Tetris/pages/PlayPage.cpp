@@ -262,6 +262,7 @@ Tetris::PlayPage::PlayPage(
 				this->DEFAULT_CELL_COLOR);
 
 			this->addRenderable(cellName, cell);
+			this->cells[c][rID] = cell;
 		}
 	}
 
@@ -280,6 +281,7 @@ Tetris::PlayPage::PlayPage(
 			cellMarker->setVisibility(false);
 
 			this->addRenderable(cellMarkerName, cellMarker);
+			this->cellMarkers[c][rID] = cellMarker;
 		}
 	}
 
@@ -296,12 +298,6 @@ void Tetris::PlayPage::init()
 	}
 
 	Page::init();
-
-	for (int c = 0; c < 10; c++) {
-		for (int r = 0; r < 20; r++) {
-			this->cellInfo[c][r] = false;
-		}
-	}
 
 	this->blockFallingInterval = this->START_BLOCK_FALLING_INTERVAL;
 	this->pieceRotationIndex = 0;
@@ -322,6 +318,7 @@ void Tetris::PlayPage::clean()
 	}
 
 	Page::clean();
+
 	if (this->nextBlockHint != nullptr) {
 		this->nextBlockHint->setVisibility(false);
 		this->nextBlockHint = nullptr;
@@ -329,11 +326,40 @@ void Tetris::PlayPage::clean()
 
 	this->fallingBlocks.clear();
 	this->idleBlocks.clear();
+	this->blockMarkers.clear();
+
+	for (int c = 0; c < 10; c++) {
+		for (int r = 0; r < 20; r++) {
+			this->cellInfo[c][r] = false;
+		}
+	}
+
 	delete this->currentBlock;
 	delete this->nextBlock;
-
 	this->currentBlock = nullptr;
 	this->nextBlock = nullptr;
+
+	Layout* pauseMenu = this->getRenderable<Layout>("pause_menu__layout");
+	Layout* gameOverMenu = this->getRenderable<Layout>("game_over_menu__layout");
+
+	gameOverMenu->setVisibility(false);
+	pauseMenu->setVisibility(false);
+
+	for (int c = 0; c < 10; c++) {
+		for (int r = 0; r < 20; r++) {
+			this->cells[c][r]->setColor({
+				this->DEFAULT_CELL_COLOR.r,
+				this->DEFAULT_CELL_COLOR.g,
+				this->DEFAULT_CELL_COLOR.b,
+				this->DEFAULT_CELL_COLOR.a });
+		}
+	}
+
+	for (int c = 0; c < 10; c++) {
+		for (int r = 0; r < 20; r++) {
+			this->cellMarkers[c][r]->setVisibility(false);
+		}
+	}
 }
 
 void Tetris::PlayPage::updateBlockMarkers()
@@ -343,10 +369,7 @@ void Tetris::PlayPage::updateBlockMarkers()
 			continue;
 		}
 
-		Rectangle* cellMarker = this->getRenderable<Rectangle>(
-			std::format("cell_marker_{}_{}__rectangle", marker.x, marker.y));
-
-		cellMarker->setVisibility(false);
+		this->cellMarkers[marker.x][marker.y]->setVisibility(false);
 	}
 
 	this->blockMarkers.clear();
@@ -381,10 +404,7 @@ void Tetris::PlayPage::updateBlockMarkers()
 			continue;
 		}
 
-		Rectangle* cellMarker = this->getRenderable<Rectangle>(
-			std::format("cell_marker_{}_{}__rectangle", marker.x, marker.y));
-
-		cellMarker->setVisibility(true);
+		this->cellMarkers[marker.x][marker.y]->setVisibility(true);
 	}
 }
 
@@ -565,13 +585,9 @@ void Tetris::PlayPage::update()
 		return;
 	}
 
-	Rectangle* cells[10][20] = {};
-
 	for (int c = 0; c < 10; c++) {
 		for (int r = 0; r < 20; r++) {
-			cells[c][r] = this->getRenderable<Rectangle>(
-				std::format("cell_{}_{}__rectangle", c, r));
-			cells[c][r]->setColor({
+			this->cells[c][r]->setColor({
 				this->DEFAULT_CELL_COLOR.r,
 				this->DEFAULT_CELL_COLOR.g,
 				this->DEFAULT_CELL_COLOR.b,
@@ -584,7 +600,7 @@ void Tetris::PlayPage::update()
 			continue;
 		}
 
-		cells[block.x][block.y]->setColor({
+		this->cells[block.x][block.y]->setColor({
 			block.r,
 			block.g,
 			block.b,
@@ -596,7 +612,7 @@ void Tetris::PlayPage::update()
 			continue;
 		}
 
-		cells[block.x][block.y]->setColor({
+		this->cells[block.x][block.y]->setColor({
 			block.r,
 			block.g,
 			block.b,
@@ -708,8 +724,22 @@ void Tetris::PlayPage::initGameOverMenu()
 		&windowWidth,
 		0.f,
 		120.f,
-		{ 255, 0, 0, 255 });
+		{ 200, 0, 0, 255 });
 	header__text->setPositionX(windowWidth / 2.f - header__text->getWidth() / 2.f);
+
+	TextButton* restart__text_button = new TextButton(
+		this->app->getRenderer(),
+		"assets/fonts/swansea/normal.ttf",
+		"Restart",
+		29,
+		400,
+		65,
+		this->app->getWindowWidth() / 2 - 200,
+		260,
+		{ 200, 0, 0, 255 },
+		{ 0, 0, 0, 255 },
+		5,
+		5);
 
 	Layout* menu = new Layout(
 		this->app->getRenderer(),
@@ -719,11 +749,20 @@ void Tetris::PlayPage::initGameOverMenu()
 		0.f,
 		{ 0, 0, 0, 200 },
 		{
-			{ "header__text", header__text }
+			{ "header__text", header__text },
+			{ "restart__text_button", restart__text_button }
 		});
 	menu->setVisibility(false);
 
 	this->addRenderable("game_over_menu__layout", menu);
+
+	restart__text_button->setOnRelease([=] {
+		if (!this->gameOver) {
+			return;
+		}
+
+		this->getApp()->restartPage();
+	});
 }
 
 void Tetris::PlayPage::initKeyDownEvents()
