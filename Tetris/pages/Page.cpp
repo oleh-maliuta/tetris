@@ -113,11 +113,10 @@ void Tetris::Page::input()
 
 	while (SDL_PollEvent(&event))
 	{
-		switch (event.type) {
-		case SDL_QUIT:
-			this->app->setRunning(false);
-			break;
-		case SDL_MOUSEBUTTONUP: {
+		if (event.type == SDL_QUIT) {
+			this->app->setIsRunning(false);
+		}
+		else if (event.type == SDL_MOUSEBUTTONUP) {
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				for (const auto& el : this->renderables) {
 					if (el.second && el.second->getVisibility()) {
@@ -139,26 +138,27 @@ void Tetris::Page::input()
 					}
 				}
 			}
-			break;
 		}
-		case SDL_KEYDOWN: {
+		else if (event.type == SDL_KEYDOWN) {
 			const SDL_Keycode key = event.key.keysym.sym;
 			const auto it = this->keyDownEvents.find(key);
 
 			if (it != this->keyDownEvents.end()) {
 				it->second();
 			}
-			break;
 		}
-		case SDL_KEYUP: {
+		else if (event.type == SDL_KEYUP) {
 			const SDL_Keycode key = event.key.keysym.sym;
 			const auto it = this->keyUpEvents.find(key);
 
 			if (it != this->keyUpEvents.end()) {
 				it->second();
 			}
-			break;
 		}
+		else if (event.type == SDL_USEREVENT) {
+			auto func = static_cast<std::function<void()>*>(event.user.data1);
+			(*func)();
+			delete func;
 		}
 	}
 }

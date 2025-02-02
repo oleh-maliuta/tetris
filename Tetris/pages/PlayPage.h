@@ -68,6 +68,9 @@ namespace Tetris
 		bool cellInfo[10][20];
 		Uint32 blockFallingInterval = START_BLOCK_FALLING_INTERVAL;
 		short int pieceRotationIndex = 0;
+		unsigned int level = 1;
+		unsigned int lines = 0;
+		unsigned int score = 0;
 		char* currentBlock = nullptr;
 		bool isBlockFallingAccelerated = false;
 		bool pause = false;
@@ -79,6 +82,7 @@ namespace Tetris
 		virtual void clean() override;
 
 		void updateBlockMarkers();
+		void saveGameOverResults();
 
 		void rotatePiece(
 			bool clockwise,
@@ -113,9 +117,6 @@ namespace Tetris
 		Rectangle* cellMarkers[10][20];
 		Texture* nextBlockHint = nullptr;
 		char* nextBlock = nullptr;
-		unsigned int level = 1;
-		unsigned int lines = 0;
-		unsigned int score = 0;
 
 		void choosePiece();
 		void initPauseMenu();

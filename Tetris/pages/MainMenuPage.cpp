@@ -25,7 +25,7 @@ Tetris::MainMenuPage::MainMenuPage(
 
 	TextButton* play__text_button = new TextButton(
 		this->app->getRenderer(),
-		"assets/fonts/swansea/normal.ttf",
+		"assets/fonts/swansea/bold.ttf",
 		"Play",
 		29,
 		400,
@@ -39,7 +39,7 @@ Tetris::MainMenuPage::MainMenuPage(
 
 	TextButton* settings__text_button = new TextButton(
 		this->app->getRenderer(),
-		"assets/fonts/swansea/normal.ttf",
+		"assets/fonts/swansea/bold.ttf",
 		"Settings",
 		29,
 		400,
@@ -53,7 +53,7 @@ Tetris::MainMenuPage::MainMenuPage(
 
 	TextButton* quit__text_button = new TextButton(
 		this->app->getRenderer(),
-		"assets/fonts/swansea/normal.ttf",
+		"assets/fonts/swansea/bold.ttf",
 		"Quit",
 		29,
 		400,
@@ -75,7 +75,7 @@ Tetris::MainMenuPage::MainMenuPage(
 
 	play__text_button->setOnRelease([appRef] { appRef->changePage("play"); });
 	settings__text_button->setOnRelease([appRef] { appRef->changePage("settings"); });
-	quit__text_button->setOnRelease([appRef] { appRef->setRunning(false); });
+	quit__text_button->setOnRelease([appRef] { appRef->setIsRunning(false); });
 }
 
 void Tetris::MainMenuPage::init()

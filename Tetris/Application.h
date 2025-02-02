@@ -48,7 +48,7 @@ namespace Tetris
 
 		void setFps(const int& value);
 		void setVSync(const bool& value);
-		void setRunning(const bool& value);
+		void setIsRunning(const bool& value);
 
 	private:
 

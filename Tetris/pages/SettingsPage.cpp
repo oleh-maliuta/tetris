@@ -37,14 +37,14 @@ Tetris::SettingsPage::SettingsPage(
 
 	TextButton* apply__text_button = new TextButton(
 		this->app->getRenderer(),
-		"assets/fonts/swansea/normal.ttf",
+		"assets/fonts/swansea/bold.ttf",
 		"Apply",
 		20,
 		140,
 		45,
 		this->app->getWindowWidth() / 2 - 70,
 		450,
-		{ 0, 200, 0, 255 },
+		{ 0, 150, 0, 255 },
 		{ 255, 255, 255, 255 },
 		5,
 		5);

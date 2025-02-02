@@ -408,6 +408,31 @@ void Tetris::PlayPage::updateBlockMarkers()
 	}
 }
 
+void Tetris::PlayPage::saveGameOverResults()
+{
+	Layout* menu = this->getRenderable<Layout>("game_over_menu__layout");
+	Text* levelTextObj = menu->getObject<Text>("level__text");
+	Text* linesTextObj = menu->getObject<Text>("lines__text");
+	Text* scoreTextObj = menu->getObject<Text>("score__text");
+	Uint32 windowWidth = static_cast<Uint32>(this->app->getWindowWidth());
+
+	levelTextObj->setContent("Level: " + std::to_string(this->level));
+	linesTextObj->setContent("Lines: " + std::to_string(this->lines));
+	scoreTextObj->setContent("Score: " + std::to_string(this->score));
+
+	float maxTextWidth = std::max({
+		levelTextObj->getWidth(),
+		linesTextObj->getWidth(),
+		scoreTextObj->getWidth()
+	});
+
+	levelTextObj->setPositionX(windowWidth / 2.f - maxTextWidth / 2.f);
+	linesTextObj->setPositionX(windowWidth / 2.f - maxTextWidth / 2.f);
+	scoreTextObj->setPositionX(windowWidth / 2.f - maxTextWidth / 2.f);
+
+	menu->setVisibility(true);
+}
+
 void Tetris::PlayPage::rotatePiece(
 	bool clockwise,
 	bool shouldOffset)
@@ -659,19 +684,61 @@ void Tetris::PlayPage::initPauseMenu()
 		50,
 		&windowWidth,
 		0.f,
-		120.f,
+		60.f,
 		{ 255, 255, 255, 255 });
 	header__text->setPositionX(windowWidth / 2.f - header__text->getWidth() / 2.f);
 
 	TextButton* resume__text_button = new TextButton(
 		this->app->getRenderer(),
-		"assets/fonts/swansea/normal.ttf",
+		"assets/fonts/swansea/bold.ttf",
 		"Resume",
-		29,
+		31,
 		400,
 		65,
 		this->app->getWindowWidth() / 2 - 200,
-		260,
+		180,
+		{ 255, 255, 255, 255 },
+		{ 0, 0, 0, 255 },
+		5,
+		5);
+
+	TextButton* restart__text_button = new TextButton(
+		this->app->getRenderer(),
+		"assets/fonts/swansea/bold.ttf",
+		"Restart",
+		31,
+		400,
+		65,
+		this->app->getWindowWidth() / 2 - 200,
+		280,
+		{ 255, 255, 255, 255 },
+		{ 0, 0, 0, 255 },
+		5,
+		5);
+
+	TextButton* main_menu__text_button = new TextButton(
+		this->app->getRenderer(),
+		"assets/fonts/swansea/bold.ttf",
+		"Main Menu",
+		31,
+		400,
+		65,
+		this->app->getWindowWidth() / 2 - 200,
+		380,
+		{ 255, 255, 255, 255 },
+		{ 0, 0, 0, 255 },
+		5,
+		5);
+
+	TextButton* quit__text_button = new TextButton(
+		this->app->getRenderer(),
+		"assets/fonts/swansea/bold.ttf",
+		"Quit the game",
+		31,
+		400,
+		65,
+		this->app->getWindowWidth() / 2 - 200,
+		480,
 		{ 255, 255, 255, 255 },
 		{ 0, 0, 0, 255 },
 		5,
@@ -686,7 +753,10 @@ void Tetris::PlayPage::initPauseMenu()
 		{ 0, 0, 0, 200 },
 		{
 			{ "header__text", header__text },
-			{ "resume__text_button", resume__text_button }
+			{ "resume__text_button", resume__text_button },
+			{ "restart__text_button", restart__text_button },
+			{ "main_menu__text_button", main_menu__text_button },
+			{ "quit__text_button", quit__text_button }
 		});
 	menu->setVisibility(false);
 
@@ -710,6 +780,30 @@ void Tetris::PlayPage::initPauseMenu()
 			this->gameProcessTimerCallback(),
 			this);
 	});
+
+	restart__text_button->setOnRelease([=] {
+		if (!this->pause || this->gameOver) {
+			return;
+		}
+
+		this->getApp()->restartPage();
+	});
+
+	main_menu__text_button->setOnRelease([=] {
+		if (!this->pause || this->gameOver) {
+			return;
+		}
+
+		this->getApp()->changePage("main_menu");
+	});
+
+	quit__text_button->setOnRelease([=] {
+		if (!this->pause || this->gameOver) {
+			return;
+		}
+
+		this->getApp()->setIsRunning(false);
+	});
 }
 
 void Tetris::PlayPage::initGameOverMenu()
@@ -723,20 +817,81 @@ void Tetris::PlayPage::initGameOverMenu()
 		50,
 		&windowWidth,
 		0.f,
-		120.f,
-		{ 200, 0, 0, 255 });
+		60.f,
+		{ 200, 70, 103, 255 });
 	header__text->setPositionX(windowWidth / 2.f - header__text->getWidth() / 2.f);
+
+	Text* level__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"1",
+		22,
+		&windowWidth,
+		0.f,
+		140.f,
+		{ 255, 255, 255, 255 });
+	level__text->setPositionX(windowWidth / 2.f - level__text->getWidth() / 2.f);
+
+	Text* lines__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"1",
+		22,
+		&windowWidth,
+		0.f,
+		180.f,
+		{ 255, 255, 255, 255 });
+	lines__text->setPositionX(windowWidth / 2.f - lines__text->getWidth() / 2.f);
+
+	Text* score__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"1",
+		22,
+		&windowWidth,
+		0.f,
+		220.f,
+		{ 255, 255, 255, 255 });
+	score__text->setPositionX(windowWidth / 2.f - score__text->getWidth() / 2.f);
 
 	TextButton* restart__text_button = new TextButton(
 		this->app->getRenderer(),
-		"assets/fonts/swansea/normal.ttf",
+		"assets/fonts/swansea/bold.ttf",
 		"Restart",
-		29,
+		31,
 		400,
 		65,
 		this->app->getWindowWidth() / 2 - 200,
-		260,
-		{ 200, 0, 0, 255 },
+		280,
+		{ 200, 70, 103, 255 },
+		{ 0, 0, 0, 255 },
+		5,
+		5);
+
+	TextButton* main_menu__text_button = new TextButton(
+		this->app->getRenderer(),
+		"assets/fonts/swansea/bold.ttf",
+		"Main Menu",
+		31,
+		400,
+		65,
+		this->app->getWindowWidth() / 2 - 200,
+		380,
+		{ 200, 70, 103, 255 },
+		{ 0, 0, 0, 255 },
+		5,
+		5);
+
+	TextButton* quit__text_button = new TextButton(
+		this->app->getRenderer(),
+		"assets/fonts/swansea/bold.ttf",
+		"Quit the game",
+		31,
+		400,
+		65,
+		this->app->getWindowWidth() / 2 - 200,
+		480,
+		{ 200, 70, 103, 255 },
 		{ 0, 0, 0, 255 },
 		5,
 		5);
@@ -750,7 +905,12 @@ void Tetris::PlayPage::initGameOverMenu()
 		{ 0, 0, 0, 200 },
 		{
 			{ "header__text", header__text },
-			{ "restart__text_button", restart__text_button }
+			{ "level__text", level__text },
+			{ "lines__text", lines__text },
+			{ "score__text", score__text },
+			{ "restart__text_button", restart__text_button },
+			{ "main_menu__text_button", main_menu__text_button },
+			{ "quit__text_button", quit__text_button }
 		});
 	menu->setVisibility(false);
 
@@ -763,6 +923,22 @@ void Tetris::PlayPage::initGameOverMenu()
 
 		this->getApp()->restartPage();
 	});
+
+	main_menu__text_button->setOnRelease([=] {
+		if (!this->gameOver) {
+			return;
+		}
+
+		this->getApp()->changePage("main_menu");
+		});
+
+	quit__text_button->setOnRelease([=] {
+		if (!this->gameOver) {
+			return;
+		}
+
+		this->getApp()->setIsRunning(false);
+		});
 }
 
 void Tetris::PlayPage::initKeyDownEvents()
@@ -925,10 +1101,18 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 					page->pause = true;
 					page->gameOver = true;
 					page->isBlockFallingAccelerated = false;
-					page->removeRegularEvent("game-process");
 
-					Layout* menu = page->getRenderable<Layout>("game_over_menu__layout");
-					menu->setVisibility(true);
+					auto funcPtr = new std::function<void()>([page] {
+						page->saveGameOverResults();
+					});
+					SDL_Event event;
+					SDL_zero(event);
+					event.type = SDL_USEREVENT;
+					event.user.data1 = static_cast<void*>(funcPtr);
+					SDL_PushEvent(&event);
+
+					page->removeRegularEvent("game-process");
+					break;
 				}
 			}
 

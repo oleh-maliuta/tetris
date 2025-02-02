@@ -107,7 +107,7 @@ void Tetris::Application::changePage(
 {
 	if (this->pages.find(key) == this->pages.end()) {
 		printf("Could not change the page because it does not exist.\n");
-		this->setRunning(false);
+		this->setIsRunning(false);
 		return;
 	}
 
@@ -225,7 +225,7 @@ void Tetris::Application::setVSync(
 	SDL_RenderSetVSync(this->renderer, this->vSync);
 }
 
-void Tetris::Application::setRunning(
+void Tetris::Application::setIsRunning(
 	const bool& value)
 {
 	this->isRunning = value;
