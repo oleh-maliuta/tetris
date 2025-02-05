@@ -61,7 +61,7 @@ void Tetris::TextButton::init()
 	Uint32 textWrap = static_cast<Uint32>(
 		this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-	this->textTexture = Loader::getTextureFromUtf8Text(
+	this->textTexture = Loader::getTextureOfUtf8Text(
 		this->renderer,
 		this->font,
 		this->fontColor,
@@ -198,7 +198,7 @@ void Tetris::TextButton::setFontColor(
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-		this->textTexture = Loader::getTextureFromUtf8Text(
+		this->textTexture = Loader::getTextureOfUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -223,7 +223,7 @@ void Tetris::TextButton::setContent(
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-		this->textTexture = Loader::getTextureFromUtf8Text(
+		this->textTexture = Loader::getTextureOfUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -248,7 +248,7 @@ void Tetris::TextButton::setFontPath(
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-		this->textTexture = Loader::getTextureFromUtf8Text(
+		this->textTexture = Loader::getTextureOfUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -273,7 +273,7 @@ void Tetris::TextButton::setFontSize(
 		Uint32 textWrap = static_cast<Uint32>(
 			this->bodyWidth - this->paddingLeft - this->paddingRight);
 
-		this->textTexture = Loader::getTextureFromUtf8Text(
+		this->textTexture = Loader::getTextureOfUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,

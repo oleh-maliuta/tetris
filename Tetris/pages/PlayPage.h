@@ -7,6 +7,7 @@
 #include <format>
 #include <random>
 #include <array>
+#include <vector>
 #include <list>
 #include "Page.h"
 #include "../Loader.h"
@@ -82,6 +83,7 @@ namespace Tetris
 		virtual void clean() override;
 
 		void updateBlockMarkers();
+		void clearFilledGridRows();
 		void saveGameOverResults();
 
 		void rotatePiece(

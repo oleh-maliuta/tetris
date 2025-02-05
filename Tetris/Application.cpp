@@ -4,6 +4,11 @@ Tetris::Application::Application(
 	const int& windowWidth,
 	const int& windowHeight)
 {
+	if (this->EXECUTE_FUNCTION_EVENT == (Uint32)-1) {
+		printf("EXECUTE_FUNCTION_EVENT event could not register!");
+		return;
+	}
+
 	std::unordered_map<std::string, std::string> app_settings;
 	this->getAppSettings(app_settings);
 

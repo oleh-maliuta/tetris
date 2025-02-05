@@ -24,6 +24,8 @@ namespace Tetris
 	{
 	public:
 
+		const Uint32 EXECUTE_FUNCTION_EVENT = SDL_RegisterEvents(1);
+
 		Application(
 			const int& windowWidth,
 			const int& windowHeight);
@@ -60,10 +62,10 @@ namespace Tetris
 		std::string version;
 		float deltaTime = 1;
 		int lastFrameTime = 0;
-		int fps;
-		int windowWidth;
-		int windowHeight;
-		bool vSync;
+		int fps = 0;
+		int windowWidth = 0;
+		int windowHeight = 0;
+		bool vSync = false;
 		bool isRestartRequired = false;
 		bool isRunning = false;
 

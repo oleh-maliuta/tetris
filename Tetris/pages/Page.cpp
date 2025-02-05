@@ -155,7 +155,7 @@ void Tetris::Page::input()
 				it->second();
 			}
 		}
-		else if (event.type == SDL_USEREVENT) {
+		else if (event.type == this->app->EXECUTE_FUNCTION_EVENT) {
 			auto func = static_cast<std::function<void()>*>(event.user.data1);
 			(*func)();
 			delete func;

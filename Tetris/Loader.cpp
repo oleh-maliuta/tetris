@@ -59,7 +59,7 @@ void Tetris::Loader::getUtf8TextSize(
 	SDL_FreeSurface(textSurface);
 }
 
-SDL_Texture* Tetris::Loader::getTextureFromImage(
+SDL_Texture* Tetris::Loader::getTextureOfImage(
 	SDL_Renderer* renderer,
 	const char* path) 
 {
@@ -75,7 +75,7 @@ SDL_Texture* Tetris::Loader::getTextureFromImage(
 	return texture;
 }
 
-SDL_Texture* Tetris::Loader::getTextureFromUtf8Text(
+SDL_Texture* Tetris::Loader::getTextureOfUtf8Text(
 	SDL_Renderer* renderer,
 	TTF_Font* font,
 	const SDL_Color& color,

@@ -60,7 +60,7 @@ void Tetris::ImageButton::init()
 		return;
 	}
 
-	this->texture = Loader::getTextureFromImage(
+	this->texture = Loader::getTextureOfImage(
 		this->renderer,
 		this->imagePath.c_str());
 

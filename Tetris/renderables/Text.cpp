@@ -71,7 +71,7 @@ void Tetris::Text::init()
 			TTF_GetError());
 	}
 
-	this->texture = Loader::getTextureFromUtf8Text(
+	this->texture = Loader::getTextureOfUtf8Text(
 		this->renderer,
 		this->font,
 		this->fontColor,
@@ -221,7 +221,7 @@ void Tetris::Text::setWrapLength(
 	}
 
 	if (this->isInitialized) {
-		this->texture = Loader::getTextureFromUtf8Text(
+		this->texture = Loader::getTextureOfUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -243,7 +243,7 @@ void Tetris::Text::setFontColor(
 	this->fontColor = value;
 	
 	if (this->isInitialized) {
-		this->texture = Loader::getTextureFromUtf8Text(
+		this->texture = Loader::getTextureOfUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -271,7 +271,7 @@ void Tetris::Text::setContent(
 	this->content = value;
 	
 	if (this->isInitialized) {
-		this->texture = Loader::getTextureFromUtf8Text(
+		this->texture = Loader::getTextureOfUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,
@@ -319,7 +319,7 @@ void Tetris::Text::setFontSize(
 	this->fontSize = value;
 
 	if (this->isInitialized) {
-		this->texture = Loader::getTextureFromUtf8Text(
+		this->texture = Loader::getTextureOfUtf8Text(
 			this->renderer,
 			this->font,
 			this->fontColor,

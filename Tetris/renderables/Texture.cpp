@@ -57,7 +57,7 @@ void Tetris::Texture::init()
 		return;
 	}
 
-	this->sdlTexture = Loader::getTextureFromImage(
+	this->sdlTexture = Loader::getTextureOfImage(
 		this->renderer,
 		this->filePath.c_str());
 
@@ -208,7 +208,7 @@ void Tetris::Texture::setFilePath(
 	this->filePath = value;
 
 	if (this->isInitialized) {
-		this->sdlTexture = Loader::getTextureFromImage(
+		this->sdlTexture = Loader::getTextureOfImage(
 			this->renderer,
 			this->filePath.c_str());
 	}

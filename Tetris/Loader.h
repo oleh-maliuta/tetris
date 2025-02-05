@@ -27,10 +27,10 @@ namespace Tetris
 			const Uint32* wrapLength,
 			float* widthRef,
 			float* heightRef);
-		static SDL_Texture* getTextureFromImage(
+		static SDL_Texture* getTextureOfImage(
 			SDL_Renderer* renderer,
 			const char* path);
-		static SDL_Texture* getTextureFromUtf8Text(
+		static SDL_Texture* getTextureOfUtf8Text(
 			SDL_Renderer* renderer,
 			TTF_Font* font,
 			const SDL_Color& color,

@@ -14,37 +14,37 @@ Tetris::PlayPage::PlayPage(
 
 	this->pieceData = {
 		{'i', {
-				{{ 4, 21 }, { 4, 19 }, { 4, 20 }, { 4, 22 }},
+				{{ 4, 22 }, { 4, 20 }, { 4, 21 }, { 4, 23 }},
 				251, 112, 36, 255
 			}
 		},
 		{'o', {
-				{{ 4, 19 }, { 4, 20 }, { 5, 19 }, { 5, 20 }},
+				{{ 4, 20 }, { 4, 21 }, { 5, 20 }, { 5, 21 }},
 				243, 209, 26, 255
 			}
 		},
 		{'t', {
-				{{ 4, 19 }, { 3, 19 }, { 5, 19 }, { 4, 20 }},
+				{{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 4, 21 }},
 				167, 47, 232, 255
 			}
 		},
 		{'j', {
-				{{ 4, 19 }, { 3, 19 }, { 5, 19 }, { 3, 20 }},
+				{{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 3, 21 }},
 				117, 196, 63, 255
 			}
 		},
 		{'l', {
-				{{ 4, 19 }, { 3, 19 }, { 5, 19 }, { 5, 20 }},
+				{{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 5, 21 }},
 				61, 194, 132, 255
 			}
 		},
 		{'s', {
-				{{ 4, 19 }, { 3, 19 }, { 4, 20 }, { 5, 20 }},
+				{{ 4, 20 }, { 3, 20 }, { 4, 21 }, { 5, 21 }},
 				238, 30, 40, 255
 			}
 		},
 		{'z', {
-				{{ 4, 19 }, { 5, 19 }, { 4, 20 }, { 3, 20 }},
+				{{ 4, 20 }, { 5, 20 }, { 4, 21 }, { 3, 21 }},
 				31, 197, 240, 255
 			}
 		},
@@ -405,6 +405,59 @@ void Tetris::PlayPage::updateBlockMarkers()
 		}
 
 		this->cellMarkers[marker.x][marker.y]->setVisibility(true);
+	}
+}
+
+void Tetris::PlayPage::clearFilledGridRows()
+{
+	std::vector<int> filledRows;
+
+	for (int rowNum = 0; rowNum < 20; rowNum++) {
+		bool isRowFilled = true;
+		bool isRowEmpty = true;
+
+		for (int columnNum = 0; columnNum < 10; columnNum++) {
+			if (!this->cellInfo[columnNum][rowNum]) {
+				isRowFilled = false;
+			}
+			else {
+				isRowEmpty = false;
+			}
+		}
+
+		if (isRowFilled) {
+			filledRows.push_back(rowNum);
+		}
+
+		if (isRowEmpty) {
+			break;
+		}
+	}
+
+	if (filledRows.size() == 0) {
+		return;
+	}
+	
+	for (int rowId = filledRows.size() - 1; rowId >= 0; rowId--) {
+		this->idleBlocks.remove_if([&rowId, &filledRows](TetrisBlockData el) {
+			return el.y == filledRows[rowId];
+		});
+
+		for (auto& el : this->idleBlocks) {
+			if (el.y > filledRows[rowId]) {
+				el.y--;
+			}
+		}
+	}
+
+	for (int c = 0; c < 10; c++) {
+		for (int r = 0; r < 20; r++) {
+			this->cellInfo[c][r] = false;
+		}
+	}
+
+	for (auto& block : this->idleBlocks) {
+		this->cellInfo[block.x][block.y] = true;
 	}
 }
 
@@ -1049,7 +1102,7 @@ void Tetris::PlayPage::initRegularEvents()
 {
 	this->addRegularEvent(
 		"game-process",
-		this->blockFallingInterval,
+		0,
 		this->gameProcessTimerCallback(),
 		this);
 }
@@ -1063,6 +1116,7 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 			page->blockFallingInterval;
 
 		if (page->fallingBlocks.size() == 0) {
+			page->clearFilledGridRows();
 			page->choosePiece();
 
 			TetrisPieceData currentPieceData = page->pieceData[*page->currentBlock];
@@ -1107,7 +1161,7 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 					});
 					SDL_Event event;
 					SDL_zero(event);
-					event.type = SDL_USEREVENT;
+					event.type = page->getApp()->EXECUTE_FUNCTION_EVENT;
 					event.user.data1 = static_cast<void*>(funcPtr);
 					SDL_PushEvent(&event);
 
@@ -1117,6 +1171,7 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 			}
 
 			page->idleBlocks.splice(page->idleBlocks.end(), page->fallingBlocks);
+			page->updateBlockMarkers();
 		}
 		else {
 			for (auto& block : page->fallingBlocks) {
