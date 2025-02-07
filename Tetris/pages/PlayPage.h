@@ -73,7 +73,7 @@ namespace Tetris
 		unsigned int lines = 0;
 		unsigned int score = 0;
 		char* currentBlock = nullptr;
-		bool isBlockFallingAccelerated = false;
+		bool isSoftDropOn = false;
 		bool pause = false;
 		bool gameOver = false;
 

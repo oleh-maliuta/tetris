@@ -304,9 +304,20 @@ void Tetris::PlayPage::init()
 	this->level = 1;
 	this->lines = 0;
 	this->score = 0;
-	this->isBlockFallingAccelerated = false;
+	this->isSoftDropOn = false;
 	this->pause = false;
 	this->gameOver = false;
+
+	Text* levelValue = this->getRenderable<Text>("level_value__text");
+	Text* linesValue = this->getRenderable<Text>("lines_value__text");
+	Text* scoreValue = this->getRenderable<Text>("score_value__text");
+
+	levelValue->setContent("1");
+	linesValue->setContent("0");
+	scoreValue->setContent("0");
+	levelValue->setPositionX(330 + 150 / 2.f - levelValue->getWidth() / 2.f);
+	linesValue->setPositionX(330 + 150 / 2.f - linesValue->getWidth() / 2.f);
+	scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
 
 	this->initRegularEvents();
 }
@@ -459,6 +470,20 @@ void Tetris::PlayPage::clearFilledGridRows()
 	for (auto& block : this->idleBlocks) {
 		this->cellInfo[block.x][block.y] = true;
 	}
+
+	this->addExecuteFunctionEvent([=] {
+		const size_t rowClearedCount = filledRows.size();
+		Text* linesValue = this->getRenderable<Text>("lines_value__text");
+		Text* scoreValue = this->getRenderable<Text>("score_value__text");
+
+		this->lines += rowClearedCount;
+		this->score += rowClearedCount == 1 ? 100 :
+			rowClearedCount == 2 ? 300 : 500;
+		linesValue->setContent(std::to_string(this->lines));
+		scoreValue->setContent(std::to_string(this->score));
+		linesValue->setPositionX(330 + 150 / 2.f - linesValue->getWidth() / 2.f);
+		scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
+	});
 }
 
 void Tetris::PlayPage::saveGameOverResults()
@@ -488,7 +513,7 @@ void Tetris::PlayPage::saveGameOverResults()
 
 void Tetris::PlayPage::rotatePiece(
 	bool clockwise,
-	bool shouldOffset)
+	bool shouldOffset = true)
 {
 	int oldRotationIndex = this->pieceRotationIndex;
 	TetrisBlockData pivot = this->fallingBlocks.front();
@@ -820,7 +845,7 @@ void Tetris::PlayPage::initPauseMenu()
 			return;
 		}
 
-		const Uint32 resultInterval = this->isBlockFallingAccelerated ?
+		const Uint32 resultInterval = this->isSoftDropOn ?
 			static_cast<Uint32>(ceil(this->blockFallingInterval / 10)) :
 			this->blockFallingInterval;
 		Layout* menu = this->getRenderable<Layout>("pause_menu__layout");
@@ -1004,7 +1029,7 @@ void Tetris::PlayPage::initKeyDownEvents()
 		Layout* menu = this->getRenderable<Layout>("pause_menu__layout");
 
 		this->pause = true;
-		this->isBlockFallingAccelerated = false;
+		this->isSoftDropOn = false;
 		menu->setVisibility(true);
 		this->removeRegularEvent("game-process");
 	};
@@ -1056,27 +1081,41 @@ void Tetris::PlayPage::initKeyDownEvents()
 	};
 
 	this->keyDownEvents[SDLK_UP] = [=] {
-		if (this->fallingBlocks.size() == 0 || *this->currentBlock == 'o' || this->pause) {
+		if (this->fallingBlocks.size() == 0 ||
+			*this->currentBlock == 'o' ||
+			this->pause)
+{
 			return;
 		}
 
-		this->rotatePiece(true, true);
+		this->rotatePiece(true);
+		this->updateBlockMarkers();
+	};
+
+	this->keyDownEvents[SDLK_z] = [=] {
+		if (this->fallingBlocks.size() == 0 ||
+			*this->currentBlock == 'o' ||
+			this->pause)
+		{
+			return;
+		}
+
+		this->rotatePiece(false);
 		this->updateBlockMarkers();
 	};
 
 	this->keyDownEvents[SDLK_DOWN] = [=] {
-		if (this->isBlockFallingAccelerated || this->pause) {
+		if (this->isSoftDropOn || this->pause) {
 			return;
 		}
 
 		const Uint32 resultInterval = static_cast<Uint32>(
 			ceil(this->blockFallingInterval / 10));
 
-		this->isBlockFallingAccelerated = true;
-		this->gameProcessTimerCallback()(0, this);
+		this->isSoftDropOn = true;
 		this->addRegularEvent(
 			"game-process",
-			resultInterval,
+			0,
 			this->gameProcessTimerCallback(),
 			this);
 	};
@@ -1085,11 +1124,11 @@ void Tetris::PlayPage::initKeyDownEvents()
 void Tetris::PlayPage::initKeyUpEvents()
 {
 	this->keyUpEvents[SDLK_DOWN] = [=] {
-		if (!this->isBlockFallingAccelerated || this->pause) {
+		if (!this->isSoftDropOn || this->pause) {
 			return;
 		}
 
-		this->isBlockFallingAccelerated = false;
+		this->isSoftDropOn = false;
 		this->addRegularEvent(
 			"game-process",
 			this->blockFallingInterval,
@@ -1111,7 +1150,7 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 {
 	return [](Uint32 interval, void* param) -> Uint32 {
 		PlayPage* page = static_cast<PlayPage*>(param);
-		const Uint32 resultInterval = page->isBlockFallingAccelerated ?
+		const Uint32 resultInterval = page->isSoftDropOn ?
 			static_cast<Uint32>(ceil(page->blockFallingInterval / 10)) :
 			page->blockFallingInterval;
 
@@ -1128,8 +1167,7 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 					currentPieceData.r,
 					currentPieceData.g,
 					currentPieceData.b,
-					currentPieceData.a
-					});
+					currentPieceData.a });
 			}
 
 			page->updateBlockMarkers();
@@ -1154,17 +1192,11 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 				else {
 					page->pause = true;
 					page->gameOver = true;
-					page->isBlockFallingAccelerated = false;
+					page->isSoftDropOn = false;
 
-					auto funcPtr = new std::function<void()>([page] {
+					page->addExecuteFunctionEvent([page] {
 						page->saveGameOverResults();
 					});
-					SDL_Event event;
-					SDL_zero(event);
-					event.type = page->getApp()->EXECUTE_FUNCTION_EVENT;
-					event.user.data1 = static_cast<void*>(funcPtr);
-					SDL_PushEvent(&event);
-
 					page->removeRegularEvent("game-process");
 					break;
 				}
@@ -1176,6 +1208,15 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 		else {
 			for (auto& block : page->fallingBlocks) {
 				block.y--;
+			}
+
+			if (page->isSoftDropOn) {
+				page->addExecuteFunctionEvent([page] {
+					page->score += 1;
+					Text* scoreValue = page->getRenderable<Text>("score_value__text");
+					scoreValue->setContent(std::to_string(page->score));
+					scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
+				});
 			}
 		}
 

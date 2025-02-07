@@ -37,6 +37,8 @@ namespace Tetris
 			void* param);
 		void removeRegularEvent(
 			const std::string& key);
+		void addExecuteFunctionEvent(
+			const std::function<void()>& func);
 
 		Application* getApp() const;
 

@@ -85,7 +85,6 @@ void Tetris::Page::addRegularEvent(
 	}
 
 	SDL_TimerID timerID = SDL_AddTimer(interval, callback, param);
-
 	this->regularEvents[key] = timerID;
 }
 
@@ -97,6 +96,17 @@ void Tetris::Page::removeRegularEvent(
 		SDL_RemoveTimer(it->second);
 		this->regularEvents.erase(it->first);
 	}
+}
+
+void Tetris::Page::addExecuteFunctionEvent(
+	const std::function<void()>& func)
+{
+	auto funcPtr = new std::function<void()>(func);
+	SDL_Event event;
+	SDL_zero(event);
+	event.type = this->app->EXECUTE_FUNCTION_EVENT;
+	event.user.data1 = static_cast<void*>(funcPtr);
+	SDL_PushEvent(&event);
 }
 
 Tetris::Application* Tetris::Page::getApp() const
