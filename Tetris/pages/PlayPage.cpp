@@ -341,7 +341,7 @@ void Tetris::PlayPage::clean()
 
 	for (int c = 0; c < 10; c++) {
 		for (int r = 0; r < 20; r++) {
-			this->cellInfo[c][r] = false;
+			this->gridInfo[c][r] = false;
 		}
 	}
 
@@ -397,7 +397,7 @@ void Tetris::PlayPage::updateBlockMarkers()
 
 	while (!touchedTheGround) {
 		for (auto& marker : this->blockMarkers) {
-			if (marker.y <= 20 && (marker.y == 0 || this->cellInfo[marker.x][marker.y - 1])) {
+			if (marker.y <= 20 && (marker.y == 0 || this->gridInfo[marker.x][marker.y - 1])) {
 				touchedTheGround = true;
 				break;
 			}
@@ -428,7 +428,7 @@ void Tetris::PlayPage::clearFilledGridRows()
 		bool isRowEmpty = true;
 
 		for (int columnNum = 0; columnNum < 10; columnNum++) {
-			if (!this->cellInfo[columnNum][rowNum]) {
+			if (!this->gridInfo[columnNum][rowNum]) {
 				isRowFilled = false;
 			}
 			else {
@@ -463,26 +463,39 @@ void Tetris::PlayPage::clearFilledGridRows()
 
 	for (int c = 0; c < 10; c++) {
 		for (int r = 0; r < 20; r++) {
-			this->cellInfo[c][r] = false;
+			this->gridInfo[c][r] = false;
 		}
 	}
 
 	for (auto& block : this->idleBlocks) {
-		this->cellInfo[block.x][block.y] = true;
+		this->gridInfo[block.x][block.y] = true;
+	}
+
+	const size_t rowClearedCount = filledRows.size();
+
+	this->lines += rowClearedCount;
+	this->score += rowClearedCount == 1 ? 100 :
+		rowClearedCount == 2 ? 300 : 500;
+
+	if (this->level < 100 && this->lines % 10 == 0) {
+		this->level = this->lines / 10 + 1;
+		this->blockFallingInterval = this->START_BLOCK_FALLING_INTERVAL - 10 * (this->level - 1);
 	}
 
 	this->addExecuteFunctionEvent([=] {
-		const size_t rowClearedCount = filledRows.size();
 		Text* linesValue = this->getRenderable<Text>("lines_value__text");
 		Text* scoreValue = this->getRenderable<Text>("score_value__text");
 
-		this->lines += rowClearedCount;
-		this->score += rowClearedCount == 1 ? 100 :
-			rowClearedCount == 2 ? 300 : 500;
 		linesValue->setContent(std::to_string(this->lines));
 		scoreValue->setContent(std::to_string(this->score));
 		linesValue->setPositionX(330 + 150 / 2.f - linesValue->getWidth() / 2.f);
 		scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
+
+		if (this->lines % 10 == 0) {
+			Text* levelValue = this->getRenderable<Text>("level_value__text");
+			levelValue->setContent(std::to_string(this->level));
+			levelValue->setPositionX(330 + 150 / 2.f - levelValue->getWidth() / 2.f);
+		}
 	});
 }
 
@@ -644,7 +657,7 @@ bool Tetris::PlayPage::canTileMove(
 		return false;
 	}
 
-	if (endPos.y < 20 && this->cellInfo[endPos.x][endPos.y])
+	if (endPos.y < 20 && this->gridInfo[endPos.x][endPos.y])
 	{
 		return false;
 	}
@@ -1042,7 +1055,7 @@ void Tetris::PlayPage::initKeyDownEvents()
 		bool isActionEnabled = true;
 
 		for (auto& block : this->fallingBlocks) {
-			if (block.x >= 9 || (block.y <= 19 && this->cellInfo[block.x + 1][block.y])) {
+			if (block.x >= 9 || (block.y <= 19 && this->gridInfo[block.x + 1][block.y])) {
 				isActionEnabled = false;
 				break;
 			}
@@ -1065,7 +1078,7 @@ void Tetris::PlayPage::initKeyDownEvents()
 		bool isActionEnabled = true;
 
 		for (auto& block : this->fallingBlocks) {
-			if (block.x <= 0 || (block.y <= 19 && this->cellInfo[block.x - 1][block.y])) {
+			if (block.x <= 0 || (block.y <= 19 && this->gridInfo[block.x - 1][block.y])) {
 				isActionEnabled = false;
 				break;
 			}
@@ -1178,7 +1191,7 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 		bool touchedTheGround = false;
 
 		for (auto& block : page->fallingBlocks) {
-			if (block.y <= 20 && (block.y == 0 || page->cellInfo[block.x][block.y - 1])) {
+			if (block.y <= 20 && (block.y == 0 || page->gridInfo[block.x][block.y - 1])) {
 				touchedTheGround = true;
 				break;
 			}
@@ -1187,7 +1200,7 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 		if (touchedTheGround) {
 			for (auto& block : page->fallingBlocks) {
 				if (block.y <= 19) {
-					page->cellInfo[block.x][block.y] = true;
+					page->gridInfo[block.x][block.y] = true;
 				}
 				else {
 					page->pause = true;
@@ -1211,8 +1224,8 @@ SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
 			}
 
 			if (page->isSoftDropOn) {
+				page->score += 1;
 				page->addExecuteFunctionEvent([page] {
-					page->score += 1;
 					Text* scoreValue = page->getRenderable<Text>("score_value__text");
 					scoreValue->setContent(std::to_string(page->score));
 					scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);

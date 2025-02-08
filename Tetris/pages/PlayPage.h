@@ -66,7 +66,7 @@ namespace Tetris
 		std::list<TetrisBlockData> fallingBlocks;
 		std::list<TetrisBlockData> idleBlocks;
 		std::list<TetrisCellPosition> blockMarkers;
-		bool cellInfo[10][20];
+		bool gridInfo[10][20];
 		Uint32 blockFallingInterval = START_BLOCK_FALLING_INTERVAL;
 		short int pieceRotationIndex = 0;
 		unsigned int level = 1;
