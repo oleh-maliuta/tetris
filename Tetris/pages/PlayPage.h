@@ -104,7 +104,9 @@ namespace Tetris
 		bool movePiece(
 			TetrisCellPosition movement);
 
-		SDL_TimerCallback gameProcessTimerCallback();
+		static Uint32 gameProcessRegularEvent(
+			Uint32 interval,
+			void* param);
 
 	protected:
 

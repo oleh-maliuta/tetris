@@ -48,6 +48,7 @@
     <ClInclude Include="renderables\Text.h" />
     <ClInclude Include="renderables\TextButton.h" />
     <ClInclude Include="renderables\Texture.h" />
+    <ClInclude Include="structures\RegularEventData.h" />
     <ClInclude Include="structures\TetrisBlockData.h" />
     <ClInclude Include="structures\TetrisCellPosition.h" />
     <ClInclude Include="structures\TetrisPieceData.h" />

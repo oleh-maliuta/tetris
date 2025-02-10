@@ -21,6 +21,7 @@ void Tetris::Page::exec()
 		return;
 	}
 
+	this->manageRegularEvents();
 	this->update();
 
 	SDL_Renderer* renderer = this->app->getRenderer();
@@ -35,6 +36,41 @@ void Tetris::Page::exec()
 	SDL_RenderClear(renderer);
 	this->render();
 	SDL_RenderPresent(renderer);
+}
+
+void Tetris::Page::manageRegularEvents()
+{
+	std::list<std::string> eventsToErase;
+
+	for (auto& reRef : this->regularEvents) {
+		const Uint32 currentTime = SDL_GetTicks();
+		RegularEventData* regularEvent = &reRef.second;
+
+		if (currentTime - regularEvent->startTime >= regularEvent->interval) {
+			const Uint32 resultInterval = regularEvent->callback(
+				regularEvent->interval,
+				regularEvent->param);
+
+			if (resultInterval == 0) {
+				eventsToErase.push_back(reRef.first);
+				continue;
+			}
+
+			regularEvent->interval = resultInterval;
+			regularEvent->startTime = currentTime;
+		}
+	}
+
+	if (eventsToErase.size() > 0) {
+		std::erase_if(this->regularEvents, [eventsToErase](const auto& el) {
+			for (std::string key : eventsToErase) {
+				if (key == el.first) {
+					return true;
+				}
+			}
+			return false;
+		});
+	}
 }
 
 void Tetris::Page::init()
@@ -56,9 +92,6 @@ void Tetris::Page::clean()
 		el.second->destroy();
 	}
 
-	for (const auto& el : this->regularEvents) {
-		SDL_RemoveTimer(el.second);
-	}
 	this->regularEvents.clear();
 
 	this->isInitialized = false;
@@ -73,19 +106,24 @@ void Tetris::Page::addRenderable(
 	this->renderables.push_back(std::pair(key, obj));
 }
 
-void Tetris::Page::addRegularEvent(
+void Tetris::Page::setRegularEvent(
 	const std::string& key,
+	std::function<Uint32(Uint32, void*)> callback,
 	Uint32 interval,
-	SDL_TimerCallback callback,
 	void* param)
 {
 	const auto it = this->regularEvents.find(key);
 	if (it != this->regularEvents.end()) {
-		SDL_RemoveTimer(it->second);
+		this->regularEvents.erase(it->first);
 	}
 
-	SDL_TimerID timerID = SDL_AddTimer(interval, callback, param);
-	this->regularEvents[key] = timerID;
+	const RegularEventData data = {
+		SDL_GetTicks(),
+		interval,
+		param,
+		callback
+	};
+	this->regularEvents[key] = data;
 }
 
 void Tetris::Page::removeRegularEvent(
@@ -93,20 +131,8 @@ void Tetris::Page::removeRegularEvent(
 {
 	const auto it = this->regularEvents.find(key);
 	if (it != this->regularEvents.end()) {
-		SDL_RemoveTimer(it->second);
 		this->regularEvents.erase(it->first);
 	}
-}
-
-void Tetris::Page::addExecuteFunctionEvent(
-	const std::function<void()>& func)
-{
-	auto funcPtr = new std::function<void()>(func);
-	SDL_Event event;
-	SDL_zero(event);
-	event.type = this->app->EXECUTE_FUNCTION_EVENT;
-	event.user.data1 = static_cast<void*>(funcPtr);
-	SDL_PushEvent(&event);
 }
 
 Tetris::Application* Tetris::Page::getApp() const
@@ -121,7 +147,7 @@ void Tetris::Page::input()
 
 	SDL_GetMouseState(&mousePosX, &mousePosY);
 
-	while (SDL_PollEvent(&event))
+	while (SDL_PollEvent(&event) && this->app->getIsRunning())
 	{
 		if (event.type == SDL_QUIT) {
 			this->app->setIsRunning(false);
@@ -164,11 +190,6 @@ void Tetris::Page::input()
 			if (it != this->keyUpEvents.end()) {
 				it->second();
 			}
-		}
-		else if (event.type == this->app->EXECUTE_FUNCTION_EVENT) {
-			auto func = static_cast<std::function<void()>*>(event.user.data1);
-			(*func)();
-			delete func;
 		}
 	}
 }

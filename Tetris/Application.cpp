@@ -4,11 +4,6 @@ Tetris::Application::Application(
 	const int& windowWidth,
 	const int& windowHeight)
 {
-	if (this->EXECUTE_FUNCTION_EVENT == (Uint32)-1) {
-		printf("EXECUTE_FUNCTION_EVENT event could not register!");
-		return;
-	}
-
 	std::unordered_map<std::string, std::string> app_settings;
 	this->getAppSettings(app_settings);
 
@@ -135,36 +130,38 @@ void Tetris::Application::run(
 	this->currentLocation = startPage;
 	this->previousLocation = startPage;
 
-	this->pages[this->currentLocation]->init();
+	Page* currentPage = this->pages[this->currentLocation];
+	currentPage->init();
 
 	while (this->isRunning)
 	{
-		int frame_time = (1000 / this->fps);
-		int delay_time = frame_time - SDL_GetTicks() - this->lastFrameTime;
+		int frameTime = (1000 / this->fps);
+		int delayTime = frameTime - SDL_GetTicks() - this->lastFrameTime;
 
-		if (delay_time > 0 && delay_time <= frame_time) {
-			SDL_Delay(delay_time);
+		if (delayTime > 0 && delayTime <= frameTime) {
+			SDL_Delay(delayTime);
 		}
 
 		this->deltaTime = static_cast<float>(SDL_GetTicks()) / this->lastFrameTime / 1000.0f;
 		this->lastFrameTime = SDL_GetTicks();
 
 		if (this->isRestartRequired) {
-			this->pages[this->previousLocation]->clean();
-			this->pages[this->previousLocation]->init();
+			currentPage->clean();
+			currentPage->init();
 			this->isRestartRequired = false;
 		}
 
 		if (this->currentLocation != this->previousLocation) {
-			this->pages[this->previousLocation]->clean();
-			this->pages[this->currentLocation]->init();
+			currentPage->clean();
+			currentPage = this->pages[this->currentLocation];
+			currentPage->init();
 			this->previousLocation = this->currentLocation;
 		}
 
-		this->pages[this->previousLocation]->exec();
+		currentPage->exec();
 	}
 
-	this->pages[this->previousLocation]->clean();
+	currentPage->clean();
 }
 
 SDL_Renderer* Tetris::Application::getRenderer() const

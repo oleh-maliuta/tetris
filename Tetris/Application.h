@@ -24,8 +24,6 @@ namespace Tetris
 	{
 	public:
 
-		const Uint32 EXECUTE_FUNCTION_EVENT = SDL_RegisterEvents(1);
-
 		Application(
 			const int& windowWidth,
 			const int& windowHeight);

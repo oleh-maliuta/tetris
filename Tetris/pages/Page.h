@@ -6,9 +6,11 @@
 #include <utility>
 #include <list>
 #include <unordered_map>
+#include <algorithm>
 #include "../renderables/Renderable.h"
 #include "../Application.h"
 #include "../renderables/Layout.h"
+#include "../structures/RegularEventData.h"
 
 namespace Tetris
 {
@@ -21,24 +23,17 @@ namespace Tetris
 		Page(Application* app);
 		virtual ~Page();
 
-		virtual void init();
-		virtual void clean();
-
 		template<class T>
 		T* getRenderable(
 			const std::string& key);
 
-		void exec();
-
-		void addRegularEvent(
+		void setRegularEvent(
 			const std::string& key,
+			std::function<Uint32(Uint32, void*)> callback,
 			Uint32 interval,
-			SDL_TimerCallback callback,
 			void* param);
 		void removeRegularEvent(
 			const std::string& key);
-		void addExecuteFunctionEvent(
-			const std::function<void()>& func);
 
 		Application* getApp() const;
 
@@ -50,6 +45,8 @@ namespace Tetris
 		SDL_Color backgroundColor = { 255, 255, 255, 255 };
 		bool isInitialized = false;
 
+		virtual void init();
+		virtual void clean();
 		virtual void update();
 
 		void addRenderable(
@@ -58,11 +55,15 @@ namespace Tetris
 
 	private:
 
-		std::unordered_map<std::string, SDL_TimerID> regularEvents;
+		std::unordered_map<std::string, RegularEventData> regularEvents;
 		std::list<std::pair<std::string, Renderable*>> renderables;
 
 		void input();
 		void render();
+		void exec();
+		void manageRegularEvents();
+
+		friend class Application;
 	};
 
 	template<class T>

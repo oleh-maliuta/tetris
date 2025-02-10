@@ -94,6 +94,9 @@
     <ClInclude Include="renderables\Layout.h">
       <Filter>renderables</Filter>
     </ClInclude>
+    <ClInclude Include="structures\RegularEventData.h">
+      <Filter>structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="app_settings.txt" />

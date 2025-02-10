@@ -477,26 +477,22 @@ void Tetris::PlayPage::clearFilledGridRows()
 	this->score += rowClearedCount == 1 ? 100 :
 		rowClearedCount == 2 ? 300 : 500;
 
+	Text* linesValue = this->getRenderable<Text>("lines_value__text");
+	Text* scoreValue = this->getRenderable<Text>("score_value__text");
+
+	linesValue->setContent(std::to_string(this->lines));
+	scoreValue->setContent(std::to_string(this->score));
+	linesValue->setPositionX(330 + 150 / 2.f - linesValue->getWidth() / 2.f);
+	scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
+
 	if (this->level < 100 && this->lines % 10 == 0) {
 		this->level = this->lines / 10 + 1;
 		this->blockFallingInterval = this->START_BLOCK_FALLING_INTERVAL - 10 * (this->level - 1);
+
+		Text* levelValue = this->getRenderable<Text>("level_value__text");
+		levelValue->setContent(std::to_string(this->level));
+		levelValue->setPositionX(330 + 150 / 2.f - levelValue->getWidth() / 2.f);
 	}
-
-	this->addExecuteFunctionEvent([=] {
-		Text* linesValue = this->getRenderable<Text>("lines_value__text");
-		Text* scoreValue = this->getRenderable<Text>("score_value__text");
-
-		linesValue->setContent(std::to_string(this->lines));
-		scoreValue->setContent(std::to_string(this->score));
-		linesValue->setPositionX(330 + 150 / 2.f - linesValue->getWidth() / 2.f);
-		scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
-
-		if (this->lines % 10 == 0) {
-			Text* levelValue = this->getRenderable<Text>("level_value__text");
-			levelValue->setContent(std::to_string(this->level));
-			levelValue->setPositionX(330 + 150 / 2.f - levelValue->getWidth() / 2.f);
-		}
-	});
 }
 
 void Tetris::PlayPage::saveGameOverResults()
@@ -865,10 +861,10 @@ void Tetris::PlayPage::initPauseMenu()
 
 		this->pause = false;
 		menu->setVisibility(false);
-		this->addRegularEvent(
+		this->setRegularEvent(
 			"game-process",
+			this->gameProcessRegularEvent,
 			resultInterval,
-			this->gameProcessTimerCallback(),
 			this);
 	});
 
@@ -1126,10 +1122,10 @@ void Tetris::PlayPage::initKeyDownEvents()
 			ceil(this->blockFallingInterval / 10));
 
 		this->isSoftDropOn = true;
-		this->addRegularEvent(
+		this->setRegularEvent(
 			"game-process",
+			this->gameProcessRegularEvent,
 			0,
-			this->gameProcessTimerCallback(),
 			this);
 	};
 }
@@ -1142,97 +1138,93 @@ void Tetris::PlayPage::initKeyUpEvents()
 		}
 
 		this->isSoftDropOn = false;
-		this->addRegularEvent(
+		this->setRegularEvent(
 			"game-process",
+			this->gameProcessRegularEvent,
 			this->blockFallingInterval,
-			this->gameProcessTimerCallback(),
 			this);
 	};
 }
 
 void Tetris::PlayPage::initRegularEvents()
 {
-	this->addRegularEvent(
+	this->setRegularEvent(
 		"game-process",
+		this->gameProcessRegularEvent,
 		0,
-		this->gameProcessTimerCallback(),
 		this);
 }
 
-SDL_TimerCallback Tetris::PlayPage::gameProcessTimerCallback()
+Uint32 Tetris::PlayPage::gameProcessRegularEvent(
+	Uint32 interval,
+	void* param)
 {
-	return [](Uint32 interval, void* param) -> Uint32 {
-		PlayPage* page = static_cast<PlayPage*>(param);
-		const Uint32 resultInterval = page->isSoftDropOn ?
-			static_cast<Uint32>(ceil(page->blockFallingInterval / 10)) :
-			page->blockFallingInterval;
+	PlayPage* page = static_cast<PlayPage*>(param);
+	const Uint32 resultInterval = page->isSoftDropOn ?
+		static_cast<Uint32>(ceil(page->blockFallingInterval / 10)) :
+		page->blockFallingInterval;
 
-		if (page->fallingBlocks.size() == 0) {
-			page->clearFilledGridRows();
-			page->choosePiece();
+	if (page->fallingBlocks.size() == 0) {
+		page->clearFilledGridRows();
+		page->choosePiece();
 
-			TetrisPieceData currentPieceData = page->pieceData[*page->currentBlock];
+		TetrisPieceData currentPieceData = page->pieceData[*page->currentBlock];
 
-			for (auto& blockPosition : currentPieceData.startBlockPositions) {
-				page->fallingBlocks.push_back({
-					blockPosition.x,
-					blockPosition.y,
-					currentPieceData.r,
-					currentPieceData.g,
-					currentPieceData.b,
-					currentPieceData.a });
-			}
-
-			page->updateBlockMarkers();
-
-			return resultInterval;
+		for (auto& blockPosition : currentPieceData.startBlockPositions) {
+			page->fallingBlocks.push_back({
+				blockPosition.x,
+				blockPosition.y,
+				currentPieceData.r,
+				currentPieceData.g,
+				currentPieceData.b,
+				currentPieceData.a });
 		}
 
-		bool touchedTheGround = false;
-
-		for (auto& block : page->fallingBlocks) {
-			if (block.y <= 20 && (block.y == 0 || page->gridInfo[block.x][block.y - 1])) {
-				touchedTheGround = true;
-				break;
-			}
-		}
-
-		if (touchedTheGround) {
-			for (auto& block : page->fallingBlocks) {
-				if (block.y <= 19) {
-					page->gridInfo[block.x][block.y] = true;
-				}
-				else {
-					page->pause = true;
-					page->gameOver = true;
-					page->isSoftDropOn = false;
-
-					page->addExecuteFunctionEvent([page] {
-						page->saveGameOverResults();
-					});
-					page->removeRegularEvent("game-process");
-					break;
-				}
-			}
-
-			page->idleBlocks.splice(page->idleBlocks.end(), page->fallingBlocks);
-			page->updateBlockMarkers();
-		}
-		else {
-			for (auto& block : page->fallingBlocks) {
-				block.y--;
-			}
-
-			if (page->isSoftDropOn) {
-				page->score += 1;
-				page->addExecuteFunctionEvent([page] {
-					Text* scoreValue = page->getRenderable<Text>("score_value__text");
-					scoreValue->setContent(std::to_string(page->score));
-					scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
-				});
-			}
-		}
+		page->updateBlockMarkers();
 
 		return resultInterval;
-	};
+	}
+
+	bool touchedTheGround = false;
+
+	for (auto& block : page->fallingBlocks) {
+		if (block.y <= 20 && (block.y == 0 || page->gridInfo[block.x][block.y - 1])) {
+			touchedTheGround = true;
+			break;
+		}
+	}
+
+	if (touchedTheGround) {
+		for (auto& block : page->fallingBlocks) {
+			if (block.y <= 19) {
+				page->gridInfo[block.x][block.y] = true;
+			}
+			else {
+				page->pause = true;
+				page->gameOver = true;
+				page->isSoftDropOn = false;
+
+				page->saveGameOverResults();
+				return 0;
+			}
+		}
+
+		page->idleBlocks.splice(page->idleBlocks.end(), page->fallingBlocks);
+		page->updateBlockMarkers();
+	}
+	else {
+		for (auto& block : page->fallingBlocks) {
+			block.y--;
+		}
+
+		if (page->isSoftDropOn) {
+			page->score += 1;
+
+			Text* scoreValue = page->getRenderable<Text>("score_value__text");
+			scoreValue->setContent(std::to_string(page->score));
+			scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
+		}
+	}
+
+	return resultInterval;
 }
