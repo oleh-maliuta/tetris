@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef APP_H
-#define APP_H
+#ifndef TETRIS__APPLICATION__H
+#define TETRIS__APPLICATION__H
 
 #include <stdio.h>
 #include <string>
@@ -11,6 +11,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "./pages/Page.h"
 
 namespace Tetris
@@ -35,6 +36,11 @@ namespace Tetris
 		void changePage(const std::string& key);
 		void restartPage();
 		void run(const std::string& startPage);
+
+		void haltSound();
+		void pauseMusic();
+		void resumeMusic();
+		void haltMusic();
 
 		SDL_Renderer* getRenderer() const;
 		std::string getVersion() const;

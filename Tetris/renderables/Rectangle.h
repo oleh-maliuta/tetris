@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERABLES_RECTANGLE_H
-#define RENDERABLES_RECTANGLE_H
+#ifndef TETRIS__RENDERABLES__RECTANGLE__H
+#define TETRIS__RENDERABLES__RECTANGLE__H
 
 #include "Renderable.h"
 

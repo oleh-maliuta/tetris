@@ -67,11 +67,11 @@ Tetris::MainMenuPage::MainMenuPage(
 
 	this->backgroundColor = { 0, 15, 49, 255 };
 
-	this->addRenderable("logo__texture", logo__texture);
-	this->addRenderable("version_info__text", version_info__text);
-	this->addRenderable("play__text_button", play__text_button);
-	this->addRenderable("settings__text_button", settings__text_button);
-	this->addRenderable("quit__text_button", quit__text_button);
+	this->setRenderable("logo__texture", logo__texture);
+	this->setRenderable("version_info__text", version_info__text);
+	this->setRenderable("play__text_button", play__text_button);
+	this->setRenderable("settings__text_button", settings__text_button);
+	this->setRenderable("quit__text_button", quit__text_button);
 
 	play__text_button->setOnRelease([appRef] { appRef->changePage("play"); });
 	settings__text_button->setOnRelease([appRef] { appRef->changePage("settings"); });

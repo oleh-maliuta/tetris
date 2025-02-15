@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERABLES_TEXTBUTTON_H
-#define RENDERABLES_TEXTBUTTON_H
+#ifndef TETRIS__RENDERABLES__TEXT_BUTTON__H
+#define TETRIS__RENDERABLES__TEXT_BUTTON__H
 
 #include <string>
 #include "../Loader.h"

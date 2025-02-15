@@ -229,24 +229,24 @@ Tetris::PlayPage::PlayPage(
 		{ 255, 255, 255, 255 });
 	score_value__text->setPositionX(330 + 150 / 2 - score_value__text->getWidth() / 2);
 
-	this->addRenderable("next_block__rectangle", next_block__rectangle);
-	this->addRenderable("next_block_label__text", next_block_label__text);
-	this->addRenderable("next_i_block_hint__texture", next_i_block_hint__texture);
-	this->addRenderable("next_o_block_hint__texture", next_o_block_hint__texture);
-	this->addRenderable("next_t_block_hint__texture", next_t_block_hint__texture);
-	this->addRenderable("next_j_block_hint__texture", next_j_block_hint__texture);
-	this->addRenderable("next_l_block_hint__texture", next_l_block_hint__texture);
-	this->addRenderable("next_s_block_hint__texture", next_s_block_hint__texture);
-	this->addRenderable("next_z_block_hint__texture", next_z_block_hint__texture);
-	this->addRenderable("level__rectangle", level__rectangle);
-	this->addRenderable("level_label__text", level_label__text);
-	this->addRenderable("level_value__text", level_value__text);
-	this->addRenderable("lines__rectangle", lines__rectangle);
-	this->addRenderable("lines_label__text", lines_label__text);
-	this->addRenderable("lines_value__text", lines_value__text);
-	this->addRenderable("score__rectangle", score__rectangle);
-	this->addRenderable("score_label__text", score_label__text);
-	this->addRenderable("score_value__text", score_value__text);
+	this->setRenderable("next_block__rectangle", next_block__rectangle);
+	this->setRenderable("next_block_label__text", next_block_label__text);
+	this->setRenderable("next_i_block_hint__texture", next_i_block_hint__texture);
+	this->setRenderable("next_o_block_hint__texture", next_o_block_hint__texture);
+	this->setRenderable("next_t_block_hint__texture", next_t_block_hint__texture);
+	this->setRenderable("next_j_block_hint__texture", next_j_block_hint__texture);
+	this->setRenderable("next_l_block_hint__texture", next_l_block_hint__texture);
+	this->setRenderable("next_s_block_hint__texture", next_s_block_hint__texture);
+	this->setRenderable("next_z_block_hint__texture", next_z_block_hint__texture);
+	this->setRenderable("level__rectangle", level__rectangle);
+	this->setRenderable("level_label__text", level_label__text);
+	this->setRenderable("level_value__text", level_value__text);
+	this->setRenderable("lines__rectangle", lines__rectangle);
+	this->setRenderable("lines_label__text", lines_label__text);
+	this->setRenderable("lines_value__text", lines_value__text);
+	this->setRenderable("score__rectangle", score__rectangle);
+	this->setRenderable("score_label__text", score_label__text);
+	this->setRenderable("score_value__text", score_value__text);
 
 	for (int c = 0; c < 10; c++) {
 		for (int r = 0, rID = 19; r < 20; r++, rID--) {
@@ -261,7 +261,7 @@ Tetris::PlayPage::PlayPage(
 				startCellPos.y + ((cellGab + cellSize.y) * r),
 				this->DEFAULT_CELL_COLOR);
 
-			this->addRenderable(cellName, cell);
+			this->setRenderable(cellName, cell);
 			this->cells[c][rID] = cell;
 		}
 	}
@@ -280,7 +280,7 @@ Tetris::PlayPage::PlayPage(
 				{ 255, 255, 255, 255 });
 			cellMarker->setVisibility(false);
 
-			this->addRenderable(cellMarkerName, cellMarker);
+			this->setRenderable(cellMarkerName, cellMarker);
 			this->cellMarkers[c][rID] = cellMarker;
 		}
 	}
@@ -289,6 +289,7 @@ Tetris::PlayPage::PlayPage(
 	this->initGameOverMenu();
 	this->initKeyDownEvents();
 	this->initKeyUpEvents();
+	this->initSoundEffectsAndMusic();
 }
 
 void Tetris::PlayPage::init()
@@ -320,6 +321,8 @@ void Tetris::PlayPage::init()
 	scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
 
 	this->initRegularEvents();
+
+	this->playMusic();
 }
 
 void Tetris::PlayPage::clean()
@@ -529,17 +532,14 @@ void Tetris::PlayPage::rotatePiece(
 	this->pieceRotationIndex += clockwise ? 1 : -1;
 	this->pieceRotationIndex = (this->pieceRotationIndex % 4 + 4) % 4;
 
-	for (auto& block : this->fallingBlocks)
-	{
+	for (auto& block : this->fallingBlocks) {
 		this->rotateTile(
 			block,
 			{ pivot.x, pivot.y },
 			clockwise);
-
 	}
 
-	if (!shouldOffset)
-	{
+	if (!shouldOffset) {
 		return;
 	}
 
@@ -547,9 +547,11 @@ void Tetris::PlayPage::rotatePiece(
 		oldRotationIndex,
 		this->pieceRotationIndex);
 
-	if (!canOffset)
-	{
+	if (!canOffset) {
 		this->rotatePiece(!clockwise, false);
+	}
+	else {
+		this->pieceRotationSound->play();
 	}
 }
 
@@ -847,7 +849,7 @@ void Tetris::PlayPage::initPauseMenu()
 		});
 	menu->setVisibility(false);
 
-	this->addRenderable("pause_menu__layout", menu);
+	this->setRenderable("pause_menu__layout", menu);
 
 	resume__text_button->setOnRelease([=] {
 		if (!this->pause || this->gameOver) {
@@ -866,6 +868,8 @@ void Tetris::PlayPage::initPauseMenu()
 			this->gameProcessRegularEvent,
 			resultInterval,
 			this);
+
+		this->getApp()->resumeMusic();
 	});
 
 	restart__text_button->setOnRelease([=] {
@@ -1001,7 +1005,7 @@ void Tetris::PlayPage::initGameOverMenu()
 		});
 	menu->setVisibility(false);
 
-	this->addRenderable("game_over_menu__layout", menu);
+	this->setRenderable("game_over_menu__layout", menu);
 
 	restart__text_button->setOnRelease([=] {
 		if (!this->gameOver) {
@@ -1041,6 +1045,8 @@ void Tetris::PlayPage::initKeyDownEvents()
 		this->isSoftDropOn = false;
 		menu->setVisibility(true);
 		this->removeRegularEvent("game-process");
+
+		this->getApp()->pauseMusic();
 	};
 
 	this->keyDownEvents[SDLK_RIGHT] = [=] {
@@ -1058,6 +1064,8 @@ void Tetris::PlayPage::initKeyDownEvents()
 		}
 
 		if (isActionEnabled) {
+			this->pieceMovingSound->play();
+
 			for (auto& block : this->fallingBlocks) {
 				block.x++;
 			}
@@ -1081,6 +1089,8 @@ void Tetris::PlayPage::initKeyDownEvents()
 		}
 
 		if (isActionEnabled) {
+			this->pieceMovingSound->play();
+
 			for (auto& block : this->fallingBlocks) {
 				block.x--;
 			}
@@ -1146,6 +1156,13 @@ void Tetris::PlayPage::initKeyUpEvents()
 	};
 }
 
+void Tetris::PlayPage::initSoundEffectsAndMusic()
+{
+	this->setMusic("assets/audio/tetris_theme.wav");
+	this->pieceMovingSound = this->setSoundEffect("piece_moving", "assets/audio/piece_moving.wav");
+	this->pieceRotationSound = this->setSoundEffect("piece_rotation", "assets/audio/piece_rotation.wav");
+}
+
 void Tetris::PlayPage::initRegularEvents()
 {
 	this->setRegularEvent(
@@ -1205,6 +1222,7 @@ Uint32 Tetris::PlayPage::gameProcessRegularEvent(
 				page->isSoftDropOn = false;
 
 				page->saveGameOverResults();
+				page->getApp()->haltMusic();
 				return 0;
 			}
 		}

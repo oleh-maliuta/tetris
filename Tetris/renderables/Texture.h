@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERABLES_TEXTURE_H
-#define RENDERABLES_TEXTURE_H
+#ifndef TETRIS__RENDERABLES__TEXTURE__H
+#define TETRIS__RENDERABLES__TEXTURE__H
 
 #include <string>
 #include "Renderable.h"

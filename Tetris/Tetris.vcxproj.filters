@@ -10,6 +10,9 @@
     <Filter Include="structures">
       <UniqueIdentifier>{5a302f1a-8142-4d53-89ba-9bcf3d93cb06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="audio">
+      <UniqueIdentifier>{948cbe79-5372-4166-87bc-b2229cbfe2ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pages\MainMenuPage.cpp">
@@ -47,6 +50,12 @@
     </ClCompile>
     <ClCompile Include="renderables\Layout.cpp">
       <Filter>renderables</Filter>
+    </ClCompile>
+    <ClCompile Include="audio\SoundEffect.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="audio\SoundTrack.cpp">
+      <Filter>audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +105,12 @@
     </ClInclude>
     <ClInclude Include="structures\RegularEventData.h">
       <Filter>structures</Filter>
+    </ClInclude>
+    <ClInclude Include="audio\SoundEffect.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="audio\SoundTrack.h">
+      <Filter>audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

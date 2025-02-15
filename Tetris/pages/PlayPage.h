@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef PAGES_PLAYPAGE_H
-#define PAGES_PLAYPAGE_H
+#ifndef TETRIS__PAGES__PLAY_PAGE__H
+#define TETRIS__PAGES__PLAY_PAGE__H
 
 #include <algorithm>
 #include <format>
@@ -120,6 +120,8 @@ namespace Tetris
 		Rectangle* cells[10][20];
 		Rectangle* cellMarkers[10][20];
 		Texture* nextBlockHint = nullptr;
+		SoundEffect* pieceMovingSound = nullptr;
+		SoundEffect* pieceRotationSound = nullptr;
 		char* nextBlock = nullptr;
 
 		void choosePiece();
@@ -127,6 +129,7 @@ namespace Tetris
 		void initGameOverMenu();
 		void initKeyDownEvents();
 		void initKeyUpEvents();
+		void initSoundEffectsAndMusic();
 		void initRegularEvents();
 	};
 }

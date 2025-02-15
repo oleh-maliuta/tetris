@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERABLES_TEXT_H
-#define RENDERABLES_TEXT_H
+#ifndef TETRIS__RENDERABLES__TEXT__H
+#define TETRIS__RENDERABLES__TEXT__H
 
 #include <string>
 #include "../Loader.h"

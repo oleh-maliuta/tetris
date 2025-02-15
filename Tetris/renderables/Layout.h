@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERABLES_LAYOUT_H
-#define RENDERABLES_LAYOUT_H
+#ifndef TETRIS__RENDERABLES__LAYOUT__H
+#define TETRIS__RENDERABLES__LAYOUT__H
 
 #include <string>
 #include <list>

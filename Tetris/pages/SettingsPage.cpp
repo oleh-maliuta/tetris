@@ -62,11 +62,11 @@ Tetris::SettingsPage::SettingsPage(
 
 	this->backgroundColor = { 0, 15, 49, 255 };
 
-	this->addRenderable("version_info__text", version_info__text);
-	this->addRenderable("v_sync__texture", v_sync__texture);
-	this->addRenderable("v_sync__text", v_sync__text);
-	this->addRenderable("apply__text_button", apply__text_button);
-	this->addRenderable("return__image_button", return__image_button);
+	this->setRenderable("version_info__text", version_info__text);
+	this->setRenderable("v_sync__texture", v_sync__texture);
+	this->setRenderable("v_sync__text", v_sync__text);
+	this->setRenderable("apply__text_button", apply__text_button);
+	this->setRenderable("return__image_button", return__image_button);
 
 	v_sync__texture->setOnRelease([pageRef, v_sync__texture] {
 		pageRef->setVSync(!pageRef->getVSync());

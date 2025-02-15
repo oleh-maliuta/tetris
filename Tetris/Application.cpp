@@ -14,7 +14,7 @@ Tetris::Application::Application(
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
 		printf(
 			"SDL could not initialize! SDL_Error: %s\n",
 			SDL_GetError());
@@ -35,6 +35,14 @@ Tetris::Application::Application(
 		printf(
 			"SDL_ttf could not initialize! SDL_ttf Error: %s\n",
 			TTF_GetError());
+		return;
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		printf(
+			"SDL_mixer could not initialize! SDL_mixer Error: %s\n",
+			Mix_GetError());
 		return;
 	}
 
@@ -97,6 +105,7 @@ Tetris::Application::~Application()
 
 	SDL_DestroyRenderer(this->renderer);
 	SDL_DestroyWindow(this->window);
+	Mix_Quit();
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
@@ -162,6 +171,30 @@ void Tetris::Application::run(
 	}
 
 	currentPage->clean();
+}
+
+void Tetris::Application::haltSound()
+{
+	Mix_HaltChannel(-1);
+}
+
+void Tetris::Application::pauseMusic()
+{
+	if (Mix_PlayingMusic() == 1) {
+		Mix_PauseMusic();
+	}
+}
+
+void Tetris::Application::resumeMusic()
+{
+	if (Mix_PausedMusic() == 1) {
+		Mix_ResumeMusic();
+	}
+}
+
+void Tetris::Application::haltMusic()
+{
+	Mix_HaltMusic();
 }
 
 SDL_Renderer* Tetris::Application::getRenderer() const

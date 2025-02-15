@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERABLES_IMAGEBUTTON_H
-#define RENDERABLES_IMAGEBUTTON_H
+#ifndef TETRIS__RENDERABLES__IMAGE_BUTTON__H
+#define TETRIS__RENDERABLES__IMAGE_BUTTON__H
 
 #include <string>
 #include "Renderable.h"

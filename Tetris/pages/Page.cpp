@@ -11,6 +11,12 @@ Tetris::Page::~Page()
 	for (const auto& el : this->renderables) {
 		delete el.second;
 	}
+
+	for (const auto& el : this->soundEffects) {
+		delete el.second;
+	}
+
+	delete this->music;
 }
 
 void Tetris::Page::exec()
@@ -79,6 +85,14 @@ void Tetris::Page::init()
 		el.second->init();
 	}
 
+	for (const auto& el : this->soundEffects) {
+		el.second->init();
+	}
+
+	if (this->music != nullptr) {
+		this->music->init();
+	}
+
 	this->isInitialized = true;
 }
 
@@ -88,22 +102,83 @@ void Tetris::Page::clean()
 		return;
 	}
 
+	this->app->haltSound();
+	this->app->haltMusic();
+
 	for (const auto& el : this->renderables) {
 		el.second->destroy();
 	}
 
-	this->regularEvents.clear();
+	for (const auto& el : this->soundEffects) {
+		el.second->destroy();
+	}
+	
+	if (this->music != nullptr) {
+		this->music->destroy();
+	}
 
+	this->regularEvents.clear();
 	this->isInitialized = false;
 }
 
 void Tetris::Page::update() {}
 
-void Tetris::Page::addRenderable(
+void Tetris::Page::setRenderable(
 	const std::string& key,
 	Renderable* obj)
 {
 	this->renderables.push_back(std::pair(key, obj));
+}
+
+Tetris::SoundEffect* Tetris::Page::setSoundEffect(
+	const std::string& key,
+	const std::string& path)
+{
+	const auto it = this->soundEffects.find(key);
+
+	if (it != this->soundEffects.end()) {
+		delete it->second;
+		this->soundEffects.erase(it->first);
+	}
+
+	SoundEffect* soundEffect = new SoundEffect(path);
+
+	if (this->isInitialized) {
+		soundEffect->init();
+	}
+
+	this->soundEffects[key] = soundEffect;
+	return soundEffect;
+}
+
+Tetris::SoundEffect* Tetris::Page::getSoundEffect(
+	const std::string& key)
+{
+	const auto it = this->soundEffects.find(key);
+	if (it != this->soundEffects.end()) {
+		return it->second;
+	}
+	return nullptr;
+}
+
+void Tetris::Page::setMusic(
+	const std::string& path)
+{
+	if (this->music != nullptr) {
+		delete this->music;
+		this->music = nullptr;
+	}
+
+	SoundTrack* music = new SoundTrack(path);
+	if (this->isInitialized) {
+		music->init();
+	}
+	this->music = music;
+}
+
+void Tetris::Page::playMusic()
+{
+	this->music->play();
 }
 
 void Tetris::Page::setRegularEvent(

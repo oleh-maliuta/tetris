@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef LOADER_H
-#define LOADER_H
+#ifndef TETRIS__LOADER__H
+#define TETRIS__LOADER__H
 
 #include <stdio.h>
 #include <SDL.h>

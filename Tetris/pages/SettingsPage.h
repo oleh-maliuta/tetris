@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef PAGES_SETTINGSPAGE_H
-#define PAGES_SETTINGSPAGE_H
+#ifndef TETRIS__PAGES__SETTINGS_PAGE__H
+#define TETRIS__PAGES__SETTINGS_PAGE__H
 
 #include "Page.h"
 #include "../Loader.h"

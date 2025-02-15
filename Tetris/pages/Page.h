@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef PAGES_PAGE_H
-#define PAGES_PAGE_H
+#ifndef TETRIS__PAGES__PAGE__H
+#define TETRIS__PAGES__PAGE__H
 
 #include <utility>
 #include <list>
@@ -11,6 +11,8 @@
 #include "../Application.h"
 #include "../renderables/Layout.h"
 #include "../structures/RegularEventData.h"
+#include "../audio/SoundTrack.h"
+#include "../audio/SoundEffect.h"
 
 namespace Tetris
 {
@@ -25,7 +27,7 @@ namespace Tetris
 
 		template<class T>
 		T* getRenderable(
-			const std::string& key);
+			const std::string& key) const;
 
 		void setRegularEvent(
 			const std::string& key,
@@ -49,14 +51,24 @@ namespace Tetris
 		virtual void clean();
 		virtual void update();
 
-		void addRenderable(
+		void setRenderable(
 			const std::string& key,
 			Renderable* obj);
+		SoundEffect* setSoundEffect(
+			const std::string& key,
+			const std::string& path);
+		SoundEffect* getSoundEffect(
+			const std::string& key);
+		void setMusic(
+			const std::string& path);
+		void playMusic();
 
 	private:
 
-		std::unordered_map<std::string, RegularEventData> regularEvents;
 		std::list<std::pair<std::string, Renderable*>> renderables;
+		std::unordered_map<std::string, RegularEventData> regularEvents;
+		std::map<std::string, SoundEffect*> soundEffects;
+		SoundTrack* music = nullptr;
 
 		void input();
 		void render();
@@ -68,7 +80,7 @@ namespace Tetris
 
 	template<class T>
 	T* Tetris::Page::getRenderable(
-		const std::string& key)
+		const std::string& key) const
 	{
 		if (!std::is_base_of<Renderable, T>::value) {
 			return nullptr;

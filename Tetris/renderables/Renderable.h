@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef RENDERABLES_RENDERABLE_H
-#define RENDERABLES_RENDERABLE_H
+#ifndef TETRIS__RENDERABLES__RENDERABLE__H
+#define TETRIS__RENDERABLES__RENDERABLE__H
 
 #include <functional>
 #include <SDL.h>

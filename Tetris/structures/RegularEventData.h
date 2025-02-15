@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef STRUCTURES_REGULAR_EVENT_DATA_H
-#define STRUCTURES_REGULAR_EVENT_DATA_H
+#ifndef TETRIS__STRUCTURES__REGULAR_EVENT_DATA__H
+#define TETRIS__STRUCTURES__REGULAR_EVENT_DATA__H
 
 #include <SDL.h>
 #include <functional>
