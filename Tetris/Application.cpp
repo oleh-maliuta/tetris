@@ -10,6 +10,7 @@ Tetris::Application::Application(
 	this->version = app_settings["app_version"];
 	this->fps = std::stoi(app_settings["fps"]);
 	this->vSync = app_settings["v_sync"] == "1";
+	this->colorBlocksOn = app_settings["color_blocks"] == "1";
 
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
@@ -98,7 +99,8 @@ Tetris::Application::~Application()
 	std::unordered_map<std::string, std::string> data = {
 		{"app_version", this->version},
 		{"fps",	std::to_string(this->fps)},
-		{"v_sync", this->vSync ? "1" : "0"}
+		{"v_sync", this->vSync ? "1" : "0"},
+		{"color_blocks", this->colorBlocksOn ? "1" : "0"}
 	};
 
 	this->saveAppSettings(data);
@@ -237,6 +239,11 @@ bool Tetris::Application::getVSync() const
 	return this->vSync;
 }
 
+bool Tetris::Application::getColorBlocksOn() const
+{
+	return this->colorBlocksOn;
+}
+
 bool Tetris::Application::getIsRunning() const
 {
 	return this->isRunning;
@@ -260,20 +267,31 @@ void Tetris::Application::setVSync(
 	SDL_RenderSetVSync(this->renderer, this->vSync);
 }
 
+void Tetris::Application::setColorBlocksOn(
+	const bool& value)
+{
+	this->colorBlocksOn = value;
+}
+
 void Tetris::Application::setIsRunning(
 	const bool& value)
 {
 	this->isRunning = value;
 }
 
-bool Tetris::Application::getAppSettings(
+void Tetris::Application::getAppSettings(
 	std::unordered_map<std::string, std::string>& data)
 {
 	std::ifstream app_settings_file("app_settings.txt");
 
 	if (!app_settings_file.is_open()) {
-		printf("Unable to open file for reading.\n");
-		return false;
+		data = {
+			{"app_version", "0.10.0"},
+			{"fps", "60"},
+			{"v_sync", "0"},
+			{"color_blocks", "1"}
+		};
+		return;
 	}
 
 	const char* delimiter = ":";
@@ -289,19 +307,12 @@ bool Tetris::Application::getAppSettings(
 	}
 
 	app_settings_file.close();
-	return true;
 }
 
-bool Tetris::Application::saveAppSettings(
+void Tetris::Application::saveAppSettings(
 	const std::unordered_map<std::string, std::string>& data)
 {
 	std::ofstream app_settings_file("app_settings.txt");
-
-	if (!app_settings_file.is_open()) {
-		printf("Unable to open file for writing.\n");
-		return false;
-	}
-
 	const char* delimiter = ":";
 
 	for (const auto& el : data) {

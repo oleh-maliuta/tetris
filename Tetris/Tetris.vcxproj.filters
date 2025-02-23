@@ -97,9 +97,6 @@
     <ClInclude Include="structures\TetrisCellPosition.h">
       <Filter>structures</Filter>
     </ClInclude>
-    <ClInclude Include="structures\TetrisPieceData.h">
-      <Filter>structures</Filter>
-    </ClInclude>
     <ClInclude Include="renderables\Layout.h">
       <Filter>renderables</Filter>
     </ClInclude>
@@ -112,8 +109,5 @@
     <ClInclude Include="audio\SoundTrack.h">
       <Filter>audio</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app_settings.txt" />
   </ItemGroup>
 </Project>

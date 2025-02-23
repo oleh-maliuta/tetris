@@ -7,13 +7,9 @@ Tetris::SettingsPage::SettingsPage(
 	Tetris::Application* appRef = this->app;
 	SettingsPage* pageRef = this;
 	Uint32 versionInfoTextWrap = this->app->getWindowWidth() - 6;
-	Uint32 vSyncTextWrap = 100;
-
-	Texture* v_sync__texture = new Texture(
-		this->app->getRenderer(),
-		this->vSync ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png",
-		280,
-		100);
+	Uint32 vSyncTextWrap = 230;
+	float switchWidth = 48;
+	float switchHeight = 25;
 
 	Text* version_info__text = new Text(
 		this->app->getRenderer(),
@@ -31,9 +27,35 @@ Tetris::SettingsPage::SettingsPage(
 		"V-Sync",
 		20,
 		&vSyncTextWrap,
-		130,
+		120,
 		100,
 		{ 255, 255, 255, 255 });
+
+	Texture* v_sync__texture = new Texture(
+		this->app->getRenderer(),
+		this->vSync ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png",
+		380,
+		100,
+		&switchWidth,
+		&switchHeight);
+
+	Text* color_blocks__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"Color blocks",
+		20,
+		&vSyncTextWrap,
+		120,
+		150,
+		{ 255, 255, 255, 255 });
+
+	Texture* color_blocks__texture = new Texture(
+		this->app->getRenderer(),
+		this->colorBlocksOn ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png",
+		380,
+		150,
+		&switchWidth,
+		&switchHeight);
 
 	TextButton* apply__text_button = new TextButton(
 		this->app->getRenderer(),
@@ -62,12 +84,17 @@ Tetris::SettingsPage::SettingsPage(
 
 	this->backgroundColor = { 0, 15, 49, 255 };
 
-	this->setRenderable("version_info__text", version_info__text);
-	this->setRenderable("v_sync__texture", v_sync__texture);
 	this->setRenderable("v_sync__text", v_sync__text);
+	this->setRenderable("v_sync__texture", v_sync__texture);
+	this->setRenderable("color_blocks__text", color_blocks__text);
+	this->setRenderable("color_blocks__texture", color_blocks__texture);
+	this->setRenderable("version_info__text", version_info__text);
 	this->setRenderable("apply__text_button", apply__text_button);
 	this->setRenderable("return__image_button", return__image_button);
 
+	return__image_button->setOnRelease([appRef] {
+		appRef->changePage("main_menu");
+	});
 	v_sync__texture->setOnRelease([pageRef, v_sync__texture] {
 		pageRef->setVSync(!pageRef->getVSync());
 		v_sync__texture->setFilePath(
@@ -75,10 +102,19 @@ Tetris::SettingsPage::SettingsPage(
 			"assets/images/png/checked.png" :
 			"assets/images/png/unchecked.png");
 	});
-	return__image_button->setOnRelease([appRef] { appRef->changePage("main_menu"); });
+	color_blocks__texture->setOnRelease([pageRef, color_blocks__texture] {
+		pageRef->setColorBlocksOn(!pageRef->getColorBlocksOn());
+		color_blocks__texture->setFilePath(
+			pageRef->getColorBlocksOn() ?
+			"assets/images/png/checked.png" :
+			"assets/images/png/unchecked.png");
+		});
 	apply__text_button->setOnRelease([appRef, pageRef] {
 		if (appRef->getVSync() != pageRef->getVSync()) {
 			appRef->setVSync(pageRef->getVSync());
+		}
+		if (appRef->getColorBlocksOn() != pageRef->getColorBlocksOn()) {
+			appRef->setColorBlocksOn(pageRef->getColorBlocksOn());
 		}
 	});
 }
@@ -92,11 +128,17 @@ void Tetris::SettingsPage::init()
 	Page::init();
 
 	Texture* v_sync__texture = this->getRenderable<Texture>("v_sync__texture");
+	Texture* color_blocks__texture = this->getRenderable<Texture>("color_blocks__texture");
 
 	this->vSync = this->app->getVSync();
+	this->colorBlocksOn = this->app->getColorBlocksOn();
 
 	v_sync__texture->setFilePath(
 		this->vSync ?
+		"assets/images/png/checked.png" :
+		"assets/images/png/unchecked.png");
+	color_blocks__texture->setFilePath(
+		this->colorBlocksOn ?
 		"assets/images/png/checked.png" :
 		"assets/images/png/unchecked.png");
 }
@@ -115,10 +157,21 @@ bool Tetris::SettingsPage::getVSync() const
 	return this->vSync;
 }
 
+bool Tetris::SettingsPage::getColorBlocksOn() const
+{
+	return this->colorBlocksOn;
+}
+
 void Tetris::SettingsPage::setVSync(
 	const bool& value)
 {
 	this->vSync = value;
+}
+
+void Tetris::SettingsPage::setColorBlocksOn(
+	const bool& value)
+{
+	this->colorBlocksOn = value;
 }
 
 void Tetris::SettingsPage::update() {}

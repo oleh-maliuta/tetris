@@ -55,10 +55,6 @@
     <ClInclude Include="structures\RegularEventData.h" />
     <ClInclude Include="structures\TetrisBlockData.h" />
     <ClInclude Include="structures\TetrisCellPosition.h" />
-    <ClInclude Include="structures\TetrisPieceData.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app_settings.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

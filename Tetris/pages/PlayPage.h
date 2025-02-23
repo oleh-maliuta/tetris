@@ -18,7 +18,6 @@
 #include "../renderables/Layout.h"
 #include "../structures/TetrisCellPosition.h"
 #include "../structures/TetrisBlockData.h"
-#include "../structures/TetrisPieceData.h"
 
 namespace Tetris
 {
@@ -115,8 +114,11 @@ namespace Tetris
 	private:
 
 		const SDL_Color DEFAULT_CELL_COLOR = { 35, 50, 79, 255 };
+		const SDL_Color DEFAULT_BLOCK_COLOR = { 255, 255, 255, 255 };
 
-		std::map<char, TetrisPieceData> pieceData;
+		std::map<char, std::vector<TetrisCellPosition>> pieceStartPositions;
+		std::map<char, SDL_Color> pieceColors;
+		std::map<char, SDL_Color> defaultPieceColors;
 		Rectangle* cells[10][20];
 		Rectangle* cellMarkers[10][20];
 		Texture* nextBlockHint = nullptr;

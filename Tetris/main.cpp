@@ -7,7 +7,7 @@ using namespace Tetris;
 
 int main(int argc, char* argv[])
 {
-	Application app(600, 600);
+	Application app(550, 600);
 
 	app.usePage<MainMenuPage>("main_menu");
 	app.usePage<SettingsPage>("settings");

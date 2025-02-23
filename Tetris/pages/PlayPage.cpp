@@ -12,43 +12,25 @@ Tetris::PlayPage::PlayPage(
 
 	this->backgroundColor = { 0, 15, 49, 255 };
 
-	this->pieceData = {
-		{'i', {
-				{{ 4, 22 }, { 4, 20 }, { 4, 21 }, { 4, 23 }},
-				251, 112, 36, 255
-			}
-		},
-		{'o', {
-				{{ 4, 20 }, { 4, 21 }, { 5, 20 }, { 5, 21 }},
-				243, 209, 26, 255
-			}
-		},
-		{'t', {
-				{{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 4, 21 }},
-				167, 47, 232, 255
-			}
-		},
-		{'j', {
-				{{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 3, 21 }},
-				117, 196, 63, 255
-			}
-		},
-		{'l', {
-				{{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 5, 21 }},
-				61, 194, 132, 255
-			}
-		},
-		{'s', {
-				{{ 4, 20 }, { 3, 20 }, { 4, 21 }, { 5, 21 }},
-				238, 30, 40, 255
-			}
-		},
-		{'z', {
-				{{ 4, 20 }, { 5, 20 }, { 4, 21 }, { 3, 21 }},
-				31, 197, 240, 255
-			}
-		},
+	this->pieceStartPositions = {
+		{'i', {{ 4, 22 }, { 4, 20 }, { 4, 21 }, { 4, 23 }}},
+		{'o', {{ 4, 20 }, { 4, 21 }, { 5, 20 }, { 5, 21 }}},
+		{'t', {{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 4, 21 }}},
+		{'j', {{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 3, 21 }}},
+		{'l', {{ 4, 20 }, { 3, 20 }, { 5, 20 }, { 5, 21 }}},
+		{'s', {{ 4, 20 }, { 3, 20 }, { 4, 21 }, { 5, 21 }}},
+		{'z', {{ 4, 20 }, { 5, 20 }, { 4, 21 }, { 3, 21 }}},
 	};
+	this->defaultPieceColors = {
+		{'i', { 251, 112, 36, 255 }},
+		{'o', { 243, 209, 26, 255 }},
+		{'t', { 167, 47, 232, 255 }},
+		{'j', { 117, 196, 63, 255 }},
+		{'l', { 61, 194, 132, 255 }},
+		{'s', { 238, 30, 40, 255 }},
+		{'z', { 31, 197, 240, 255 }},
+	};
+	this->pieceColors = this->defaultPieceColors;
 
 	Rectangle* next_block__rectangle = new Rectangle(
 		this->app->getRenderer(),
@@ -299,6 +281,24 @@ void Tetris::PlayPage::init()
 	}
 
 	Page::init();
+
+	if (this->getApp()->getColorBlocksOn()) {
+		for (auto& piece : this->pieceColors) {
+			SDL_Color color = this->defaultPieceColors[piece.first];
+			piece.second.r = color.r;
+			piece.second.g = color.g;
+			piece.second.b = color.b;
+			piece.second.a = color.a;
+		}
+	}
+	else {
+		for (auto& piece : this->pieceColors) {
+			piece.second.r = this->DEFAULT_BLOCK_COLOR.r;
+			piece.second.g = this->DEFAULT_BLOCK_COLOR.g;
+			piece.second.b = this->DEFAULT_BLOCK_COLOR.b;
+			piece.second.a = this->DEFAULT_BLOCK_COLOR.a;
+		}
+	}
 
 	this->blockFallingInterval = this->START_BLOCK_FALLING_INTERVAL;
 	this->pieceRotationIndex = 0;
@@ -1185,16 +1185,17 @@ Uint32 Tetris::PlayPage::gameProcessRegularEvent(
 		page->clearFilledGridRows();
 		page->choosePiece();
 
-		TetrisPieceData currentPieceData = page->pieceData[*page->currentBlock];
+		const auto& blockPositions = page->pieceStartPositions[*page->currentBlock];
+		const SDL_Color blockColor = page->pieceColors[*page->currentBlock];
 
-		for (auto& blockPosition : currentPieceData.startBlockPositions) {
+		for (auto& blockPosition : blockPositions) {
 			page->fallingBlocks.push_back({
 				blockPosition.x,
 				blockPosition.y,
-				currentPieceData.r,
-				currentPieceData.g,
-				currentPieceData.b,
-				currentPieceData.a });
+				blockColor.r,
+				blockColor.g,
+				blockColor.b,
+				blockColor.a });
 		}
 
 		page->updateBlockMarkers();

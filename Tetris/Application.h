@@ -50,10 +50,12 @@ namespace Tetris
 		int getWindowWidth() const;
 		int getWindowHeight() const;
 		bool getVSync() const;
+		bool getColorBlocksOn() const;
 		bool getIsRunning() const;
 
 		void setFps(const int& value);
 		void setVSync(const bool& value);
+		void setColorBlocksOn(const bool& value);
 		void setIsRunning(const bool& value);
 
 	private:
@@ -70,11 +72,12 @@ namespace Tetris
 		int windowWidth = 0;
 		int windowHeight = 0;
 		bool vSync = false;
+		bool colorBlocksOn = false;
 		bool isRestartRequired = false;
 		bool isRunning = false;
 
-		static bool getAppSettings(std::unordered_map<std::string, std::string>& data);
-		static bool saveAppSettings(const std::unordered_map<std::string, std::string>& data);
+		static void getAppSettings(std::unordered_map<std::string, std::string>& data);
+		static void saveAppSettings(const std::unordered_map<std::string, std::string>& data);
 	};
 
 	template<class T>

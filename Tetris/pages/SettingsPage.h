@@ -23,8 +23,10 @@ namespace Tetris
 		virtual void clean() override;
 
 		bool getVSync() const;
+		bool getColorBlocksOn() const;
 
 		void setVSync(const bool& value);
+		void setColorBlocksOn(const bool& value);
 
 	protected:
 
@@ -33,6 +35,7 @@ namespace Tetris
 	private:
 
 		bool vSync = false;
+		bool colorBlocksOn = false;
 	};
 }
 
