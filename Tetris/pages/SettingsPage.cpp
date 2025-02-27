@@ -14,7 +14,7 @@ Tetris::SettingsPage::SettingsPage(
 	Text* version_info__text = new Text(
 		this->app->getRenderer(),
 		"assets/fonts/open_sans/normal.ttf",
-		this->app->getVersion(),
+		this->app->VERSION,
 		15,
 		&versionInfoTextWrap,
 		3,
@@ -57,6 +57,42 @@ Tetris::SettingsPage::SettingsPage(
 		&switchWidth,
 		&switchHeight);
 
+	Text* music__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"Music",
+		20,
+		&vSyncTextWrap,
+		120,
+		200,
+		{ 255, 255, 255, 255 });
+
+	Texture* music__texture = new Texture(
+		this->app->getRenderer(),
+		this->musicOn ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png",
+		380,
+		200,
+		&switchWidth,
+		&switchHeight);
+
+	Text* sound_effects__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"Sound effects",
+		20,
+		&vSyncTextWrap,
+		120,
+		250,
+		{ 255, 255, 255, 255 });
+
+	Texture* sound_effects__texture = new Texture(
+		this->app->getRenderer(),
+		this->soundEffectsOn ? "assets/images/png/checked.png" : "assets/images/png/unchecked.png",
+		380,
+		250,
+		&switchWidth,
+		&switchHeight);
+
 	TextButton* apply__text_button = new TextButton(
 		this->app->getRenderer(),
 		"assets/fonts/swansea/bold.ttf",
@@ -88,6 +124,10 @@ Tetris::SettingsPage::SettingsPage(
 	this->setRenderable("v_sync__texture", v_sync__texture);
 	this->setRenderable("color_blocks__text", color_blocks__text);
 	this->setRenderable("color_blocks__texture", color_blocks__texture);
+	this->setRenderable("music__text", music__text);
+	this->setRenderable("music__texture", music__texture);
+	this->setRenderable("sound_effects__text", sound_effects__text);
+	this->setRenderable("sound_effects__texture", sound_effects__texture);
 	this->setRenderable("version_info__text", version_info__text);
 	this->setRenderable("apply__text_button", apply__text_button);
 	this->setRenderable("return__image_button", return__image_button);
@@ -108,13 +148,33 @@ Tetris::SettingsPage::SettingsPage(
 			pageRef->getColorBlocksOn() ?
 			"assets/images/png/checked.png" :
 			"assets/images/png/unchecked.png");
-		});
+	});
+	music__texture->setOnRelease([pageRef, music__texture] {
+		pageRef->setMusicOn(!pageRef->getMusicOn());
+		music__texture->setFilePath(
+			pageRef->getMusicOn() ?
+			"assets/images/png/checked.png" :
+			"assets/images/png/unchecked.png");
+	});
+	sound_effects__texture->setOnRelease([pageRef, sound_effects__texture] {
+		pageRef->setSoundEffectsOn(!pageRef->getSoundEffectsOn());
+		sound_effects__texture->setFilePath(
+			pageRef->getSoundEffectsOn() ?
+			"assets/images/png/checked.png" :
+			"assets/images/png/unchecked.png");
+	});
 	apply__text_button->setOnRelease([appRef, pageRef] {
 		if (appRef->getVSync() != pageRef->getVSync()) {
 			appRef->setVSync(pageRef->getVSync());
 		}
 		if (appRef->getColorBlocksOn() != pageRef->getColorBlocksOn()) {
 			appRef->setColorBlocksOn(pageRef->getColorBlocksOn());
+		}
+		if (appRef->getMusicOn() != pageRef->getMusicOn()) {
+			appRef->setMusicOn(pageRef->getMusicOn());
+		}
+		if (appRef->getSoundEffectsOn() != pageRef->getSoundEffectsOn()) {
+			appRef->setSoundEffectsOn(pageRef->getSoundEffectsOn());
 		}
 	});
 }
@@ -129,9 +189,13 @@ void Tetris::SettingsPage::init()
 
 	Texture* v_sync__texture = this->getRenderable<Texture>("v_sync__texture");
 	Texture* color_blocks__texture = this->getRenderable<Texture>("color_blocks__texture");
+	Texture* music__texture = this->getRenderable<Texture>("music__texture");
+	Texture* sound_effects__texture = this->getRenderable<Texture>("sound_effects__texture");
 
 	this->vSync = this->app->getVSync();
 	this->colorBlocksOn = this->app->getColorBlocksOn();
+	this->musicOn = this->app->getMusicOn();
+	this->soundEffectsOn = this->app->getSoundEffectsOn();
 
 	v_sync__texture->setFilePath(
 		this->vSync ?
@@ -139,6 +203,14 @@ void Tetris::SettingsPage::init()
 		"assets/images/png/unchecked.png");
 	color_blocks__texture->setFilePath(
 		this->colorBlocksOn ?
+		"assets/images/png/checked.png" :
+		"assets/images/png/unchecked.png");
+	music__texture->setFilePath(
+		this->musicOn ?
+		"assets/images/png/checked.png" :
+		"assets/images/png/unchecked.png");
+	sound_effects__texture->setFilePath(
+		this->soundEffectsOn ?
 		"assets/images/png/checked.png" :
 		"assets/images/png/unchecked.png");
 }
@@ -152,9 +224,14 @@ void Tetris::SettingsPage::clean()
 	Page::clean();
 }
 
-bool Tetris::SettingsPage::getVSync() const
+bool Tetris::SettingsPage::getMusicOn() const
 {
-	return this->vSync;
+	return this->musicOn;
+}
+
+bool Tetris::SettingsPage::getSoundEffectsOn() const
+{
+	return this->soundEffectsOn;
 }
 
 bool Tetris::SettingsPage::getColorBlocksOn() const
@@ -162,16 +239,33 @@ bool Tetris::SettingsPage::getColorBlocksOn() const
 	return this->colorBlocksOn;
 }
 
-void Tetris::SettingsPage::setVSync(
+bool Tetris::SettingsPage::getVSync() const
+{
+	return this->vSync;
+}
+
+void Tetris::SettingsPage::setMusicOn(
 	const bool& value)
 {
-	this->vSync = value;
+	this->musicOn = value;
+}
+
+void Tetris::SettingsPage::setSoundEffectsOn(
+	const bool& value)
+{
+	this->soundEffectsOn = value;
 }
 
 void Tetris::SettingsPage::setColorBlocksOn(
 	const bool& value)
 {
 	this->colorBlocksOn = value;
+}
+
+void Tetris::SettingsPage::setVSync(
+	const bool& value)
+{
+	this->vSync = value;
 }
 
 void Tetris::SettingsPage::update() {}

@@ -34,9 +34,20 @@ void Tetris::SoundEffect::destroy()
 
 void Tetris::SoundEffect::play()
 {
-	if (!this->isInitialized) {
+	if (!this->isInitialized || this->muted) {
 		return;
 	}
 
 	Mix_PlayChannel(-1, this->effect, 0);
+}
+
+void Tetris::SoundEffect::mute(
+	const bool& value)
+{
+	this->muted = value;
+}
+
+bool Tetris::SoundEffect::isMuted() const
+{
+	return this->muted;
 }

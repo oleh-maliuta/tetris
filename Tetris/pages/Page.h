@@ -59,9 +59,13 @@ namespace Tetris
 			const std::string& path);
 		SoundEffect* getSoundEffect(
 			const std::string& key);
+		void muteAllSoundEffects(
+			const bool& value);
 		void setMusic(
 			const std::string& path);
 		void playMusic();
+		void muteMusic(
+			const bool& value);
 
 	private:
 

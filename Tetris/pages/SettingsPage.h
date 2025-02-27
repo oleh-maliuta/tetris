@@ -22,11 +22,15 @@ namespace Tetris
 		virtual void init() override;
 		virtual void clean() override;
 
-		bool getVSync() const;
+		bool getMusicOn() const;
+		bool getSoundEffectsOn() const;
 		bool getColorBlocksOn() const;
+		bool getVSync() const;
 
-		void setVSync(const bool& value);
+		void setMusicOn(const bool& value);
+		void setSoundEffectsOn(const bool& value);
 		void setColorBlocksOn(const bool& value);
+		void setVSync(const bool& value);
 
 	protected:
 
@@ -34,8 +38,10 @@ namespace Tetris
 
 	private:
 
-		bool vSync = false;
+		bool musicOn = false;
+		bool soundEffectsOn = false;
 		bool colorBlocksOn = false;
+		bool vSync = false;
 	};
 }
 

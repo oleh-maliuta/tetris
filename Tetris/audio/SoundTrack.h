@@ -16,11 +16,16 @@ namespace Tetris {
 		~SoundTrack();
 
 		void play();
+		void mute(
+			const bool& value);
+
+		bool isMuted() const;
 
 	private:
 
 		std::string path;
 		Mix_Music* track = nullptr;
+		bool muted = false;
 		bool isInitialized = false;
 
 		void init();

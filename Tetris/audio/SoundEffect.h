@@ -16,11 +16,16 @@ namespace Tetris {
 		~SoundEffect();
 
 		void play();
+		void mute(
+			const bool& value);
+
+		bool isMuted() const;
 
 	private:
 
 		std::string path;
 		Mix_Chunk* effect = nullptr;
+		bool muted = false;
 		bool isInitialized = false;
 
 		void init();

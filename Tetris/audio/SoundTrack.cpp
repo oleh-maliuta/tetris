@@ -34,11 +34,22 @@ void Tetris::SoundTrack::destroy()
 
 void Tetris::SoundTrack::play()
 {
-	if (!this->isInitialized) {
+	if (!this->isInitialized || this->muted) {
 		return;
 	}
 
 	if (Mix_PlayingMusic() == 0) {
 		Mix_PlayMusic(this->track, -1);
 	}
+}
+
+void Tetris::SoundTrack::mute(
+	const bool& value)
+{
+	this->muted = value;
+}
+
+bool Tetris::SoundTrack::isMuted() const
+{
+	return this->muted;
 }

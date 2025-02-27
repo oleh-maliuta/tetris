@@ -16,7 +16,7 @@ Tetris::MainMenuPage::MainMenuPage(
 	Text* version_info__text = new Text(
 		this->app->getRenderer(),
 		"assets/fonts/open_sans/normal.ttf",
-		this->app->getVersion(),
+		this->app->VERSION,
 		15,
 		&versionInfoTextWrap,
 		3,

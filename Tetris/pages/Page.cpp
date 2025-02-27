@@ -161,6 +161,14 @@ Tetris::SoundEffect* Tetris::Page::getSoundEffect(
 	return nullptr;
 }
 
+void Tetris::Page::muteAllSoundEffects(
+	const bool& value)
+{
+	for (const auto& el : this->soundEffects) {
+		el.second->mute(value);
+	}
+}
+
 void Tetris::Page::setMusic(
 	const std::string& path)
 {
@@ -179,6 +187,12 @@ void Tetris::Page::setMusic(
 void Tetris::Page::playMusic()
 {
 	this->music->play();
+}
+
+void Tetris::Page::muteMusic(
+	const bool& value)
+{
+	this->music->mute(value);
 }
 
 void Tetris::Page::setRegularEvent(

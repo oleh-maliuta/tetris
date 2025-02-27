@@ -321,6 +321,8 @@ void Tetris::PlayPage::init()
 	scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
 
 	this->initRegularEvents();
+	this->muteAllSoundEffects(!this->getApp()->getSoundEffectsOn());
+	this->muteMusic(!this->getApp()->getMusicOn());
 
 	this->playMusic();
 }

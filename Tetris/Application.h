@@ -25,6 +25,8 @@ namespace Tetris
 	{
 	public:
 
+		const std::string VERSION = "0.10.0";
+
 		Application(
 			const int& windowWidth,
 			const int& windowHeight);
@@ -43,7 +45,6 @@ namespace Tetris
 		void haltMusic();
 
 		SDL_Renderer* getRenderer() const;
-		std::string getVersion() const;
 		float getDeltaTime() const;
 		int getLastFrameTime() const;
 		int getFps() const;
@@ -51,11 +52,15 @@ namespace Tetris
 		int getWindowHeight() const;
 		bool getVSync() const;
 		bool getColorBlocksOn() const;
+		bool getMusicOn() const;
+		bool getSoundEffectsOn() const;
 		bool getIsRunning() const;
 
 		void setFps(const int& value);
 		void setVSync(const bool& value);
 		void setColorBlocksOn(const bool& value);
+		void setMusicOn(const bool& value);
+		void setSoundEffectsOn(const bool& value);
 		void setIsRunning(const bool& value);
 
 	private:
@@ -65,7 +70,6 @@ namespace Tetris
 		std::map<std::string, Page*> pages;
 		std::string currentLocation;
 		std::string previousLocation;
-		std::string version;
 		float deltaTime = 1;
 		int lastFrameTime = 0;
 		int fps = 0;
@@ -73,6 +77,8 @@ namespace Tetris
 		int windowHeight = 0;
 		bool vSync = false;
 		bool colorBlocksOn = false;
+		bool musicOn = false;
+		bool soundEffectsOn = false;
 		bool isRestartRequired = false;
 		bool isRunning = false;
 

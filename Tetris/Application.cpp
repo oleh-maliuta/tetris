@@ -7,10 +7,11 @@ Tetris::Application::Application(
 	std::unordered_map<std::string, std::string> app_settings;
 	this->getAppSettings(app_settings);
 
-	this->version = app_settings["app_version"];
 	this->fps = std::stoi(app_settings["fps"]);
 	this->vSync = app_settings["v_sync"] == "1";
 	this->colorBlocksOn = app_settings["color_blocks"] == "1";
+	this->musicOn = app_settings["music"] == "1";
+	this->soundEffectsOn = app_settings["sound_effects"] == "1";
 
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
@@ -97,10 +98,11 @@ Tetris::Application::~Application()
 	}
 
 	std::unordered_map<std::string, std::string> data = {
-		{"app_version", this->version},
 		{"fps",	std::to_string(this->fps)},
 		{"v_sync", this->vSync ? "1" : "0"},
-		{"color_blocks", this->colorBlocksOn ? "1" : "0"}
+		{"color_blocks", this->colorBlocksOn ? "1" : "0"},
+		{"music", this->musicOn ? "1" : "0"},
+		{"sound_effects", this->soundEffectsOn ? "1" : "0"}
 	};
 
 	this->saveAppSettings(data);
@@ -204,11 +206,6 @@ SDL_Renderer* Tetris::Application::getRenderer() const
 	return this->renderer;
 }
 
-std::string Tetris::Application::getVersion() const
-{
-	return this->version;
-}
-
 float Tetris::Application::getDeltaTime() const
 {
 	return this->deltaTime;
@@ -244,6 +241,16 @@ bool Tetris::Application::getColorBlocksOn() const
 	return this->colorBlocksOn;
 }
 
+bool Tetris::Application::getMusicOn() const
+{
+	return this->musicOn;
+}
+
+bool Tetris::Application::getSoundEffectsOn() const
+{
+	return this->soundEffectsOn;
+}
+
 bool Tetris::Application::getIsRunning() const
 {
 	return this->isRunning;
@@ -273,6 +280,18 @@ void Tetris::Application::setColorBlocksOn(
 	this->colorBlocksOn = value;
 }
 
+void Tetris::Application::setMusicOn(
+	const bool& value)
+{
+	this->musicOn = value;
+}
+
+void Tetris::Application::setSoundEffectsOn(
+	const bool& value)
+{
+	this->soundEffectsOn = value;
+}
+
 void Tetris::Application::setIsRunning(
 	const bool& value)
 {
@@ -286,10 +305,11 @@ void Tetris::Application::getAppSettings(
 
 	if (!app_settings_file.is_open()) {
 		data = {
-			{"app_version", "0.10.0"},
 			{"fps", "60"},
 			{"v_sync", "0"},
-			{"color_blocks", "1"}
+			{"color_blocks", "1"},
+			{"music", "1"},
+			{"sound_effects", "1"}
 		};
 		return;
 	}
