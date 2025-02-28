@@ -40,6 +40,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="audio\SoundEffect.h" />
     <ClInclude Include="audio\SoundTrack.h" />
+    <ClInclude Include="BagRandomizer.hpp" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="pages\MainMenuPage.h" />
     <ClInclude Include="pages\Page.h" />

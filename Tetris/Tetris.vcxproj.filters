@@ -109,5 +109,6 @@
     <ClInclude Include="audio\SoundTrack.h">
       <Filter>audio</Filter>
     </ClInclude>
+    <ClInclude Include="BagRandomizer.hpp" />
   </ItemGroup>
 </Project>

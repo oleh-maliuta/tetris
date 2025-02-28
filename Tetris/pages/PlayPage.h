@@ -11,6 +11,7 @@
 #include <list>
 #include "Page.h"
 #include "../Loader.h"
+#include "../BagRandomizer.hpp"
 #include "../renderables/Rectangle.h"
 #include "../renderables/Text.h"
 #include "../renderables/TextButton.h"
@@ -119,11 +120,13 @@ namespace Tetris
 		std::map<char, std::vector<TetrisCellPosition>> pieceStartPositions;
 		std::map<char, SDL_Color> pieceColors;
 		std::map<char, SDL_Color> defaultPieceColors;
+		BagRandomizer<char> pieceRandomizer;
 		Rectangle* cells[10][20];
 		Rectangle* cellMarkers[10][20];
 		Texture* nextBlockHint = nullptr;
 		SoundEffect* pieceMovingSound = nullptr;
 		SoundEffect* pieceRotationSound = nullptr;
+		SoundEffect* lineClearingSound = nullptr;
 		char* nextBlock = nullptr;
 
 		void choosePiece();

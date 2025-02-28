@@ -32,6 +32,10 @@ Tetris::PlayPage::PlayPage(
 	};
 	this->pieceColors = this->defaultPieceColors;
 
+	this->pieceRandomizer.setItems({
+		'i', 'o', 't', 'j', 'l', 's', 'z'
+	});
+
 	Rectangle* next_block__rectangle = new Rectangle(
 		this->app->getRenderer(),
 		150,
@@ -498,6 +502,8 @@ void Tetris::PlayPage::clearFilledGridRows()
 		levelValue->setContent(std::to_string(this->level));
 		levelValue->setPositionX(330 + 150 / 2.f - levelValue->getWidth() / 2.f);
 	}
+
+	this->lineClearingSound->play();
 }
 
 void Tetris::PlayPage::saveGameOverResults()
@@ -738,27 +744,22 @@ void Tetris::PlayPage::update()
 
 void Tetris::PlayPage::choosePiece()
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distribution(0, 6);
-
-	std::string blockCharacters = "iotjlsz";
-	int current_block_num = this->nextBlock != nullptr ?
-		blockCharacters.find(*this->nextBlock) :
-		distribution(gen);
-	int next_block_num = distribution(gen);
+	char currentBlock = this->nextBlock != nullptr ?
+		*this->nextBlock :
+		this->pieceRandomizer.pullItem();
+	char nextBlock = this->pieceRandomizer.pullItem();
 
 	Texture* next_block_hint__texture = this->getRenderable<Texture>(
 		std::format(
 			"next_{}_block_hint__texture",
-			blockCharacters[next_block_num]));
+			nextBlock));
 
 	if (this->nextBlockHint != nullptr) {
 		this->nextBlockHint->setVisibility(false);
 	}
 
-	this->currentBlock = new char(blockCharacters[current_block_num]);
-	this->nextBlock = new char(blockCharacters[next_block_num]);
+	this->currentBlock = new char(currentBlock);
+	this->nextBlock = new char(nextBlock);
 	this->nextBlockHint = next_block_hint__texture;
 
 	this->nextBlockHint->setVisibility(true);
@@ -1163,6 +1164,7 @@ void Tetris::PlayPage::initSoundEffectsAndMusic()
 	this->setMusic("assets/audio/tetris_theme.wav");
 	this->pieceMovingSound = this->setSoundEffect("piece_moving", "assets/audio/piece_moving.wav");
 	this->pieceRotationSound = this->setSoundEffect("piece_rotation", "assets/audio/piece_rotation.wav");
+	this->lineClearingSound = this->setSoundEffect("line_clearing", "assets/audio/line_clearing.wav");
 }
 
 void Tetris::PlayPage::initRegularEvents()
