@@ -27,7 +27,7 @@ namespace Tetris
 			: rng(std::random_device{}()) {
 		}
 
-		// Refill the bag with the items
+		// Refill the bag with the items.
 		void refillBag()
 		{
 			if (this->items.empty()) {
@@ -37,15 +37,14 @@ namespace Tetris
 			std::shuffle(this->bag.begin(), this->bag.end(), this->rng);
 		}
 
-		// Put new items to the bag
+		// Put new items to the bag.
 		void setItems(
 			const std::vector<T>& items)
 		{
 			this->items = items;
-			this->refillBag();
 		}
 
-		// Pull an item from the bag
+		// Pull an item from the bag.
 		T pullItem()
 		{
 			if (this->bag.empty()) {
@@ -58,13 +57,13 @@ namespace Tetris
 			return item;
 		}
 
-		// Check the size of the bag
+		// Check the size of the bag.
 		bool size() const
 		{
 			return this->bag.size();
 		}
 
-		// Check if the bag is empty
+		// Check if the bag is empty.
 		bool isEmpty() const
 		{
 			return this->bag.empty();

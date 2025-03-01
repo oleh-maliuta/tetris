@@ -38,7 +38,7 @@ Tetris::PlayPage::PlayPage(
 
 	Rectangle* next_block__rectangle = new Rectangle(
 		this->app->getRenderer(),
-		150,
+		200,
 		170,
 		330,
 		20,
@@ -53,7 +53,7 @@ Tetris::PlayPage::PlayPage(
 		0.f,
 		15.f,
 		{ 255, 255, 255, 255 });
-	next_block_label__text->setPositionX(330 + 150 / 2 - next_block_label__text->getWidth() / 2);
+	next_block_label__text->setPositionX(330 + 200 / 2 - next_block_label__text->getWidth() / 2);
 
 	Texture* next_i_block_hint__texture = new Texture(
 		this->app->getRenderer(),
@@ -62,7 +62,7 @@ Tetris::PlayPage::PlayPage(
 		75.0,
 		&nextPieceSize,
 		&nextPieceSize);
-	next_i_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
+	next_i_block_hint__texture->setPositionX(330 + 200 / 2 - nextPieceSize / 2);
 	next_i_block_hint__texture->setVisibility(false);
 
 	Texture* next_o_block_hint__texture = new Texture(
@@ -72,7 +72,7 @@ Tetris::PlayPage::PlayPage(
 		75.0,
 		&nextPieceSize,
 		&nextPieceSize);
-	next_o_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
+	next_o_block_hint__texture->setPositionX(330 + 200 / 2 - nextPieceSize / 2);
 	next_o_block_hint__texture->setVisibility(false);
 
 	Texture* next_t_block_hint__texture = new Texture(
@@ -82,7 +82,7 @@ Tetris::PlayPage::PlayPage(
 		75.0,
 		&nextPieceSize,
 		&nextPieceSize);
-	next_t_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
+	next_t_block_hint__texture->setPositionX(330 + 200 / 2 - nextPieceSize / 2);
 	next_t_block_hint__texture->setVisibility(false);
 
 	Texture* next_j_block_hint__texture = new Texture(
@@ -92,7 +92,7 @@ Tetris::PlayPage::PlayPage(
 		75.0,
 		&nextPieceSize,
 		&nextPieceSize);
-	next_j_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
+	next_j_block_hint__texture->setPositionX(330 + 200 / 2 - nextPieceSize / 2);
 	next_j_block_hint__texture->setVisibility(false);
 
 	Texture* next_l_block_hint__texture = new Texture(
@@ -102,7 +102,7 @@ Tetris::PlayPage::PlayPage(
 		75.0,
 		&nextPieceSize,
 		&nextPieceSize);
-	next_l_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
+	next_l_block_hint__texture->setPositionX(330 + 200 / 2 - nextPieceSize / 2);
 	next_l_block_hint__texture->setVisibility(false);
 
 	Texture* next_s_block_hint__texture = new Texture(
@@ -112,7 +112,7 @@ Tetris::PlayPage::PlayPage(
 		75.0,
 		&nextPieceSize,
 		&nextPieceSize);
-	next_s_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
+	next_s_block_hint__texture->setPositionX(330 + 200 / 2 - nextPieceSize / 2);
 	next_s_block_hint__texture->setVisibility(false);
 
 	Texture* next_z_block_hint__texture = new Texture(
@@ -122,12 +122,12 @@ Tetris::PlayPage::PlayPage(
 		75.0,
 		&nextPieceSize,
 		&nextPieceSize);
-	next_z_block_hint__texture->setPositionX(330 + 150 / 2 - nextPieceSize / 2);
+	next_z_block_hint__texture->setPositionX(330 + 200 / 2 - nextPieceSize / 2);
 	next_z_block_hint__texture->setVisibility(false);
 
 	Rectangle* level__rectangle = new Rectangle(
 		this->app->getRenderer(),
-		150,
+		200,
 		100,
 		330,
 		210,
@@ -142,7 +142,7 @@ Tetris::PlayPage::PlayPage(
 		0.f,
 		205.f,
 		{ 255, 255, 255, 255 });
-	level_label__text->setPositionX(330 + 150 / 2 - level_label__text->getWidth() / 2);
+	level_label__text->setPositionX(330 + 200 / 2 - level_label__text->getWidth() / 2);
 
 	Text* level_value__text = new Text(
 		this->app->getRenderer(),
@@ -153,11 +153,11 @@ Tetris::PlayPage::PlayPage(
 		0.f,
 		260.f,
 		{ 255, 255, 255, 255 });
-	level_value__text->setPositionX(330 + 150 / 2 - level_value__text->getWidth() / 2);
+	level_value__text->setPositionX(330 + 200 / 2 - level_value__text->getWidth() / 2);
 
 	Rectangle* lines__rectangle = new Rectangle(
 		this->app->getRenderer(),
-		150,
+		200,
 		100,
 		330,
 		330,
@@ -172,7 +172,7 @@ Tetris::PlayPage::PlayPage(
 		0.f,
 		325.f,
 		{ 255, 255, 255, 255 });
-	lines_label__text->setPositionX(330 + 150 / 2 - lines_label__text->getWidth() / 2);
+	lines_label__text->setPositionX(330 + 200 / 2 - lines_label__text->getWidth() / 2);
 
 	Text* lines_value__text = new Text(
 		this->app->getRenderer(),
@@ -183,11 +183,11 @@ Tetris::PlayPage::PlayPage(
 		0.f,
 		380.f,
 		{ 255, 255, 255, 255 });
-	lines_value__text->setPositionX(330 + 150 / 2 - lines_value__text->getWidth() / 2);
+	lines_value__text->setPositionX(330 + 200 / 2 - lines_value__text->getWidth() / 2);
 
 	Rectangle* score__rectangle = new Rectangle(
 		this->app->getRenderer(),
-		150,
+		200,
 		100,
 		330,
 		450,
@@ -202,7 +202,7 @@ Tetris::PlayPage::PlayPage(
 		0.f,
 		445.f,
 		{ 255, 255, 255, 255 });
-	score_label__text->setPositionX(330 + 150 / 2 - score_label__text->getWidth() / 2);
+	score_label__text->setPositionX(330 + 200 / 2 - score_label__text->getWidth() / 2);
 
 	Text* score_value__text = new Text(
 		this->app->getRenderer(),
@@ -213,7 +213,7 @@ Tetris::PlayPage::PlayPage(
 		0.f,
 		500.f,
 		{ 255, 255, 255, 255 });
-	score_value__text->setPositionX(330 + 150 / 2 - score_value__text->getWidth() / 2);
+	score_value__text->setPositionX(330 + 200 / 2 - score_value__text->getWidth() / 2);
 
 	this->setRenderable("next_block__rectangle", next_block__rectangle);
 	this->setRenderable("next_block_label__text", next_block_label__text);
@@ -312,6 +312,7 @@ void Tetris::PlayPage::init()
 	this->isSoftDropOn = false;
 	this->pause = false;
 	this->gameOver = false;
+	this->pieceRandomizer.refillBag();
 
 	Text* levelValue = this->getRenderable<Text>("level_value__text");
 	Text* linesValue = this->getRenderable<Text>("lines_value__text");
@@ -320,9 +321,9 @@ void Tetris::PlayPage::init()
 	levelValue->setContent("1");
 	linesValue->setContent("0");
 	scoreValue->setContent("0");
-	levelValue->setPositionX(330 + 150 / 2.f - levelValue->getWidth() / 2.f);
-	linesValue->setPositionX(330 + 150 / 2.f - linesValue->getWidth() / 2.f);
-	scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
+	levelValue->setPositionX(330 + 200 / 2.f - levelValue->getWidth() / 2.f);
+	linesValue->setPositionX(330 + 200 / 2.f - linesValue->getWidth() / 2.f);
+	scoreValue->setPositionX(330 + 200 / 2.f - scoreValue->getWidth() / 2.f);
 
 	this->initRegularEvents();
 	this->muteAllSoundEffects(!this->getApp()->getSoundEffectsOn());
@@ -481,6 +482,7 @@ void Tetris::PlayPage::clearFilledGridRows()
 	}
 
 	const size_t rowClearedCount = filledRows.size();
+	const unsigned int previousLineCount = this->lines;
 
 	this->lines += rowClearedCount;
 	this->score += rowClearedCount == 1 ? 100 :
@@ -491,16 +493,16 @@ void Tetris::PlayPage::clearFilledGridRows()
 
 	linesValue->setContent(std::to_string(this->lines));
 	scoreValue->setContent(std::to_string(this->score));
-	linesValue->setPositionX(330 + 150 / 2.f - linesValue->getWidth() / 2.f);
-	scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
+	linesValue->setPositionX(330 + 200 / 2.f - linesValue->getWidth() / 2.f);
+	scoreValue->setPositionX(330 + 200 / 2.f - scoreValue->getWidth() / 2.f);
 
-	if (this->level < 100 && this->lines % 10 == 0) {
-		this->level = this->lines / 10 + 1;
+	if (this->level < 100 && floor(previousLineCount / 10.f) < floor(this->lines / 10.f)) {
+		this->level = floor(this->lines / 10.f) + 1;
 		this->blockFallingInterval = this->START_BLOCK_FALLING_INTERVAL - 10 * (this->level - 1);
 
 		Text* levelValue = this->getRenderable<Text>("level_value__text");
 		levelValue->setContent(std::to_string(this->level));
-		levelValue->setPositionX(330 + 150 / 2.f - levelValue->getWidth() / 2.f);
+		levelValue->setPositionX(330 + 200 / 2.f - levelValue->getWidth() / 2.f);
 	}
 
 	this->lineClearingSound->play();
@@ -1131,9 +1133,6 @@ void Tetris::PlayPage::initKeyDownEvents()
 			return;
 		}
 
-		const Uint32 resultInterval = static_cast<Uint32>(
-			ceil(this->blockFallingInterval / 10));
-
 		this->isSoftDropOn = true;
 		this->setRegularEvent(
 			"game-process",
@@ -1245,7 +1244,7 @@ Uint32 Tetris::PlayPage::gameProcessRegularEvent(
 
 			Text* scoreValue = page->getRenderable<Text>("score_value__text");
 			scoreValue->setContent(std::to_string(page->score));
-			scoreValue->setPositionX(330 + 150 / 2.f - scoreValue->getWidth() / 2.f);
+			scoreValue->setPositionX(330 + 200 / 2.f - scoreValue->getWidth() / 2.f);
 		}
 	}
 

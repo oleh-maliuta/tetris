@@ -107,6 +107,18 @@ Tetris::SettingsPage::SettingsPage(
 		5,
 		5);
 
+	Text* changes_are_saved__text = new Text(
+		this->app->getRenderer(),
+		"assets/fonts/open_sans/bold.ttf",
+		"Changes are saved",
+		18,
+		&vSyncTextWrap,
+		0,
+		500,
+		{ 0, 255, 0, 255 });
+	changes_are_saved__text->setPositionX(this->app->getWindowWidth() / 2.f - changes_are_saved__text->getWidth() / 2);
+	changes_are_saved__text->setVisibility(false);
+
 	ImageButton* return__image_button = new ImageButton(
 		this->app->getRenderer(),
 		"assets/images/png/return.png",
@@ -130,6 +142,7 @@ Tetris::SettingsPage::SettingsPage(
 	this->setRenderable("sound_effects__texture", sound_effects__texture);
 	this->setRenderable("version_info__text", version_info__text);
 	this->setRenderable("apply__text_button", apply__text_button);
+	this->setRenderable("changes_are_saved__text", changes_are_saved__text);
 	this->setRenderable("return__image_button", return__image_button);
 
 	return__image_button->setOnRelease([appRef] {
@@ -176,6 +189,19 @@ Tetris::SettingsPage::SettingsPage(
 		if (appRef->getSoundEffectsOn() != pageRef->getSoundEffectsOn()) {
 			appRef->setSoundEffectsOn(pageRef->getSoundEffectsOn());
 		}
+
+		Text* messageText = pageRef->getRenderable<Text>("changes_are_saved__text");
+		messageText->setVisibility(true);
+
+		pageRef->setRegularEvent(
+			"message-about-the-saved-changes",
+			[](Uint32 interval, void* param) -> Uint32 {
+				Text* messageText = static_cast<Text*>(param);
+				messageText->setVisibility(false);
+				return 0;
+			},
+			3000,
+			messageText);
 	});
 }
 
