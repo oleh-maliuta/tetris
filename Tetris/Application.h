@@ -12,6 +12,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
+#include <nlohmann/json.hpp>
 #include "./pages/Page.h"
 
 namespace Tetris
@@ -25,7 +26,7 @@ namespace Tetris
 	{
 	public:
 
-		const std::string VERSION = "0.11.1";
+		const std::string VERSION = "0.12.0";
 
 		Application(
 			const int& windowWidth,
@@ -82,8 +83,8 @@ namespace Tetris
 		bool isRestartRequired = false;
 		bool isRunning = false;
 
-		static void getAppSettings(std::unordered_map<std::string, std::string>& data);
-		static void saveAppSettings(const std::unordered_map<std::string, std::string>& data);
+		void getAppSettings();
+		void saveAppSettings();
 	};
 
 	template<class T>

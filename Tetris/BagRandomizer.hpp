@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef TETRIS__BAG_RANDOMIZER__H
-#define TETRIS__BAG_RANDOMIZER__H
+#ifndef TETRIS__BAG_RANDOMIZER__HPP
+#define TETRIS__BAG_RANDOMIZER__HPP
 
 #include <algorithm>
 #include <random>

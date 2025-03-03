@@ -42,6 +42,8 @@ namespace Tetris
 		bool soundEffectsOn = false;
 		bool colorBlocksOn = false;
 		bool vSync = false;
+
+		void initKeyDownEvents();
 	};
 }
 

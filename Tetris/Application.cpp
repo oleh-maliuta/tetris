@@ -4,14 +4,7 @@ Tetris::Application::Application(
 	const int& windowWidth,
 	const int& windowHeight)
 {
-	std::unordered_map<std::string, std::string> app_settings;
-	this->getAppSettings(app_settings);
-
-	this->fps = std::stoi(app_settings["fps"]);
-	this->vSync = app_settings["v_sync"] == "1";
-	this->colorBlocksOn = app_settings["color_blocks"] == "1";
-	this->musicOn = app_settings["music"] == "1";
-	this->soundEffectsOn = app_settings["sound_effects"] == "1";
+	this->getAppSettings();
 
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
@@ -97,15 +90,7 @@ Tetris::Application::~Application()
 		delete el.second;
 	}
 
-	std::unordered_map<std::string, std::string> data = {
-		{"fps",	std::to_string(this->fps)},
-		{"v_sync", this->vSync ? "1" : "0"},
-		{"color_blocks", this->colorBlocksOn ? "1" : "0"},
-		{"music", this->musicOn ? "1" : "0"},
-		{"sound_effects", this->soundEffectsOn ? "1" : "0"}
-	};
-
-	this->saveAppSettings(data);
+	this->saveAppSettings();
 
 	SDL_DestroyRenderer(this->renderer);
 	SDL_DestroyWindow(this->window);
@@ -298,46 +283,85 @@ void Tetris::Application::setIsRunning(
 	this->isRunning = value;
 }
 
-void Tetris::Application::getAppSettings(
-	std::unordered_map<std::string, std::string>& data)
+void Tetris::Application::getAppSettings()
 {
-	std::ifstream app_settings_file("app_settings.txt");
+	std::ifstream appSettingsFile("app_settings.json");
 
-	if (!app_settings_file.is_open()) {
-		data = {
-			{"fps", "60"},
-			{"v_sync", "0"},
-			{"color_blocks", "1"},
-			{"music", "1"},
-			{"sound_effects", "1"}
-		};
+	if (!appSettingsFile.is_open()) {
+		this->fps = 60;
+		this->vSync = false;
+		this->colorBlocksOn = true;
+		this->musicOn = true;
+		this->soundEffectsOn = true;
 		return;
 	}
 
-	const char* delimiter = ":";
-	std::string line;
-
-	while (std::getline(app_settings_file, line)) {
-		size_t del_pos = line.find(delimiter);
-
-		std::string key = line.substr(0, del_pos);
-		std::string value = line.substr(del_pos + 1, line.length() - 1);
-
-		data[key] = value;
+	nlohmann::json appSettings;
+	
+	try
+	{
+		appSettingsFile >> appSettings;
+	}
+	catch (const nlohmann::json::parse_error& ex)
+	{
+		appSettings = {
+			{"fps", 60},
+			{"v_sync", false},
+			{"color_blocks", true},
+			{"music", true},
+			{"sound_effects", true}
+		};
 	}
 
-	app_settings_file.close();
+	appSettingsFile.close();
+
+	if (appSettings.contains("fps")) {
+		this->fps = appSettings["fps"];
+	}
+	else {
+		this->fps = 60;
+	}
+
+	if (appSettings.contains("v_sync")) {
+		this->vSync = appSettings["v_sync"];
+	}
+	else {
+		this->vSync = false;
+	}
+
+	if (appSettings.contains("color_blocks")) {
+		this->colorBlocksOn = appSettings["color_blocks"];
+	}
+	else {
+		this->colorBlocksOn = true;
+	}
+
+	if (appSettings.contains("music")) {
+		this->musicOn = appSettings["music"];
+	}
+	else {
+		this->musicOn = true;
+	}
+
+	if (appSettings.contains("sound_effects")) {
+		this->soundEffectsOn = appSettings["sound_effects"];
+	}
+	else {
+		this->soundEffectsOn = true;
+	}
 }
 
-void Tetris::Application::saveAppSettings(
-	const std::unordered_map<std::string, std::string>& data)
+void Tetris::Application::saveAppSettings()
 {
-	std::ofstream app_settings_file("app_settings.txt");
-	const char* delimiter = ":";
+	std::ofstream appSettingsFile("app_settings.json");
+	nlohmann::json appSettings = {
+		{"fps", this->fps},
+		{"v_sync", this->vSync},
+		{"color_blocks", this->colorBlocksOn},
+		{"music", this->musicOn},
+		{"sound_effects", this->soundEffectsOn}
+	};
 
-	for (const auto& el : data) {
-		app_settings_file << el.first << delimiter << el.second << "\n";
-	}
-
-	app_settings_file.close();
+	appSettingsFile << appSettings.dump(4);
+	appSettingsFile.close();
 }

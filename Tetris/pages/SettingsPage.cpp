@@ -203,6 +203,8 @@ Tetris::SettingsPage::SettingsPage(
 			3000,
 			messageText);
 	});
+
+	this->initKeyDownEvents();
 }
 
 void Tetris::SettingsPage::init()
@@ -248,6 +250,9 @@ void Tetris::SettingsPage::clean()
 	}
 
 	Page::clean();
+
+	Text* changes_are_saved__text = this->getRenderable<Text>("changes_are_saved__text");
+	changes_are_saved__text->setVisibility(false);
 }
 
 bool Tetris::SettingsPage::getMusicOn() const
@@ -295,3 +300,14 @@ void Tetris::SettingsPage::setVSync(
 }
 
 void Tetris::SettingsPage::update() {}
+
+void Tetris::SettingsPage::initKeyDownEvents()
+{
+	this->keyDownEvents[SDLK_ESCAPE] = [=] {
+		this->getApp()->changePage("main_menu");
+	};
+
+	this->keyDownEvents[SDLK_BACKSPACE] = [=] {
+		this->getApp()->changePage("main_menu");
+	};
+}
