@@ -200,7 +200,7 @@ Tetris::SettingsPage::SettingsPage(
 				messageText->setVisibility(false);
 				return 0;
 			},
-			3000,
+			2000,
 			messageText);
 	});
 

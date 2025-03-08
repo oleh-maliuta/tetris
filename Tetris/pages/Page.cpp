@@ -4,6 +4,7 @@ Tetris::Page::Page(
 	Application* app)
 {
 	this->app = app;
+	this->onQuit = [=] { this->app->setIsRunning(false); };
 }
 
 Tetris::Page::~Page()
@@ -239,7 +240,7 @@ void Tetris::Page::input()
 	while (SDL_PollEvent(&event) && this->app->getIsRunning())
 	{
 		if (event.type == SDL_QUIT) {
-			this->app->setIsRunning(false);
+			this->onQuit();
 		}
 		else if (event.type == SDL_MOUSEBUTTONUP) {
 			if (event.button.button == SDL_BUTTON_LEFT) {

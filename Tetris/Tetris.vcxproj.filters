@@ -57,6 +57,12 @@
     <ClCompile Include="audio\SoundTrack.cpp">
       <Filter>audio</Filter>
     </ClCompile>
+    <ClCompile Include="pages\GuidePage.cpp">
+      <Filter>pages</Filter>
+    </ClCompile>
+    <ClCompile Include="pages\ControlsPage.cpp">
+      <Filter>pages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pages\MainMenuPage.h">
@@ -110,5 +116,11 @@
       <Filter>audio</Filter>
     </ClInclude>
     <ClInclude Include="BagRandomizer.hpp" />
+    <ClInclude Include="pages\GuidePage.h">
+      <Filter>pages</Filter>
+    </ClInclude>
+    <ClInclude Include="pages\ControlsPage.h">
+      <Filter>pages</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

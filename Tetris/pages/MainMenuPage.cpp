@@ -11,7 +11,7 @@ Tetris::MainMenuPage::MainMenuPage(
 		this->app->getRenderer(),
 		"assets/images/png/game_logo.png",
 		this->app->getWindowWidth() / 2 - 233.5f,
-		50);
+		40);
 
 	Text* version_info__text = new Text(
 		this->app->getRenderer(),
@@ -29,9 +29,9 @@ Tetris::MainMenuPage::MainMenuPage(
 		"Play",
 		29,
 		400,
-		65,
+		60,
 		this->app->getWindowWidth() / 2 - 200,
-		260,
+		220,
 		{ 0, 55, 164, 255 },
 		{ 255, 255, 255, 255 },
 		5,
@@ -43,9 +43,23 @@ Tetris::MainMenuPage::MainMenuPage(
 		"Settings",
 		29,
 		400,
-		65,
+		60,
 		this->app->getWindowWidth() / 2 - 200,
-		360,
+		300,
+		{ 0, 55, 164, 255 },
+		{ 255, 255, 255, 255 },
+		5,
+		5);
+
+	TextButton* guide__text_button = new TextButton(
+		this->app->getRenderer(),
+		"assets/fonts/swansea/bold.ttf",
+		"Guide",
+		29,
+		400,
+		60,
+		this->app->getWindowWidth() / 2 - 200,
+		380,
 		{ 0, 55, 164, 255 },
 		{ 255, 255, 255, 255 },
 		5,
@@ -57,7 +71,7 @@ Tetris::MainMenuPage::MainMenuPage(
 		"Quit",
 		29,
 		400,
-		65,
+		60,
 		this->app->getWindowWidth() / 2 - 200,
 		460,
 		{ 0, 55, 164, 255 },
@@ -71,10 +85,12 @@ Tetris::MainMenuPage::MainMenuPage(
 	this->setRenderable("version_info__text", version_info__text);
 	this->setRenderable("play__text_button", play__text_button);
 	this->setRenderable("settings__text_button", settings__text_button);
+	this->setRenderable("guide__text_button", guide__text_button);
 	this->setRenderable("quit__text_button", quit__text_button);
 
 	play__text_button->setOnRelease([appRef] { appRef->changePage("play"); });
 	settings__text_button->setOnRelease([appRef] { appRef->changePage("settings"); });
+	guide__text_button->setOnRelease([appRef] { appRef->changePage("guide"); });
 	quit__text_button->setOnRelease([appRef] { appRef->setIsRunning(false); });
 }
 

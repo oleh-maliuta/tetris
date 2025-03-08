@@ -24,6 +24,8 @@
     <ClCompile Include="audio\SoundTrack.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pages\ControlsPage.cpp" />
+    <ClCompile Include="pages\GuidePage.cpp" />
     <ClCompile Include="pages\MainMenuPage.cpp" />
     <ClCompile Include="pages\Page.cpp" />
     <ClCompile Include="pages\PlayPage.cpp" />
@@ -42,6 +44,8 @@
     <ClInclude Include="audio\SoundTrack.h" />
     <ClInclude Include="BagRandomizer.hpp" />
     <ClInclude Include="Loader.h" />
+    <ClInclude Include="pages\ControlsPage.h" />
+    <ClInclude Include="pages\GuidePage.h" />
     <ClInclude Include="pages\MainMenuPage.h" />
     <ClInclude Include="pages\Page.h" />
     <ClInclude Include="pages\PlayPage.h" />
