@@ -29,6 +29,7 @@
     <ClCompile Include="pages\MainMenuPage.cpp" />
     <ClCompile Include="pages\Page.cpp" />
     <ClCompile Include="pages\PlayPage.cpp" />
+    <ClCompile Include="pages\ScoreValuesPage.cpp" />
     <ClCompile Include="pages\SettingsPage.cpp" />
     <ClCompile Include="renderables\ImageButton.cpp" />
     <ClCompile Include="renderables\Layout.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="pages\MainMenuPage.h" />
     <ClInclude Include="pages\Page.h" />
     <ClInclude Include="pages\PlayPage.h" />
+    <ClInclude Include="pages\ScoreValuesPage.h" />
     <ClInclude Include="pages\SettingsPage.h" />
     <ClInclude Include="renderables\ImageButton.h" />
     <ClInclude Include="renderables\Layout.h" />

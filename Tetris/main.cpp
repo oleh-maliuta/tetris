@@ -4,6 +4,7 @@
 #include "pages/PlayPage.h"
 #include "pages/GuidePage.h"
 #include "pages/ControlsPage.h"
+#include "pages/ScoreValuesPage.h"
 
 using namespace Tetris;
 
@@ -16,6 +17,7 @@ int main(int argc, char* argv[])
 	app.usePage<PlayPage>("play");
 	app.usePage<GuidePage>("guide");
 	app.usePage<ControlsPage>("controls");
+	app.usePage<ScoreValuesPage>("score_values");
 
 	app.run("main_menu");
 

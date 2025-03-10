@@ -123,6 +123,7 @@ namespace Tetris
 		BagRandomizer<char> pieceRandomizer;
 		Rectangle* cells[10][20];
 		Rectangle* cellMarkers[10][20];
+		Text* scoreText;
 		Texture* nextBlockHint = nullptr;
 		SoundEffect* pieceMovingSound = nullptr;
 		SoundEffect* pieceRotationSound = nullptr;

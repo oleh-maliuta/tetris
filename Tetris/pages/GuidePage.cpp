@@ -68,6 +68,9 @@ Tetris::GuidePage::GuidePage(
 	controls__text_button->setOnRelease([=] {
 		this->getApp()->changePage("controls");
 	});
+	score_values__text_button->setOnRelease([=] {
+		this->getApp()->changePage("score_values");
+	});
 
 	this->initKeyDownEvents();
 }

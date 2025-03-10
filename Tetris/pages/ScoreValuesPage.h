@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef TETRIS__PAGES__CONTROLS_PAGE__H
-#define TETRIS__PAGES__CONTROLS_PAGE__H
+#ifndef TETRIS__PAGES__SCORE_VALUES_PAGE__H
+#define TETRIS__PAGES__SCORE_VALUES_PAGE__H
 
 #include "Page.h"
 #include "../renderables/Texture.h"
@@ -10,12 +10,12 @@
 
 namespace Tetris
 {
-	class ControlsPage
+	class ScoreValuesPage
 		: public Page
 	{
 	public:
 
-		ControlsPage(Application* app);
+		ScoreValuesPage(Application* app);
 
 		virtual void init() override;
 		virtual void clean() override;

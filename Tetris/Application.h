@@ -26,7 +26,7 @@ namespace Tetris
 	{
 	public:
 
-		const std::string VERSION = "0.13.0";
+		const std::string VERSION = "0.14.0";
 
 		Application(
 			const int& windowWidth,

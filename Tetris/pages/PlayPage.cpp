@@ -214,6 +214,7 @@ Tetris::PlayPage::PlayPage(
 		500.f,
 		{ 255, 255, 255, 255 });
 	score_value__text->setPositionX(330 + 200 / 2 - score_value__text->getWidth() / 2);
+	this->scoreText = score_value__text;
 
 	this->setRenderable("next_block__rectangle", next_block__rectangle);
 	this->setRenderable("next_block_label__text", next_block_label__text);
@@ -1156,6 +1157,44 @@ void Tetris::PlayPage::initKeyUpEvents()
 			this->blockFallingInterval,
 			this);
 	};
+
+	this->keyUpEvents[SDLK_SPACE] = [=] {
+		if (this->pause) {
+			return;
+		}
+
+		bool touchedTheGround = false;
+		unsigned int reward = 0;
+
+		while (!touchedTheGround) {
+			for (auto& block : this->fallingBlocks) {
+				if (block.y <= 20 && (block.y == 0 || this->gridInfo[block.x][block.y - 1])) {
+					touchedTheGround = true;
+					break;
+				}
+			}
+
+			if (!touchedTheGround) {
+				for (auto& block : this->fallingBlocks) {
+					block.y--;
+				}
+				reward += 2;
+			}
+		}
+
+		if (reward > 0) {
+			this->score += reward;
+			this->scoreText->setContent(std::to_string(this->score));
+			this->scoreText->setPositionX(330 + 200 / 2.f - this->scoreText->getWidth() / 2.f);
+		}
+
+		PlayPage::gameProcessRegularEvent(0, this);
+		this->setRegularEvent(
+			"game-process",
+			this->gameProcessRegularEvent,
+			0,
+			this);
+	};
 }
 
 void Tetris::PlayPage::initSoundEffectsAndMusic()
@@ -1202,7 +1241,6 @@ Uint32 Tetris::PlayPage::gameProcessRegularEvent(
 		}
 
 		page->updateBlockMarkers();
-
 		return resultInterval;
 	}
 
@@ -1241,10 +1279,8 @@ Uint32 Tetris::PlayPage::gameProcessRegularEvent(
 
 		if (page->isSoftDropOn) {
 			page->score += 1;
-
-			Text* scoreValue = page->getRenderable<Text>("score_value__text");
-			scoreValue->setContent(std::to_string(page->score));
-			scoreValue->setPositionX(330 + 200 / 2.f - scoreValue->getWidth() / 2.f);
+			page->scoreText->setContent(std::to_string(page->score));
+			page->scoreText->setPositionX(330 + 200 / 2.f - page->scoreText->getWidth() / 2.f);
 		}
 	}
 

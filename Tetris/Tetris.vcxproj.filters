@@ -63,6 +63,9 @@
     <ClCompile Include="pages\ControlsPage.cpp">
       <Filter>pages</Filter>
     </ClCompile>
+    <ClCompile Include="pages\ScoreValuesPage.cpp">
+      <Filter>pages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pages\MainMenuPage.h">
@@ -120,6 +123,9 @@
       <Filter>pages</Filter>
     </ClInclude>
     <ClInclude Include="pages\ControlsPage.h">
+      <Filter>pages</Filter>
+    </ClInclude>
+    <ClInclude Include="pages\ScoreValuesPage.h">
       <Filter>pages</Filter>
     </ClInclude>
   </ItemGroup>

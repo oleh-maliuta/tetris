@@ -1,6 +1,6 @@
-#include "ControlsPage.h"
+#include "ScoreValuesPage.h"
 
-Tetris::ControlsPage::ControlsPage(
+Tetris::ScoreValuesPage::ScoreValuesPage(
 	Application* app)
 	: Page(app)
 {
@@ -29,25 +29,25 @@ Tetris::ControlsPage::ControlsPage(
 		5,
 		5);
 
-	Texture* controls__texture = new Texture(
+	Texture* score_values__texture = new Texture(
 		this->app->getRenderer(),
-		"assets/images/png/controls.png",
+		"assets/images/png/score_values.png",
 		this->app->getWindowWidth() / 2 - 233.5f,
 		80);
-	controls__texture->setPositionX(this->app->getWindowWidth() / 2.f - controls__texture->getWidth() / 2);
+	score_values__texture->setPositionX(this->app->getWindowWidth() / 2.f - score_values__texture->getWidth() / 2);
 
 	this->setRenderable("version_info__text", version_info__text);
 	this->setRenderable("return__image_button", return__image_button);
-	this->setRenderable("controls__texture", controls__texture);
+	this->setRenderable("score_values__texture", score_values__texture);
 
 	return__image_button->setOnRelease([=] {
 		this->getApp()->changePage("guide");
-	});
+		});
 
 	this->initKeyDownEvents();
 }
 
-void Tetris::ControlsPage::init()
+void Tetris::ScoreValuesPage::init()
 {
 	if (this->isInitialized) {
 		return;
@@ -56,7 +56,7 @@ void Tetris::ControlsPage::init()
 	Page::init();
 }
 
-void Tetris::ControlsPage::clean()
+void Tetris::ScoreValuesPage::clean()
 {
 	if (!this->isInitialized) {
 		return;
@@ -65,9 +65,9 @@ void Tetris::ControlsPage::clean()
 	Page::clean();
 }
 
-void Tetris::ControlsPage::update() {}
+void Tetris::ScoreValuesPage::update() {}
 
-void Tetris::ControlsPage::initKeyDownEvents()
+void Tetris::ScoreValuesPage::initKeyDownEvents()
 {
 	this->keyDownEvents[SDLK_ESCAPE] = [=] {
 		this->getApp()->changePage("guide");
