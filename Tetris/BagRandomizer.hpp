@@ -12,6 +12,7 @@ namespace Tetris
 	/// <summary>
 	/// Implements bag randomization, allowing a programmer to insert items, randomly shuffle them into a bag, and retrieve them one by one until the bag is empty.
 	/// </summary>
+	/// <typeparam name="T">Type of the bag elements.</typeparam>
 	template<class T>
 	class BagRandomizer
 	{
@@ -23,11 +24,16 @@ namespace Tetris
 
 	public:
 
+		/// <summary>
+		/// Initializes a new instance of the BagRandomizer class.
+		/// </summary>
 		BagRandomizer()
 			: rng(std::random_device{}()) {
 		}
 
-		// Refill the bag with the items.
+		/// <summary>
+		/// Refills the bag with the items.
+		/// </summary>
 		void refillBag()
 		{
 			if (this->items.empty()) {
@@ -37,14 +43,20 @@ namespace Tetris
 			std::shuffle(this->bag.begin(), this->bag.end(), this->rng);
 		}
 
-		// Put new items to the bag.
+		/// <summary>
+		/// Puts new items to the bag.
+		/// </summary>
+		/// <param name="items">- the items for the bag.</param>
 		void setItems(
 			const std::vector<T>& items)
 		{
 			this->items = items;
 		}
 
-		// Pull an item from the bag.
+		/// <summary>
+		/// Pulls an item from the bag.
+		/// </summary>
+		/// <returns>the last bag item.</returns>
 		T pullItem()
 		{
 			if (this->bag.empty()) {
@@ -57,13 +69,15 @@ namespace Tetris
 			return item;
 		}
 
-		// Check the size of the bag.
+		/// <returns>current size of the bag.</returns>
 		bool size() const
 		{
 			return this->bag.size();
 		}
 
-		// Check if the bag is empty.
+		/// <summary>
+		/// Checks if the bag is empty.
+		/// </summary>
 		bool isEmpty() const
 		{
 			return this->bag.empty();

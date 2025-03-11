@@ -7,6 +7,9 @@
 
 namespace Tetris
 {
+	/// <summary>
+	/// Stores data of a Tetris grid block.
+	/// </summary>
 	struct TetrisBlockData
 	{
 		int x, y;

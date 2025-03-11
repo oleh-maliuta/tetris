@@ -10,7 +10,7 @@
 #include "../renderables/Renderable.h"
 #include "../Application.h"
 #include "../renderables/Layout.h"
-#include "../structures/RegularEventData.h"
+#include "../structures/RecurringEventData.h"
 #include "../audio/SoundTrack.h"
 #include "../audio/SoundEffect.h"
 
@@ -18,25 +18,54 @@ namespace Tetris
 {
 	class Application;
 
+	/// <summary>
+	/// Represents a page for displaying SDL graphics and handling application logic.
+	/// This class manages rendering, input handling, audio playback, and event scheduling.
+	/// </summary>
 	class Page
 	{
 	public:
 
+		/// <summary>
+		/// Initializes a new instance of the Page class.
+		/// </summary>
+		/// <param name="app">- SDL application class.</param>
 		Page(Application* app);
 		virtual ~Page();
 
+		/// <summary>
+		/// Retrieves a renderable object by its key.
+		/// </summary>
+		/// <typeparam name="T">- the type of the renderable object.</typeparam>
+		/// <param name="key">- the identifier of the renderable.</param>
+		/// <returns>- a pointer to the requested renderable object, or nullptr if not found.</returns>
 		template<class T>
 		T* getRenderable(
 			const std::string& key) const;
 
-		void setRegularEvent(
+		/// <summary>
+		/// Sets a recurring event in the game loop.
+		/// </summary>
+		/// <param name="key">- the event identifier.</param>
+		/// <param name="callback">- the function to be executed at regular intervals.</param>
+		/// <param name="interval">- the interval in milliseconds between executions.</param>
+		/// <param name="param">- a pointer to additional event data.</param>
+		void setRecurringEvent(
 			const std::string& key,
 			std::function<Uint32(Uint32, void*)> callback,
 			Uint32 interval,
 			void* param);
-		void removeRegularEvent(
+		/// <summary>
+		/// Removes a previously set recurring event.
+		/// </summary>
+		/// <param name="key">- the event identifier.</param>
+		void removeRecurringEvent(
 			const std::string& key);
 
+		/// <summary>
+		/// Gets the associated application instance.
+		/// </summary>
+		/// <returns>a pointer to the application.</returns>
 		Application* getApp() const;
 
 	protected:
@@ -48,8 +77,17 @@ namespace Tetris
 		SDL_Color backgroundColor = { 255, 255, 255, 255 };
 		bool isInitialized = false;
 
+		/// <summary>
+		/// Initializes the page allocating memory for the resources.
+		/// </summary>
 		virtual void init();
+		/// <summary>
+		/// Releases the allocated memory and cleans up resources.
+		/// </summary>
 		virtual void clean();
+		/// <summary>
+		/// Updates data every frame.
+		/// </summary>
 		virtual void update();
 
 		void setRenderable(
@@ -71,7 +109,7 @@ namespace Tetris
 	private:
 
 		std::list<std::pair<std::string, Renderable*>> renderables;
-		std::unordered_map<std::string, RegularEventData> regularEvents;
+		std::unordered_map<std::string, RecurringEventData> recurringEvents;
 		std::map<std::string, SoundEffect*> soundEffects;
 		SoundTrack* music = nullptr;
 

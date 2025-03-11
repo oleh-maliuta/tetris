@@ -105,7 +105,7 @@ void Tetris::Application::changePage(
 {
 	if (this->pages.find(key) == this->pages.end()) {
 		printf("Could not change the page because it does not exist.\n");
-		this->setIsRunning(false);
+		this->isRunning = false;
 		return;
 	}
 
@@ -162,6 +162,11 @@ void Tetris::Application::run(
 	currentPage->clean();
 }
 
+void Tetris::Application::shutDown()
+{
+	this->isRunning = false;
+}
+
 void Tetris::Application::haltSound()
 {
 	Mix_HaltChannel(-1);
@@ -194,11 +199,6 @@ SDL_Renderer* Tetris::Application::getRenderer() const
 float Tetris::Application::getDeltaTime() const
 {
 	return this->deltaTime;
-}
-
-int Tetris::Application::getLastFrameTime() const
-{
-	return this->lastFrameTime;
 }
 
 int Tetris::Application::getFps() const
@@ -241,12 +241,6 @@ bool Tetris::Application::getIsRunning() const
 	return this->isRunning;
 }
 
-void Tetris::Application::setFps(
-	const int& value)
-{
-	this->fps = value;
-}
-
 void Tetris::Application::setVSync(
 	const bool& value)
 {
@@ -275,12 +269,6 @@ void Tetris::Application::setSoundEffectsOn(
 	const bool& value)
 {
 	this->soundEffectsOn = value;
-}
-
-void Tetris::Application::setIsRunning(
-	const bool& value)
-{
-	this->isRunning = value;
 }
 
 void Tetris::Application::getAppSettings()

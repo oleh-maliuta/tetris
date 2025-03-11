@@ -4,7 +4,7 @@ Tetris::Page::Page(
 	Application* app)
 {
 	this->app = app;
-	this->onQuit = [=] { this->app->setIsRunning(false); };
+	this->onQuit = [=] { this->app->shutDown(); };
 }
 
 Tetris::Page::~Page()
@@ -49,9 +49,9 @@ void Tetris::Page::manageRegularEvents()
 {
 	std::list<std::string> eventsToErase;
 
-	for (auto& reRef : this->regularEvents) {
+	for (auto& reRef : this->recurringEvents) {
 		const Uint32 currentTime = SDL_GetTicks();
-		RegularEventData* regularEvent = &reRef.second;
+		RecurringEventData* regularEvent = &reRef.second;
 
 		if (currentTime - regularEvent->startTime >= regularEvent->interval) {
 			const Uint32 resultInterval = regularEvent->callback(
@@ -69,7 +69,7 @@ void Tetris::Page::manageRegularEvents()
 	}
 
 	if (eventsToErase.size() > 0) {
-		std::erase_if(this->regularEvents, [eventsToErase](const auto& el) {
+		std::erase_if(this->recurringEvents, [eventsToErase](const auto& el) {
 			for (std::string key : eventsToErase) {
 				if (key == el.first) {
 					return true;
@@ -118,7 +118,7 @@ void Tetris::Page::clean()
 		this->music->destroy();
 	}
 
-	this->regularEvents.clear();
+	this->recurringEvents.clear();
 	this->isInitialized = false;
 }
 
@@ -196,32 +196,32 @@ void Tetris::Page::muteMusic(
 	this->music->mute(value);
 }
 
-void Tetris::Page::setRegularEvent(
+void Tetris::Page::setRecurringEvent(
 	const std::string& key,
 	std::function<Uint32(Uint32, void*)> callback,
 	Uint32 interval,
 	void* param)
 {
-	const auto it = this->regularEvents.find(key);
-	if (it != this->regularEvents.end()) {
-		this->regularEvents.erase(it->first);
+	const auto it = this->recurringEvents.find(key);
+	if (it != this->recurringEvents.end()) {
+		this->recurringEvents.erase(it->first);
 	}
 
-	const RegularEventData data = {
+	const RecurringEventData data = {
 		SDL_GetTicks(),
 		interval,
 		param,
 		callback
 	};
-	this->regularEvents[key] = data;
+	this->recurringEvents[key] = data;
 }
 
-void Tetris::Page::removeRegularEvent(
+void Tetris::Page::removeRecurringEvent(
 	const std::string& key)
 {
-	const auto it = this->regularEvents.find(key);
-	if (it != this->regularEvents.end()) {
-		this->regularEvents.erase(it->first);
+	const auto it = this->recurringEvents.find(key);
+	if (it != this->recurringEvents.end()) {
+		this->recurringEvents.erase(it->first);
 	}
 }
 

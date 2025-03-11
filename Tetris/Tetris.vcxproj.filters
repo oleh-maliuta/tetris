@@ -109,7 +109,7 @@
     <ClInclude Include="renderables\Layout.h">
       <Filter>renderables</Filter>
     </ClInclude>
-    <ClInclude Include="structures\RegularEventData.h">
+    <ClInclude Include="structures\RecurringEventData.h">
       <Filter>structures</Filter>
     </ClInclude>
     <ClInclude Include="audio\SoundEffect.h">

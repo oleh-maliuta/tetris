@@ -91,7 +91,7 @@ Tetris::MainMenuPage::MainMenuPage(
 	play__text_button->setOnRelease([appRef] { appRef->changePage("play"); });
 	settings__text_button->setOnRelease([appRef] { appRef->changePage("settings"); });
 	guide__text_button->setOnRelease([appRef] { appRef->changePage("guide"); });
-	quit__text_button->setOnRelease([appRef] { appRef->setIsRunning(false); });
+	quit__text_button->setOnRelease([appRef] { appRef->shutDown(); });
 }
 
 void Tetris::MainMenuPage::init()

@@ -193,7 +193,7 @@ Tetris::SettingsPage::SettingsPage(
 		Text* messageText = pageRef->getRenderable<Text>("changes_are_saved__text");
 		messageText->setVisibility(true);
 
-		pageRef->setRegularEvent(
+		pageRef->setRecurringEvent(
 			"message-about-the-saved-changes",
 			[](Uint32 interval, void* param) -> Uint32 {
 				Text* messageText = static_cast<Text*>(param);

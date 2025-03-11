@@ -869,7 +869,7 @@ void Tetris::PlayPage::initPauseMenu()
 
 		this->pause = false;
 		menu->setVisibility(false);
-		this->setRegularEvent(
+		this->setRecurringEvent(
 			"game-process",
 			this->gameProcessRegularEvent,
 			resultInterval,
@@ -899,7 +899,7 @@ void Tetris::PlayPage::initPauseMenu()
 			return;
 		}
 
-		this->getApp()->setIsRunning(false);
+		this->getApp()->shutDown();
 	});
 }
 
@@ -1027,15 +1027,15 @@ void Tetris::PlayPage::initGameOverMenu()
 		}
 
 		this->getApp()->changePage("main_menu");
-		});
+	});
 
 	quit__text_button->setOnRelease([=] {
 		if (!this->gameOver) {
 			return;
 		}
 
-		this->getApp()->setIsRunning(false);
-		});
+		this->getApp()->shutDown();
+	});
 }
 
 void Tetris::PlayPage::initKeyDownEvents()
@@ -1050,7 +1050,7 @@ void Tetris::PlayPage::initKeyDownEvents()
 		this->pause = true;
 		this->isSoftDropOn = false;
 		menu->setVisibility(true);
-		this->removeRegularEvent("game-process");
+		this->removeRecurringEvent("game-process");
 
 		this->getApp()->pauseMusic();
 	};
@@ -1135,7 +1135,7 @@ void Tetris::PlayPage::initKeyDownEvents()
 		}
 
 		this->isSoftDropOn = true;
-		this->setRegularEvent(
+		this->setRecurringEvent(
 			"game-process",
 			this->gameProcessRegularEvent,
 			0,
@@ -1151,7 +1151,7 @@ void Tetris::PlayPage::initKeyUpEvents()
 		}
 
 		this->isSoftDropOn = false;
-		this->setRegularEvent(
+		this->setRecurringEvent(
 			"game-process",
 			this->gameProcessRegularEvent,
 			this->blockFallingInterval,
@@ -1189,7 +1189,7 @@ void Tetris::PlayPage::initKeyUpEvents()
 		}
 
 		PlayPage::gameProcessRegularEvent(0, this);
-		this->setRegularEvent(
+		this->setRecurringEvent(
 			"game-process",
 			this->gameProcessRegularEvent,
 			0,
@@ -1207,7 +1207,7 @@ void Tetris::PlayPage::initSoundEffectsAndMusic()
 
 void Tetris::PlayPage::initRegularEvents()
 {
-	this->setRegularEvent(
+	this->setRecurringEvent(
 		"game-process",
 		this->gameProcessRegularEvent,
 		0,

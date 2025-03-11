@@ -5,6 +5,9 @@
 
 namespace Tetris
 {
+	/// <summary>
+	/// Stores the coordinates of a Tetris grid cell.
+	/// </summary>
 	struct TetrisCellPosition
 	{
 		int x, y;
